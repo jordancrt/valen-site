@@ -1,14 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="assets/style.css">
-  <title>ValenHub</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <title>ValenHub — Finance simple et IA</title>
 </head>
-
 <body>
-  <h1>Bienvenue sur ValenHub</h1>
-  <p>Votre espace simple et intelligent pour gérer vos tâches et vos idées.</p>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="brand">
+      <div class="logo"></div>
+      <h1>VALENHUB</h1>
+    </div>
+    <div class="links">
+      <a href="/">Accueil</a>
+      <a href="dashboard.html">Tableau de bord</a>
+      <a href="chat.html" class="btn">Chat IA</a>
+      <a href="about.html">À propos</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <h2>Bienvenue sur ValenHub</h2>
+    <p>Votre espace simple, gratuit et bienveillant pour organiser votre budget et apprendre la finance avec l’aide de l’IA.</p>
+    <div style="margin-top:24px;">
+      <a class="btn" href="dashboard.html">Ouvrir le tableau de bord</a>
+      <a class="btn-secondary" href="chat.html">Parler à l’IA</a>
+    </div>
+  </header>
+
+  <!-- CARTES FONCTIONS -->
+  <section class="container kpis" style="margin-bottom:48px;">
+    <div class="kpi">
+      <h3>Budget & suivi</h3>
+      <p>Suivez vos entrées/sorties et vos objectifs mensuels.</p>
+      <a class="btn-small" href="dashboard.html">Accéder</a>
+    </div>
+    <div class="kpi">
+      <h3>Chat IA</h3>
+      <p>Posez vos questions (éducation financière, concepts, outils).</p>
+      <a class="btn-small" href="chat.html">Lancer</a>
+    </div>
+    <div class="kpi">
+      <h3>En savoir plus</h3>
+      <p>Notre philosophie : clarté, bienveillance, progression.</p>
+      <a class="btn-small" href="about.html">Lire</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © <span id="year"></span> ValenHub — Gratuit & bienveillant
+  </footer>
+
+  <script>
+    // année automatique dans le footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
