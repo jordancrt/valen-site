@@ -1,1 +1,54 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests"><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#0B1120"><title>Valen — Coach IA</title><link rel="stylesheet" href="/assets/style.css"></head><body><nav class="nav"><div class="brand"><div class="logo"></div><h1>VALEN</h1></div><div><a href="/index.html">Accueil</a><a href="/dashboard.html">Tableau de bord</a><a href="/chat.html">Coach IA</a><a href="/about.html">À propos</a><a class="lang" href="/en/index.html">English</a></div></nav><section class="container"><h2 class="h-title">Coach IA</h2><p class="sub">Posez vos questions (budget, investissement, calme financier). Ne partagez pas d’infos sensibles.</p><div class="chat"><div id="log" class="chat-log"><div class="msg ai"><div class="bubble">Bonjour 👋 Je suis le coach IA de Valen. Comment puis-je vous aider aujourd’hui ?</div></div></div><div class="inputbar"><input id="q" aria-label="question" placeholder="Ex. Comment réduire mes dépenses ?" /><button id="send">Envoyer</button></div><div class="small">AI côté serveur (clé API protégée).</div></div></section><footer class="footer">© <span data-year></span> Valen — Finance & Balance</footer><script>const log=document.getElementById('log');const q=document.getElementById('q');const send=document.getElementById('send');function add(role,text){const m=document.createElement('div');m.className='msg '+role;const b=document.createElement('div');b.className='bubble';b.textContent=text;m.appendChild(b);log.appendChild(m);log.scrollTop=log.scrollHeight;}async function ask(){const text=q.value.trim(); if(!text) return; add('me',text); q.value='';try{const r=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:text,lang:'fr'})});const data=await r.json(); if(!r.ok){add('ai','Désolé, une erreur est survenue.');return;} add('ai',data.answer||'…');}catch(e){add('ai','Réseau indisponible. Réessayez.');}}send.addEventListener('click',ask); q.addEventListener('keydown',e=>{if(e.key==='Enter') ask();});</script></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <title>ValenHub — Chat IA</title>
+  <style>.chat{display:flex;flex-direction:column;gap:12px}.msg{padding:10px;border:1px solid rgba(255,255,255,.15);border-radius:10px}</style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand"><div class="logo"></div><h1>VALENHUB</h1></div>
+    <div class="links">
+      <a href="/">Accueil</a>
+      <a href="dashboard.html">Tableau</a>
+      <a href="chat.html" class="btn">Chat IA</a>
+      <a href="about.html">À propos</a>
+    </div>
+  </nav>
+
+  <section class="container chat">
+    <h2>Assistant IA (éducation financière)</h2>
+    <div id="log"></div>
+    <div class="inputbar">
+      <input id="q" placeholder="Pose ta question (budget, concepts, outils)…" />
+      <button id="send" class="btn">Envoyer</button>
+    </div>
+    <small class="muted">L’IA donne des réponses éducatives. Pas de conseil financier personnalisé.</small>
+  </section>
+
+  <script>
+    const log = document.getElementById('log');
+    function add(role, text){
+      const div = document.createElement('div');
+      div.className = 'msg ' + (role==='user'?'me':'ai');
+      div.textContent = (role==='user'?'Moi: ':'Valen IA: ') + text;
+      log.prepend(div);
+    }
+    async function ask(){
+      const q = document.getElementById('q').value.trim();
+      if(!q) return;
+      add('user', q);
+      document.getElementById('q').value='';
+      try{
+        const r = await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q,system:'Sois pédagogique, prudent et bienveillant. Pas de conseils personnalisés.'})});
+        const data = await r.json();
+        add('ai', data.reply || '…');
+      }catch(e){ add('ai','Erreur réseau.'); }
+    }
+    document.getElementById('send').onclick = ask;
+    document.getElementById('q').addEventListener('keydown',e=>{ if(e.key==='Enter') ask(); });
+  </script>
+</body>
+</html>
