@@ -2,209 +2,103 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="assets/style.css" />
-  <title>ValenHub — Tableau</title>
-  <style>
-    .grid{display:grid;gap:12px}
-    .two{grid-template-columns:1fr 1fr}
-    .table{width:100%;border-collapse:collapse;margin-top:12px}
-    .table th,.table td{border:1px solid rgba(255,255,255,.12);padding:8px;font-size:14px}
-    .right{text-align:right}
-    .muted{opacity:.85}
-    .controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-    .pill{padding:6px 10px;border:1px solid rgba(255,255,255,.2);border-radius:999px}
-  </style>
+  <title>ValenHub — Tableau de bord</title>
 </head>
-<body>
-  <nav class="nav">
-    <div class="brand"><div class="logo"></div><h1>VALENHUB</h1></div>
-    <div class="links">
-      <a href="/">Accueil</a>
-      <a href="dashboard.html" class="btn">Tableau</a>
-      <a href="chat.html">Chat IA</a>
-      <a href="about.html">À propos</a>
+<body class="vh">
+  <!-- HEADER -->
+  <header class="vh-header">
+    <div class="vh-row vh-between vh-center">
+      <div class="vh-time" id="vh-time">—:—</div>
+      <div class="vh-pill">Gratuit</div>
     </div>
+
+    <div class="vh-balance">
+      <div class="vh-balance-label">Solde total</div>
+      <div class="vh-balance-value" id="vh-balance">6 820 €</div>
+      <div class="vh-balance-delta up">+ 830 € • 13,86 %</div>
+    </div>
+
+    <div class="vh-card vh-gradient">
+      <div class="vh-card-title">💠 Investir intelligemment</div>
+      <div class="vh-actions">
+        <button class="vh-action"><span>↓</span><small>Dépôt</small></button>
+        <button class="vh-action"><span>＋</span><small>Acheter</small></button>
+        <button class="vh-action"><span>→</span><small>Plan</small></button>
+        <button class="vh-action"><span>⏱</span><small>Yield</small></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENU (onglet actif = Synthèse) -->
+  <main class="vh-main">
+    <section class="vh-section">
+      <div class="vh-section-title">Fil d’actualités</div>
+      <div class="vh-card">
+        <div class="vh-tag">SÉCURITÉ</div>
+        <div class="vh-card-row">
+          <div>
+            <div class="vh-card-title">Comment nous protégeons vos données</div>
+            <div class="vh-muted">Chiffrement, PWA hors-ligne, variables serveur…</div>
+          </div>
+          <button class="vh-icon">✕</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="vh-section">
+      <div class="vh-section-title vh-row vh-between">
+        <span>Ma performance</span>
+        <button class="vh-chip">Filtrer</button>
+      </div>
+
+      <div class="vh-asset">
+        <div class="vh-asset-left">
+          <div class="vh-asset-name">Ethereum</div>
+          <div class="vh-asset-sub">+ 1 069 € • 47,91 %</div>
+        </div>
+        <div class="vh-asset-right">3 300 €</div>
+      </div>
+
+      <div class="vh-asset">
+        <div class="vh-asset-left">
+          <div class="vh-asset-name">Or (1g)</div>
+          <div class="vh-asset-sub">Stable</div>
+        </div>
+        <div class="vh-asset-right">111 €</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOUTON FLOTTANT -->
+  <button class="vh-fab" title="Ajouter">＋</button>
+
+  <!-- NAVIGATION BAS -->
+  <nav class="vh-tabbar">
+    <a class="vh-tab active" data-tab="home">🏠<span>Synthèse</span></a>
+    <a class="vh-tab" data-tab="wealth">📊<span>Patrimoine</span></a>
+    <a class="vh-tab" data-tab="budget">🧾<span>Budget</span></a>
+    <a class="vh-tab" data-tab="analysis">📈<span>Analyse</span></a>
+    <a class="vh-tab" href="chat.html">🤖<span>Investir</span></a>
   </nav>
 
-  <section class="container">
-    <h2>Budget & tâches (local)</h2>
-    <p class="muted">Vos données restent <b>sur votre appareil</b> (localStorage). Vous pouvez les exporter en JSON.</p>
-
-    <!-- Formulaire d'ajout -->
-    <div class="grid two" style="margin-top:16px">
-      <div>
-        <h3>Ajouter un élément</h3>
-        <div class="grid">
-          <label>Type
-            <select id="type">
-              <option value="dépense">Dépense</option>
-              <option value="revenu">Revenu</option>
-              <option value="tâche">Tâche</option>
-            </select>
-          </label>
-          <label>Catégorie
-            <input id="cat" placeholder="ex: courses / loyer / salaire / à faire">
-          </label>
-          <label>Montant (€) <small class="muted">(vide si tâche)</small>
-            <input id="amt" type="number" step="0.01" placeholder="ex: 45.90">
-          </label>
-          <label>Date
-            <input id="date" type="date">
-          </label>
-          <label>Note
-            <input id="note" placeholder="optionnel">
-          </label>
-          <button class="btn" id="addBtn">Ajouter</button>
-        </div>
-      </div>
-
-      <div>
-        <h3>Objectif du mois</h3>
-        <div class="grid">
-          <label>Budget mensuel (€)
-            <input id="goal" type="number" step="1" placeholder="ex: 1200">
-          </label>
-          <button class="btn-secondary" id="saveGoal">Enregistrer l’objectif</button>
-          <div class="pill" id="goalInfo">Aucun objectif pour l’instant.</div>
-        </div>
-
-        <h3 style="margin-top:18px">Résumé</h3>
-        <div class="grid two">
-          <div class="pill">Revenus: <b id="sumIn">0</b> €</div>
-          <div class="pill">Dépenses: <b id="sumOut">0</b> €</div>
-          <div class="pill">Solde du mois: <b id="net">0</b> €</div>
-          <div class="pill">Reste vs objectif: <b id="left">—</b></div>
-        </div>
-
-        <div class="controls">
-          <button id="exportBtn" class="btn-small">Exporter JSON</button>
-          <input id="importInput" type="file" accept="application/json" style="display:none">
-          <button id="importBtn" class="btn-small">Importer JSON</button>
-          <button id="clearBtn" class="btn-small">Tout effacer</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tableau -->
-    <h3 style="margin-top:12px">Historique</h3>
-    <table class="table" id="tbl">
-      <thead>
-        <tr><th>Date</th><th>Type</th><th>Catégorie / Tâche</th><th class="right">Montant</th><th>Note</th><th></th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
-
-  <footer class="footer">© <span id="y"></span> ValenHub</footer>
-
   <script>
-    const KEY='valen_items_v1';  // enregistrements
-    const GKEY='valen_goal_v1';  // objectif
-    const $=s=>document.querySelector(s);
-    const $$=s=>document.querySelectorAll(s);
-    const ls = {
-      get(k, d){ try { return JSON.parse(localStorage.getItem(k)) ?? d } catch { return d } },
-      set(k, v){ localStorage.setItem(k, JSON.stringify(v)) }
-    };
+    // Heure en haut
+    const t=()=>{const d=new Date();const h=String(d.getHours()).padStart(2,'0');const m=String(d.getMinutes()).padStart(2,'0');document.getElementById('vh-time').textContent=`${h}:${m}`}; t(); setInterval(t,30_000);
 
-    const state = {
-      items: ls.get(KEY, []),
-      goal: ls.get(GKEY, null)
-    };
-
-    const ui = {
-      tbody: $('#tbl tbody'),
-      sumIn: $('#sumIn'), sumOut: $('#sumOut'), net: $('#net'), left: $('#left'),
-      goalInfo: $('#goalInfo')
-    };
-
-    function render(){
-      // tri par date desc
-      state.items.sort((a,b)=> (b.date||'').localeCompare(a.date||''));
-      ui.tbody.innerHTML = state.items.map((x,i)=> `
-        <tr>
-          <td>${x.date||''}</td>
-          <td>${x.type}</td>
-          <td>${x.cat||x.note||''}</td>
-          <td class="right">${x.type==='tâche' ? '—' : (Number(x.amt||0).toFixed(2)+' €')}</td>
-          <td>${x.note||''}</td>
-          <td><button class="btn-small" data-del="${i}">Suppr.</button></td>
-        </tr>`).join('');
-
-      // sommes mensuelles (mois courant)
-      const m = new Date().toISOString().slice(0,7); // AAAA-MM
-      const cur = state.items.filter(x => (x.date||'').startsWith(m));
-      const inc = cur.filter(x=>x.type==='revenu').reduce((s,x)=> s+Number(x.amt||0),0);
-      const exp = cur.filter(x=>x.type==='dépense').reduce((s,x)=> s+Number(x.amt||0),0);
-      ui.sumIn.textContent = inc.toFixed(2);
-      ui.sumOut.textContent = exp.toFixed(2);
-      ui.net.textContent = (inc-exp).toFixed(2);
-
-      if(state.goal){
-        const left = state.goal - exp;
-        ui.left.textContent = `${left.toFixed(2)} € (objectif: ${state.goal} €)`;
-        ui.goalInfo.textContent = `Objectif mensuel: ${state.goal} €`;
-      } else {
-        ui.left.textContent = '—';
-        ui.goalInfo.textContent = 'Aucun objectif pour l’instant.';
-      }
-    }
-
-    $('#addBtn').onclick = ()=>{
-      const type=$('#type').value;
-      const cat=$('#cat').value.trim();
-      const amt=$('#amt').value;
-      const date=$('#date').value || new Date().toISOString().slice(0,10);
-      const note=$('#note').value.trim();
-      if(type!=='tâche' && (amt==='' || Number.isNaN(Number(amt)))) return alert('Montant invalide');
-      state.items.push({type, cat, amt, date, note});
-      ls.set(KEY, state.items);
-      $('#cat').value=''; $('#amt').value=''; $('#note').value='';
-      render();
-    };
-
-    $('#saveGoal').onclick = ()=>{
-      const g = Number($('#goal').value);
-      if(Number.isNaN(g) || g<=0) return alert('Entrez un montant valide');
-      state.goal = g; ls.set(GKEY, g); render();
-    };
-
-    $('#exportBtn').onclick = ()=>{
-      const data = { items: state.items, goal: state.goal };
-      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'valenhub-data.json';
-      a.click();
-      URL.revokeObjectURL(a.href);
-    };
-    $('#importBtn').onclick = ()=> $('#importInput').click();
-    $('#importInput').onchange = e=>{
-      const file = e.target.files[0]; if(!file) return;
-      const r = new FileReader();
-      r.onload = ()=> {
-        try{
-          const data = JSON.parse(r.result);
-          state.items = data.items || [];
-          state.goal = data.goal || null;
-          ls.set(KEY, state.items); ls.set(GKEY, state.goal);
-          render();
-        }catch{ alert('Fichier invalide'); }
-      };
-      r.readAsText(file);
-    };
-    $('#clearBtn').onclick = ()=>{
-      if(confirm('Tout effacer ?')) { state.items=[]; state.goal=null; ls.set(KEY,[]); ls.set(GKEY,null); render(); }
-    };
-
-    document.addEventListener('click', e=>{
-      const i = e.target.dataset.del;
-      if(i!==undefined){ state.items.splice(Number(i),1); ls.set(KEY,state.items); render(); }
+    // Onglets (démo, sans changer d’URL sauf “Investir”=chat)
+    document.querySelectorAll('.vh-tabbar .vh-tab').forEach(el=>{
+      el.addEventListener('click',e=>{
+        if(el.getAttribute('href')) return; // chat.html
+        document.querySelectorAll('.vh-tab').forEach(x=>x.classList.remove('active'));
+        el.classList.add('active');
+        // Ici tu pourrais charger dynamiquement d'autres sections si besoin
+      });
     });
 
-    document.getElementById('y').textContent = new Date().getFullYear();
-    render();
+    // FAB (démo)
+    document.querySelector('.vh-fab').onclick=()=>alert('Action rapide – à connecter plus tard');
   </script>
 </body>
 </html>
