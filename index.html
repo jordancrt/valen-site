@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ValenHub — L’équilibre financier simplifié</title>
-  <link rel="stylesheet" href="assets/style.css?v=9999">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ValenHub — L'équilibre financier simplifié</title>
+  <link rel="stylesheet" href="assets/style.css?v=1001">
   <meta name="theme-color" content="#0B1120">
 </head>
-
 <body>
-
-  <!-- HEADER (barre du haut) -->
   <header class="navbar">
-    <div class="container nav-container">
-      <div class="nav-brand">
-        <img src="assets/icon-192.png" alt="Logo ValenHub" class="nav-logo">
-        <span>VALENHUB</span>
+    <div class="container">
+      <div class="brand">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" class="logo">
+        <h1>VALENHUB</h1>
       </div>
       <nav>
-        <ul class="nav-links">
+        <ul>
           <li><a href="index.html" class="active">Accueil</a></li>
           <li><a href="dashboard.html">Tableau de bord</a></li>
           <li><a href="about.html">À propos</a></li>
@@ -27,73 +24,20 @@
     </div>
   </header>
 
-  <!-- CONTENU PRINCIPAL -->
-  <main class="home">
-
-    <!-- SECTION HERO -->
-    <section class="hero">
-      <div class="container">
-        <p class="eyebrow">Gratuit · Local · Intelligent</p>
-        <h1>La clarté financière, sans complication.</h1!>
-        <p class="sub">
-          ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et mieux comprendre tes finances — tout reste sur ton appareil.
-        </p>
-        <div class="cta">
-          <a href="dashboard.html" class="btn-primary">Commencer maintenant</a>
-          <a href="#features" class="btn-secondary">Découvrir</a>
-        </div>
+  <main class="hero">
+    <section class="intro">
+      <p class="tag">Gratuit • Local • Intelligent</p>
+      <h2>Maîtrise tes finances avec clarté et sérénité.</h2>
+      <p class="subtitle">ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.</p>
+      <div class="buttons">
+        <a href="dashboard.html" class="btn-primary">Commencer maintenant</a>
+        <a href="about.html" class="btn-secondary">Découvrir</a>
       </div>
     </section>
-
-    <!-- SECTION FONCTIONNALITÉS -->
-    <section id="features" class="features">
-      <div class="container">
-        <h2>Pourquoi choisir ValenHub ?</h2>
-        <div class="grid">
-          <div class="card">
-            <h3>🧭 Simplicité</h3>
-            <p>Interface épurée et fluide, pensée pour gagner du temps.</p>
-          </div>
-          <div class="card">
-            <h3>🔒 Données locales</h3>
-            <p>Tes informations restent sur ton appareil. Zéro cloud.</p>
-          </div>
-          <div class="card">
-            <h3>📊 Vision d’ensemble</h3>
-            <p>Visualise tes dépenses, tes économies et ton évolution.</p>
-          </div>
-          <div class="card">
-            <h3>⚡ Léger et rapide</h3>
-            <p>Optimisé pour tous les appareils : web, mobile et tablette.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION ÉTAPES -->
-    <section class="steps">
-      <div class="container">
-        <h2>Comment ça marche ?</h2>
-        <ol>
-          <li>Crée ton espace local (aucune inscription requise).</li>
-          <li>Ajoute tes revenus et dépenses par catégorie.</li>
-          <li>Visualise ton équilibre et progresse chaque mois.</li>
-        </ol>
-      </div>
-    </section>
-
   </main>
 
-  <!-- PIED DE PAGE -->
-  <footer class="footer" style="text-align:center; padding:32px; color:#aab1c5; font-size:14px; border-top:1px solid rgba(255,255,255,0.1); margin-top:60px;">
-    © <span id="year"></span> ValenHub — 
-    <a href="privacy.html" style="color:#5ca6ff; text-decoration:none;">Confidentialité</a> · 
-    <a href="terms.html" style="color:#5ca6ff; text-decoration:none;">Conditions</a>
+  <footer>
+    <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-
 </body>
 </html>
