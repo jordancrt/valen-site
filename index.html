@@ -1,93 +1,99 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0B1120" />
-  <title>VALENHUB — L’équilibre, mis en chiffres.</title>
-  <meta name="description" content="ValenHub : budget simple, objectifs mensuels, données locales. Gratuit et bienveillant." />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="assets/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ValenHub — L’équilibre financier simplifié</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <meta name="theme-color" content="#0B1120">
 </head>
+
 <body>
-  <!-- HEADER -->
-  <header>
-    <nav class="navbar">
-      <div class="brand">
-        <img src="assets/icon-192.png" alt="Logo ValenHub" />
-        <h1>VALENHUB</h1>
+
+  <!-- HEADER (barre du haut) -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="nav-brand">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" class="nav-logo">
+        <span>VALENHUB</span>
       </div>
-      <ul class="nav-links">
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="dashboard.html">Tableau de bord</a></li>
-        <li id="nav-chat" style="display:none"><a href="chat.html">Chat IA</a></li>
-        <li><a href="about.html">À propos</a></li>
-      </ul>
-    </nav>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Accueil</a></li>
+          <li><a href="dashboard.html">Tableau de bord</a></li>
+          <li><a href="about.html">À propos</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <!-- HERO -->
-  <section class="hero container">
-    <span class="badge">Gratuit · Données locales · PWA</span>
-    <h2 class="h-title">L’équilibre, mis en chiffres.</h2>
-    <p class="sub">Suivez votre budget, fixez vos objectifs et visualisez l’essentiel dans une interface claire — sans inscription, sans friction.</p>
-    <div class="cta-row">
-      <a class="btn" href="dashboard.html">Commencer maintenant</a>
-      <a class="btn btn-secondary" id="hero-chat" href="chat.html" style="display:none">Poser une question</a>
-    </div>
-  </section>
+  <!-- CONTENU PRINCIPAL -->
+  <main class="home">
 
-  <!-- FEATURES -->
-  <section class="container">
-    <div class="row">
-      <div class="card">
-        <h3>Budget intelligent</h3>
-        <p>Ajoutez revenus & dépenses, catégorisez, et suivez le solde automatiquement. Filtre par mois inclus.</p>
+    <!-- SECTION HERO -->
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Gratuit · Local · Intelligent</p>
+        <h1>La clarté financière, sans complication.</h1>
+        <p class="sub">
+          ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et mieux comprendre tes finances — tout reste sur ton appareil.
+        </p>
+        <div class="cta">
+          <a href="dashboard.html" class="btn-primary">Commencer maintenant</a>
+          <a href="#features" class="btn-secondary">Découvrir</a>
+        </div>
       </div>
-      <div class="card">
-        <h3>Objectifs mensuels</h3>
-        <p>Définissez un montant cible et suivez la progression avec une barre claire et motivante.</p>
-      </div>
-      <div class="card">
-        <h3>Données locales & privées</h3>
-        <p>Vos données restent sur votre appareil. Export/Import en JSON à tout moment.</p>
-      </div>
-      <div class="card">
-        <h3>Installable</h3>
-        <p>Ajoutez ValenHub à votre écran d’accueil (PWA) et utilisez-le comme une application.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="container">
-    <div class="card">
-      <h3>Comment ça marche ?</h3>
-      <ol class="list">
-        <li>Ouvrez le <b>Tableau de bord</b> et saisissez vos premières lignes.</li>
-        <li>Fixez l’<b>objectif du mois</b> et suivez la barre de progression.</li>
-        <li>Exportez vos données si besoin (JSON), ou réimportez-les plus tard.</li>
-      </ol>
-    </div>
-  </section>
+    <!-- SECTION FONCTIONNALITÉS -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Pourquoi choisir ValenHub ?</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>🧭 Simplicité</h3>
+            <p>Interface épurée et fluide, pensée pour gagner du temps.</p>
+          </div>
+          <div class="card">
+            <h3>🔒 Données locales</h3>
+            <p>Tes informations restent sur ton appareil. Zéro cloud.</p>
+          </div>
+          <div class="card">
+            <h3>📊 Vision d’ensemble</h3>
+            <p>Visualise tes dépenses, tes économies et ton évolution.</p>
+          </div>
+          <div class="card">
+            <h3>⚡ Léger et rapide</h3>
+            <p>Optimisé pour tous les appareils : web, mobile et tablette.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    © <span id="year"></span> ValenHub — Finance & Balance ·
-    <a href="privacy.html">Confidentialité</a> · <a href="terms.html">Conditions</a>
+    <!-- SECTION ÉTAPES -->
+    <section class="steps">
+      <div class="container">
+        <h2>Comment ça marche ?</h2>
+        <ol>
+          <li>Crée ton espace local (aucune inscription requise).</li>
+          <li>Ajoute tes revenus et dépenses par catégorie.</li>
+          <li>Visualise ton équilibre et progresse chaque mois.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="footer" style="text-align:center; padding:32px; color:#aab1c5; font-size:14px; border-top:1px solid rgba(255,255,255,0.1); margin-top:60px;">
+    © <span id="year"></span> ValenHub — 
+    <a href="privacy.html" style="color:#5ca6ff; text-decoration:none;">Confidentialité</a> · 
+    <a href="terms.html" style="color:#5ca6ff; text-decoration:none;">Conditions</a>
   </footer>
 
-  <script src="assets/app.js"></script>
   <script>
-    // Affiche les liens IA uniquement si une clé est présente côté serveur (simple ping optionnel)
-    // Tu activeras vraiment quand tu brancheras l’IA.
-    const hasAI = false; // passe à true quand le chat est prêt
-    if (hasAI) {
-      document.getElementById('nav-chat').style.display = '';
-      document.getElementById('hero-chat').style.display = '';
-    }
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+
 </body>
 </html>
