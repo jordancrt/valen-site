@@ -3,102 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="assets/style.css" />
   <title>ValenHub — Tableau de bord</title>
+  <link rel="stylesheet" href="assets/style.css?v=10001" />
+  <meta name="theme-color" content="#0B1120">
 </head>
-<body class="vh">
+<body>
   <!-- HEADER -->
-  <header class="vh-header">
-    <div class="vh-row vh-between vh-center">
-      <div class="vh-time" id="vh-time">—:—</div>
-      <div class="vh-pill">Gratuit</div>
-    </div>
-
-    <div class="vh-balance">
-      <div class="vh-balance-label">Solde total</div>
-      <div class="vh-balance-value" id="vh-balance">6 820 €</div>
-      <div class="vh-balance-delta up">+ 830 € • 13,86 %</div>
-    </div>
-
-    <div class="vh-card vh-gradient">
-      <div class="vh-card-title">💠 Investir intelligemment</div>
-      <div class="vh-actions">
-        <button class="vh-action"><span>↓</span><small>Dépôt</small></button>
-        <button class="vh-action"><span>＋</span><small>Acheter</small></button>
-        <button class="vh-action"><span>→</span><small>Plan</small></button>
-        <button class="vh-action"><span>⏱</span><small>Yield</small></button>
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="nav-brand">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" class="nav-logo" />
+        <span>VALENHUB</span>
       </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a class="active" href="dashboard.html">Tableau de bord</a></li>
+          <li><a href="about.html">À propos</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <!-- CONTENU (onglet actif = Synthèse) -->
-  <main class="vh-main">
-    <section class="vh-section">
-      <div class="vh-section-title">Fil d’actualités</div>
-      <div class="vh-card">
-        <div class="vh-tag">SÉCURITÉ</div>
-        <div class="vh-card-row">
-          <div>
-            <div class="vh-card-title">Comment nous protégeons vos données</div>
-            <div class="vh-muted">Chiffrement, PWA hors-ligne, variables serveur…</div>
-          </div>
-          <button class="vh-icon">✕</button>
-        </div>
+  <main class="home">
+    <section class="container" style="margin-top:28px">
+      <p class="eyebrow">Vue d’ensemble</p>
+      <h1 class="h-title">Ton tableau de bord</h1>
+      <p class="sub">Un aperçu clair de ton budget, de tes dépenses et de tes objectifs.</p>
+    </section>
+
+    <!-- KPIs -->
+    <section class="container kpis" style="margin-top:12px">
+      <div class="card">
+        <h3>Solde agrégé</h3>
+        <p class="big" id="kpi-solde">— €</p>
+        <p class="muted small">Tous comptes confondus</p>
+      </div>
+      <div class="card">
+        <h3>Dépenses du mois</h3>
+        <p class="big" id="kpi-depenses">— €</p>
+        <p class="muted small">Mise à jour quotidienne</p>
+      </div>
+      <div class="card">
+        <h3>Budget restant</h3>
+        <p class="big" id="kpi-budget">— €</p>
+        <p class="muted small">par rapport à l’objectif</p>
+      </div>
+      <div class="card">
+        <h3>Objectifs</h3>
+        <p class="big" id="kpi-objectifs">0 / 3</p>
+        <p class="muted small">en cours ce mois-ci</p>
       </div>
     </section>
 
-    <section class="vh-section">
-      <div class="vh-section-title vh-row vh-between">
-        <span>Ma performance</span>
-        <button class="vh-chip">Filtrer</button>
+    <!-- Transactions récentes -->
+    <section class="container row" style="margin-top:18px">
+      <div class="card">
+        <h3>Transactions récentes</h3>
+        <ul id="tx-list" style="margin-top:8px">
+          <li class="muted">Aucune donnée pour l’instant.</li>
+        </ul>
+        <div style="margin-top:12px">
+          <button class="btn" id="btn-demo">Charger des exemples</button>
+          <a class="btn btn-secondary" href="about.html">En savoir plus</a>
+        </div>
       </div>
 
-      <div class="vh-asset">
-        <div class="vh-asset-left">
-          <div class="vh-asset-name">Ethereum</div>
-          <div class="vh-asset-sub">+ 1 069 € • 47,91 %</div>
-        </div>
-        <div class="vh-asset-right">3 300 €</div>
-      </div>
-
-      <div class="vh-asset">
-        <div class="vh-asset-left">
-          <div class="vh-asset-name">Or (1g)</div>
-          <div class="vh-asset-sub">Stable</div>
-        </div>
-        <div class="vh-asset-right">111 €</div>
+      <div class="card">
+        <h3>Tâches du jour</h3>
+        <ul id="todo-list" style="margin-top:8px">
+          <li>Vérifier les dépenses de la semaine</li>
+          <li>Mettre à jour un objectif d’épargne</li>
+          <li>Scanner un reçu important</li>
+        </ul>
       </div>
     </section>
   </main>
 
-  <!-- BOUTON FLOTTANT -->
-  <button class="vh-fab" title="Ajouter">＋</button>
+  <footer class="footer">
+    <p class="small">© 2025 ValenHub — Clarté & Sérénité financière.</p>
+  </footer>
 
-  <!-- NAVIGATION BAS -->
-  <nav class="vh-tabbar">
-    <a class="vh-tab active" data-tab="home">🏠<span>Synthèse</span></a>
-    <a class="vh-tab" data-tab="wealth">📊<span>Patrimoine</span></a>
-    <a class="vh-tab" data-tab="budget">🧾<span>Budget</span></a>
-    <a class="vh-tab" data-tab="analysis">📈<span>Analyse</span></a>
-    <a class="vh-tab" href="chat.html">🤖<span>Investir</span></a>
-  </nav>
-
+  <!-- Demo locale (aucune donnée perso, juste pour illustrer) -->
   <script>
-    // Heure en haut
-    const t=()=>{const d=new Date();const h=String(d.getHours()).padStart(2,'0');const m=String(d.getMinutes()).padStart(2,'0');document.getElementById('vh-time').textContent=`${h}:${m}`}; t(); setInterval(t,30_000);
+    document.getElementById('btn-demo')?.addEventListener('click', () => {
+      // KPIs factices
+      document.getElementById('kpi-solde').textContent = '5 420 €';
+      document.getElementById('kpi-depenses').textContent = '1 180 €';
+      document.getElementById('kpi-budget').textContent = '820 €';
+      document.getElementById('kpi-objectifs').textContent = '2 / 3';
 
-    // Onglets (démo, sans changer d’URL sauf “Investir”=chat)
-    document.querySelectorAll('.vh-tabbar .vh-tab').forEach(el=>{
-      el.addEventListener('click',e=>{
-        if(el.getAttribute('href')) return; // chat.html
-        document.querySelectorAll('.vh-tab').forEach(x=>x.classList.remove('active'));
-        el.classList.add('active');
-        // Ici tu pourrais charger dynamiquement d'autres sections si besoin
+      // Transactions factices
+      const tx = [
+        { label: 'Courses', amount: '-42,30 €', date: 'Aujourd’hui' },
+        { label: 'Transport', amount: '-3,10 €', date: 'Hier' },
+        { label: 'Salaire', amount: '+2 100 €', date: '01/03' },
+      ];
+      const ul = document.getElementById('tx-list');
+      ul.innerHTML = '';
+      tx.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = `${t.date} — ${t.label} ${t.amount}`;
+        ul.appendChild(li);
       });
     });
 
-    // FAB (démo)
-    document.querySelector('.vh-fab').onclick=()=>alert('Action rapide – à connecter plus tard');
+    // Petite amélioration UX : enlève le soulignement des liens actifs dans la nav (si présent)
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      if (a.classList.contains('active')) a.setAttribute('aria-current', 'page');
+    });
   </script>
 </body>
 </html>
