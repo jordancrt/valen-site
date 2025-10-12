@@ -153,3 +153,77 @@ footer {
   font-size: 0.9rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+/* ===== Animations ValenHub (fade-in + glow) ===== */
+
+/* Respecte le choix "Réduire les animations" */
+@media (prefers-reduced-motion: reduce) {
+  .no-anim, .no-anim * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* États initiaux (invisibles) */
+.hero .intro,
+.navbar,
+.btn-primary,
+.btn-secondary,
+.brand .logo {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* Quand le body a .is-ready, on lance les anims en cascade */
+body.is-ready .navbar {
+  animation: vfade 520ms ease-out forwards;
+}
+
+body.is-ready .hero .intro {
+  animation: vfade-up 620ms ease-out 100ms forwards;
+}
+
+body.is-ready .btn-primary {
+  animation: vfade-up 580ms ease-out 280ms forwards, glow-soft 2.2s ease-in-out 900ms 2;
+}
+body.is-ready .btn-secondary {
+  animation: vfade-up 580ms ease-out 360ms forwards;
+}
+
+body.is-ready .brand .logo {
+  animation: vfade-up 520ms ease-out 220ms forwards, halo 2.4s ease-in-out 700ms 1;
+}
+
+/* Keyframes */
+@keyframes vfade {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+@keyframes vfade-up {
+  from { opacity: 0; transform: translateY(8px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+
+/* Halo doux (logo) */
+@keyframes halo {
+  0%   { box-shadow: 0 0 0 rgba(124, 58, 237, 0.0) }
+  40%  { box-shadow: 0 0 24px rgba(124, 58, 237, 0.35) }
+  100% { box-shadow: 0 0 0 rgba(124, 58, 237, 0.0) }
+}
+
+/* Lueur très légère sur le bouton principal */
+@keyframes glow-soft {
+  0%   { filter: drop-shadow(0 0 0 rgba(167,139,250,0)); transform: translateY(0) }
+  50%  { filter: drop-shadow(0 6px 16px rgba(167,139,250,0.35)); transform: translateY(-1px) }
+  100% { filter: drop-shadow(0 0 0 rgba(167,139,250,0)) }
+}
+
+/* Effet hover subtil (optionnel) */
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(167,139,250,0.28);
+}
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124,58,237,0.18);
+}
