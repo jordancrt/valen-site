@@ -34,7 +34,74 @@
         <a href="about.html" class="btn-secondary">Découvrir</a>
       </div>
     </section>
-  </main>
+  <!-- PRÉFÉRENCES LOCALES & CONFIDENTIALITÉ -->
+<section class="card" id="privacy-local">
+  <h2>Confidentialité & données locales</h2>
+  <p>ValenHub fonctionne en local : tes données restent sur ton appareil. Tu peux gérer ici tes préférences.</p>
+
+  <div class="prefs">
+    <label>
+      Devise
+      <select id="vh-currency">
+        <option value="EUR">€ Euro</option>
+        <option value="CHF">CHF Franc suisse</option>
+        <option value="USD">$ Dollar</option>
+        <option value="GBP">£ Livre</option>
+      </select>
+    </label>
+
+    <label>
+      Langue
+      <select id="vh-lang">
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+      </select>
+    </label>
+
+    <label class="toggle">
+      <input type="checkbox" id="vh-dark"> Thème sombre
+    </label>
+
+    <button class="btn" id="vh-save">Enregistrer mes préférences</button>
+  </div>
+
+  <small>
+    <a href="about.html">À propos</a> ·
+    <a href="#" id="open-terms">Conditions d’utilisation</a> ·
+    <a href="#" id="open-privacy">Politique de confidentialité</a>
+  </small>
+</section>
+
+<!-- MODALES LÉGALES (simples, en-ligne) -->
+<div class="modal" id="modal-terms" hidden>
+  <div class="modal-box">
+    <h3>Conditions d’utilisation</h3>
+    <p>Service fourni “en l’état”, sans garantie. Contenu pédagogique, pas de conseil financier personnalisé. Tu restes responsable de tes décisions.</p>
+    <ul>
+      <li>Données stockées localement sur ton appareil.</li>
+      <li>Pas de connexion bancaire ni de synchronisation automatique.</li>
+      <li>Respect de la vie privée ; pas de vente de données.</li>
+    </ul>
+    <button class="btn" data-close>Fermer</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-privacy" hidden>
+  <div class="modal-box">
+    <h3>Politique de confidentialité</h3>
+    <p>Nous n’exploitons aucune donnée serveur : tout reste sur ton appareil via localStorage. Tu peux réinitialiser à tout moment.</p>
+    <button class="btn" data-close>Fermer</button>
+  </div>
+</div>
+
+<!-- BANNIÈRE DE CONSENTEMENT (localStorage uniquement) -->
+<div class="consent" id="vh-consent" hidden>
+  <p>ValenHub utilise uniquement le stockage local de ton navigateur pour sauvegarder tes préférences. Rien n’est envoyé au cloud.</p>
+  <div class="consent-actions">
+    <button class="btn" id="vh-accept">OK, compris</button>
+    <button class="btn btn-secondary" id="vh-decline">Refuser</button>
+  </div>
+</div>/main>
 
   <footer>
     <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
@@ -43,6 +110,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.add('is-ready');
   });
-</script>
-  /body>
+</script> 
+<script src="assets/app.js"></script>
+/body>
 </html>
