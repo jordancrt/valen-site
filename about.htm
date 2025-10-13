@@ -67,5 +67,33 @@
   <footer class="footer">
     <p class="small">© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
-</body>
+<script>
+  // 1) Apparition douce au chargement
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('is-ready');
+  });
+
+  // 2) Ombre sous la barre de nav quand on scrolle
+  const nav = document.querySelector('.nav');
+  function onScroll() {
+    if (!nav) return;
+    if (window.scrollY > 4) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // 3) Révélation douce des sections au scroll
+  const toReveal = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    toReveal.forEach(el => io.observe(el));
+  } else {
+    // fallback
+    toReveal.forEach(el => el.classList.add('in'));
+  }
+</script>
+  /body>
 </html>
