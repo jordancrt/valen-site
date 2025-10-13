@@ -5,16 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ValenHub — L’équilibre financier simplifié</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=1003" />
+  <link rel="stylesheet" href="assets/style.css?v=1004" />
 </head>
 <body>
-  <!-- HEADER commun -->
+
+  <!-- HEADER -->
   <header class="navbar">
     <div class="container nav-container">
       <div class="nav-brand">
-        <img src="assets/icon-192.png" alt="Logo ValenHub" class="nav-logo" />
+        <img src="assets/icon-192.png" alt="Logo ValenHub" />
         <span>VALENHUB</span>
       </div>
+
       <nav>
         <ul class="nav-links">
           <li><a class="active" href="index.html">Accueil</a></li>
@@ -30,56 +32,37 @@
 
   <!-- CONTENU -->
   <main class="home">
-    <section class="hero reveal">
+    <section class="hero">
       <div class="container">
         <p class="eyebrow" data-i18n="badge">Gratuit · Local · Intelligent</p>
         <h1>Maîtrise tes finances avec clarté et sérénité.</h1>
-        <p data-i18n="intro">ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.</p>
+        <p data-i18n="intro">
+          ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.
+        </p>
         <div class="cta">
-          <a href="dashboard.html" class="btn-primary" data-i18n="start">Commencer maintenant</a>
-          <a href="about.html" class="btn-secondary" data-i18n="discover">Découvrir</a>
+          <a href="dashboard.html" class="btn btn-primary" data-i18n="start">Commencer maintenant</a>
+          <a href="about.html" class="btn btn-secondary" data-i18n="discover">Découvrir</a>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER commun -->
-  <footer class="footer reveal">
+  <!-- FOOTER -->
+  <footer class="footer">
     <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
 
-  <!-- SCRIPTS -->
+  <!-- Scripts très légers -->
   <script>
-    document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('is-ready'));
+    // Effet "header avec ombre" en scroll
+    const nav = document.querySelector('.navbar');
+    function onScroll(){
+      if (!nav) return;
+      if (window.scrollY > 4) nav.style.boxShadow = '0 6px 18px rgba(0,0,0,.25)';
+      else nav.style.boxShadow = 'none';
+    }
+    document.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
   </script>
-  <script src="assets/app.js"></script>
-<script>
-  // 1) Apparition douce au chargement
-  document.addEventListener('DOMContentLoaded', () => {
-    document.body.classList.add('is-ready');
-  });
-
-  // 2) Ombre sous la barre de nav quand on scrolle
-  const nav = document.querySelector('.nav');
-  function onScroll() {
-    if (!nav) return;
-    if (window.scrollY > 4) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  }
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  // 3) Révélation douce des sections au scroll
-  const toReveal = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    toReveal.forEach(el => io.observe(el));
-  } else {
-    // fallback
-    toReveal.forEach(el => el.classList.add('in'));
-  }
-</script>
-  /body>
+</body>
 </html>
