@@ -103,3 +103,15 @@ body.is-ready { opacity: 1; }
   h1 { font-size: 34px; }
   .nav-links { gap: 10px; font-size: 14px; }
 }
+/* === REVEAL (fade + slide) === */
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .6s ease, transform .6s ease;
+  transition-delay: var(--d, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
