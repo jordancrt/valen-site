@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ValenHub — L’équilibre financier simplifié</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=1004" />
+  <link rel="stylesheet" href="assets/style.css?v=1021" />
 </head>
-<body>
 
+<body>
   <!-- HEADER -->
   <header class="navbar">
     <div class="container nav-container">
@@ -52,16 +52,21 @@
     <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
 
-  <!-- Scripts très légers -->
+  <!-- JS effet scroll -->
   <script>
-    // Effet "header avec ombre" en scroll
+    // Apparition douce
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('is-ready');
+    });
+
+    // Ombre sous la navbar au scroll
     const nav = document.querySelector('.navbar');
-    function onScroll(){
+    function onScroll() {
       if (!nav) return;
-      if (window.scrollY > 4) nav.style.boxShadow = '0 6px 18px rgba(0,0,0,.25)';
+      if (window.scrollY > 4) nav.style.boxShadow = '0 6px 16px rgba(0,0,0,.25)';
       else nav.style.boxShadow = 'none';
     }
-    document.addEventListener('scroll', onScroll, {passive:true});
+    document.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   </script>
 </body>
