@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ValenHub — L’équilibre financier simplifié</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=1021" />
+  <link rel="stylesheet" href="assets/style.css?v=1025" />
 </head>
 
 <body>
@@ -30,18 +30,18 @@
     </div>
   </header>
 
-  <!-- CONTENU -->
+  <!-- CONTENU PRINCIPAL -->
   <main class="home">
     <section class="hero">
       <div class="container">
-        <p class="eyebrow" data-i18n="badge">Gratuit · Local · Intelligent</p>
+        <p class="eyebrow">Gratuit · Local · Intelligent</p>
         <h1>Maîtrise tes finances avec clarté et sérénité.</h1>
-        <p data-i18n="intro">
+        <p class="intro">
           ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.
         </p>
         <div class="cta">
-          <a href="dashboard.html" class="btn btn-primary" data-i18n="start">Commencer maintenant</a>
-          <a href="about.html" class="btn btn-secondary" data-i18n="discover">Découvrir</a>
+          <a href="dashboard.html" class="btn btn-primary">Commencer maintenant</a>
+          <a href="about.html" class="btn btn-secondary">Découvrir</a>
         </div>
       </div>
     </section>
@@ -52,19 +52,16 @@
     <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
 
-  <!-- JS effet scroll -->
+  <!-- JS -->
   <script>
-    // Apparition douce
     document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.add('is-ready');
     });
 
-    // Ombre sous la navbar au scroll
     const nav = document.querySelector('.navbar');
     function onScroll() {
       if (!nav) return;
-      if (window.scrollY > 4) nav.style.boxShadow = '0 6px 16px rgba(0,0,0,.25)';
-      else nav.style.boxShadow = 'none';
+      nav.style.boxShadow = window.scrollY > 4 ? '0 6px 16px rgba(0,0,0,.25)' : 'none';
     }
     document.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
