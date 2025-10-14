@@ -55,17 +55,26 @@
 
   <!-- JS -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.body.classList.add('is-ready');
-    });
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1) Fade-in global (tu l’avais déjà)
+    document.body.classList.add('is-ready');
 
+    // 2) Ombre sous la nav au scroll (tu l’avais déjà)
     const nav = document.querySelector('.navbar');
-    function onScroll() {
+    const onScroll = () => {
       if (!nav) return;
       nav.style.boxShadow = window.scrollY > 4 ? '0 6px 16px rgba(0,0,0,.25)' : 'none';
-    }
+    };
     document.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-  </script>
+
+    // 3) Reveal doux (stagger)
+    const items = document.querySelectorAll('.reveal');
+    items.forEach((el, i) => {
+      const delay = parseInt(getComputedStyle(el).getPropertyValue('--d')) || i * 120;
+      setTimeout(() => el.classList.add('in'), delay);
+    });
+  });
+</script>
 </body>
 </html>
