@@ -3,70 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Page introuvable – ValenHub</title>
-  <link rel="stylesheet" href="assets/style.css" />
-  <style>
-    body {
-      background-color: #0b1120;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      font-family: 'Inter', sans-serif;
-      overflow: hidden;
-      animation: fadeIn 1s ease-in;
-    }
-
-    h1 {
-      font-size: 5rem;
-      margin-bottom: 0.5rem;
-      color: #b784f1;
-    }
-
-    p {
-      font-size: 1.2rem;
-      color: #cfcfcf;
-      margin-bottom: 2rem;
-    }
-
-    a {
-      background-color: #b784f1;
-      color: #fff;
-      padding: 0.8rem 1.5rem;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-    }
-
-    a:hover {
-      background-color: #d3a7ff;
-      color: #0b1120;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    footer {
-      position: absolute;
-      bottom: 15px;
-      font-size: 0.85rem;
-      color: #888;
-    }
-  </style>
+  <title>404 — Page introuvable | ValenHub</title>
+  <link rel="stylesheet" href="assets/style.css?v=1005" />
 </head>
-<body>
-  <h1>404</h1>
-  <p>Oups… cette page n’existe pas ou n’est plus disponible.</p>
-  <a href="index.html">⬅ Retour à l’accueil</a>
 
-  <footer>
-    © 2025 ValenHub — Clarté & Sérénité financière.
+<body>
+  <main class="error-page">
+    <h1>404</h1>
+    <p>Oups… cette page n’existe pas ou n’est plus disponible.</p>
+    <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
+
+    <section class="disclaimer">
+      <h3>Avertissements</h3>
+      <ul>
+        <li>💡 ValenHub n’est pas un conseiller financier.</li>
+        <li>📊 Les données affichées sont à titre informatif uniquement.</li>
+        <li>🔒 Aucune transaction n’est exécutée via cette plateforme.</li>
+        <li>⚖️ Respect de la réglementation européenne (MiFID II, RGPD).</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
 </body>
 </html>
