@@ -32,29 +32,50 @@
       <p class="sub">Un aperçu clair de ton budget, de tes dépenses et de tes objectifs.</p>
     </section>
 
+    <main class="page">
+  <section class="container">
+    <h1>Tableau de bord</h1>
+    <p class="muted">Aperçu rapide de votre situation.</p>
+
     <!-- KPIs -->
-    <section class="container kpis" style="margin-top:12px">
+    <div class="grid-3" style="margin-top:16px">
+      <div class="card center"><div class="kpi" id="kpi-solde">— €</div><div class="kpi-label">Solde total</div></div>
+      <div class="card center"><div class="kpi" id="kpi-depenses">— €</div><div class="kpi-label">Dépenses du mois</div></div>
+      <div class="card center"><div class="kpi" id="kpi-objectifs">0 / 3</div><div class="kpi-label">Objectifs atteints</div></div>
+    </div>
+
+    <!-- Graphiques (à venir) + Listes -->
+    <div class="grid-2" style="margin-top:16px">
       <div class="card">
-        <h3>Solde agrégé</h3>
-        <p class="big" id="kpi-solde">— €</p>
-        <p class="muted small">Tous comptes confondus</p>
+        <h3>Patrimoine (aperçu)</h3>
+        <ul class="list" id="list-assets">
+          <li class="muted">Ajoutez vos comptes pour voir l’allocation.</li>
+        </ul>
       </div>
       <div class="card">
-        <h3>Dépenses du mois</h3>
-        <p class="big" id="kpi-depenses">— €</p>
-        <p class="muted small">Mise à jour quotidienne</p>
+        <h3>Dépenses récentes</h3>
+        <ul class="list" id="list-spend">
+          <li class="muted">Aucune dépense enregistrée.</li>
+        </ul>
       </div>
-      <div class="card">
-        <h3>Budget restant</h3>
-        <p class="big" id="kpi-budget">— €</p>
-        <p class="muted small">par rapport à l’objectif</p>
+    </div>
+
+    <!-- Placeholder Publicité (désactivé) -->
+    <div class="card center" id="ad-slot" style="margin-top:16px; display:none;">
+      <small class="muted">Espace partenaire (publicité)</small>
+      <div style="height:80px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(255,255,255,.15); border-radius:12px; margin-top:8px;">
+        <span class="muted">(Emplacement pub 728×90)</span>
       </div>
-      <div class="card">
-        <h3>Objectifs</h3>
-        <p class="big" id="kpi-objectifs">0 / 3</p>
-        <p class="muted small">en cours ce mois-ci</p>
-      </div>
-    </section>
+    </div>
+
+    <!-- Actions -->
+    <div class="grid-3" style="margin-top:16px">
+      <a class="card" href="#" id="btn-add-income"><strong>+ Revenu</strong><p class="muted">Ajouter un revenu</p></a>
+      <a class="card" href="#" id="btn-add-expense"><strong>+ Dépense</strong><p class="muted">Ajouter une dépense</p></a>
+      <a class="card" href="#" id="btn-import-csv"><strong>↑ Import CSV</strong><p class="muted">Banques & dépenses</p></a>
+    </div>
+  </section>
+</main>
 
     <!-- Transactions récentes -->
     <section class="container row" style="margin-top:18px">
