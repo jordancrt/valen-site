@@ -27,5 +27,22 @@
   <footer class="footer">
     <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
-</body>
+<script>
+  // 🧹 Nettoyage automatique du cache et du service worker
+  (async () => {
+    try {
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const reg of regs) await reg.unregister();
+      }
+      if (window.caches && caches.keys) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      console.log('✅ Cache vidé et service worker désactivé.');
+    } catch (e) {
+      console.warn('Erreur nettoyage cache :', e);
+    }
+  })();
+</script></body>
 </html>
