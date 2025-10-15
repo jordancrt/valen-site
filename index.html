@@ -2,79 +2,71 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ValenHub — L’équilibre financier simplifié</title>
-  <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=1025" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page introuvable – ValenHub</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    body {
+      background-color: #0b1120;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      animation: fadeIn 1s ease-in;
+    }
+
+    h1 {
+      font-size: 5rem;
+      margin-bottom: 0.5rem;
+      color: #b784f1;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #cfcfcf;
+      margin-bottom: 2rem;
+    }
+
+    a {
+      background-color: #b784f1;
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    a:hover {
+      background-color: #d3a7ff;
+      color: #0b1120;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      position: absolute;
+      bottom: 15px;
+      font-size: 0.85rem;
+      color: #888;
+    }
+  </style>
 </head>
-
 <body>
-  <!-- HEADER -->
-  <header class="navbar">
-    <div class="container nav-container">
-      <div class="nav-brand">
-        <img src="assets/icon-192.png" alt="Logo ValenHub" />
-        <span>VALENHUB</span>
-      </div>
+  <h1>404</h1>
+  <p>Oups… cette page n’existe pas ou n’est plus disponible.</p>
+  <a href="index.html">⬅ Retour à l’accueil</a>
 
-      <nav>
-        <ul class="nav-links">
-          <li><a class="active" href="index.html">Accueil</a></li>
-          <li><a href="dashboard.html">Tableau de bord</a></li>
-          <li><a href="about.html">À propos</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="privacy.html">Confidentialité</a></li>
-          <li><a href="terms.html">Conditions</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- CONTENU PRINCIPAL -->
-  <main class="home">
-    <section class="hero">
-  <div class="container">
-    <p class="eyebrow reveal" style="--d:0ms">Gratuit · Local · Intelligent</p>
-    <h1 class="reveal" style="--d:120ms">Maîtrise tes finances avec clarté et sérénité.</h1>
-    <p class="intro reveal" style="--d:220ms">
-      ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses —
-      sans abonnement, sans cloud.
-    </p>
-    <div class="cta">
-      <a href="dashboard.html" class="btn btn-primary reveal" style="--d:340ms">Commencer maintenant</a>
-      <a href="about.html" class="btn btn-secondary reveal" style="--d:420ms">Découvrir</a>
-    </div>
-  </div>
-</section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+  <footer>
+    © 2025 ValenHub — Clarté & Sérénité financière.
   </footer>
-
-  <!-- JS -->
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // 1) Fade-in global (tu l’avais déjà)
-    document.body.classList.add('is-ready');
-
-    // 2) Ombre sous la nav au scroll (tu l’avais déjà)
-    const nav = document.querySelector('.navbar');
-    const onScroll = () => {
-      if (!nav) return;
-      nav.style.boxShadow = window.scrollY > 4 ? '0 6px 16px rgba(0,0,0,.25)' : 'none';
-    };
-    document.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    // 3) Reveal doux (stagger)
-    const items = document.querySelectorAll('.reveal');
-    items.forEach((el, i) => {
-      const delay = parseInt(getComputedStyle(el).getPropertyValue('--d')) || i * 120;
-      setTimeout(() => el.classList.add('in'), delay);
-    });
-  });
-</script>
 </body>
 </html>
