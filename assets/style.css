@@ -1,109 +1,68 @@
-:root{
-  --bg:#0B1120;
-  --panel:#111827;
-  --panel-2:#0F172A;
-  --text:#F5F6F7;
-  --muted:#9CA3AF;
-  --accent:#A78BFA;   /* violet doux (ton actuel) */
-  --accent-2:#7C3AED;
-  --radius:14px;
-  --shadow:0 10px 30px rgba(0,0,0,.35);
-}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ValenHub — L’équilibre financier simplifié</title>
+  <meta name="theme-color" content="#0B1120" />
+  <link rel="stylesheet" href="assets/style.css?v=1004" />
+</head>
+<body>
 
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;}
-img{max-width:100%;display:block}
-a{color:inherit;text-decoration:none}
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="nav-brand">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" />
+        <span>VALENHUB</span>
+      </div>
 
-/* Container */
-.container{max-width:1040px;margin:0 auto;padding:0 20px}
+      <nav>
+        <ul class="nav-links">
+          <li><a class="active" href="index.html">Accueil</a></li>
+          <li><a href="dashboard.html">Tableau de bord</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="privacy.html">Confidentialité</a></li>
+          <li><a href="terms.html">Conditions</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-/* NAV */
-.navbar{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,rgba(11,17,32,.9),rgba(11,17,32,.6));backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid rgba(255,255,255,.06)}
-.nav-container{display:flex;align-items:center;justify-content:space-between;height:64px}
-.nav-brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.6px}
-.nav-logo{width:26px;height:26px;border-radius:8px;box-shadow:0 0 0 2px rgba(255,255,255,.08) inset}
-.nav-links{display:flex;gap:18px;list-style:none;margin:0;padding:0}
-.nav-links a{padding:8px 10px;border-radius:10px;color:var(--muted)}
-.nav-links a:hover{background:rgba(255,255,255,.06);color:var(--text)}
-.nav-links .active{color:#fff;border:1px solid rgba(255,255,255,.12)}
+  <!-- CONTENU -->
+  <main class="home">
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow" data-i18n="badge">Gratuit · Local · Intelligent</p>
+        <h1>Maîtrise tes finances avec clarté et sérénité.</h1>
+        <p data-i18n="intro">
+          ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.
+        </p>
+        <div class="cta">
+          <a href="dashboard.html" class="btn btn-primary" data-i18n="start">Commencer maintenant</a>
+          <a href="about.html" class="btn btn-secondary" data-i18n="discover">Découvrir</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-/* HERO */
-.hero{padding:88px 0 54px;background:radial-gradient(1200px 500px at 50% -10%, rgba(124,58,237,.18), transparent 60%), linear-gradient(180deg, var(--bg), var(--panel-2))}
-.hero-inner{text-align:center}
-.eyebrow{display:inline-block;margin-bottom:14px;padding:6px 12px;border:1px solid rgba(255,255,255,.12);border-radius:999px;font-size:12px;color:var(--muted)}
-h1{font-size:40px;line-height:1.15;margin:0 0 16px}
-.sub{max-width:700px;margin:0 auto 22px;color:var(--muted)}
-.cta{display:flex;justify-content:center;gap:12px}
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+  </footer>
 
-/* Boutons */
-.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;padding:12px 18px;font-weight:600;border:1px solid rgba(255,255,255,.14);transition:.2s all;cursor:pointer}
-.btn-primary{background:var(--accent);border-color:transparent;color:#0B0B14;box-shadow:0 6px 18px rgba(124,58,237,.35)}
-.btn-primary:hover{transform:translateY(-1px)}
-.btn-secondary{background:transparent;color:#fff}
-.btn-secondary:hover{background:rgba(255,255,255,.06)}
-
-/* Features */
-.features{padding:48px 0}
-.features h2{text-align:center;margin:0 0 26px}
-.features .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.card{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-.card .ico{font-size:22px;margin-bottom:8px}
-.card h3{margin:0 0 6px}
-.card p{margin:0;color:var(--muted)}
-
-/* Assets preview */
-.assets-preview{padding:20px 0}
-.assets-preview h2{text-align:center;margin:0 0 20px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.asset{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:16px}
-.asset-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.amount{font-size:22px;margin:0 0 10px}
-.pill{padding:4px 10px;border-radius:999px;font-size:12px;border:1px solid rgba(255,255,255,.12)}
-.positive{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.35)}
-.negative{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35)}
-.sparkline{height:40px;border-radius:8px;background:linear-gradient(180deg,rgba(167,139,250,.35),rgba(167,139,250,.06))}
-
-/* CTA final */
-.final-cta{padding:32px 0 40px;text-align:center}
-.final-cta p{color:var(--muted);margin:6px 0 14px}
-
-/* Footer compact */
-.footer{border-top:1px solid rgba(255,255,255,.06);padding:18px 0 26px;color:var(--muted);text-align:center}
-
-/* Reveal (anim légère) */
-.reveal{opacity:0;transform:translateY(14px);transition:.5s ease}
-.reveal.is-in{opacity:1;transform:none}
-
-/* Responsive */
-@media (max-width:980px){
-  .features .grid{grid-template-columns:repeat(2,1fr)}
-  .cards{grid-template-columns:1fr}
-  h1{font-size:34px}
-}
-@media (max-width:700px){
-  .nav-links{display:none} /* simple pour l’instant */
-  .hero{padding-top:72px}
-}
-.disclaimer {
-  background: #0b0f1a;
-  color: #ccc;
-  padding: 40px 0;
-  text-align: center;
-  font-size: 0.95rem;
-}
-.disclaimer ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.disclaimer li {
-  margin: 6px 0;
-}
-
-.placeholder .card {
-  background: rgba(255,255,255,0.05);
-  border: 1px dashed rgba(255,255,255,0.1);
-  border-radius: 12px;
-  color: #ccc;
-}
+  <!-- Scripts très légers -->
+  <script>
+    // Effet "header avec ombre" en scroll
+    const nav = document.querySelector('.navbar');
+    function onScroll(){
+      if (!nav) return;
+      if (window.scrollY > 4) nav.style.boxShadow = '0 6px 18px rgba(0,0,0,.25)';
+      else nav.style.boxShadow = 'none';
+    }
+    document.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  </script>
+</body>
+</html>
