@@ -1,29 +1,68 @@
-<!-- SCRIPTS -->
-<script>
-  // Nettoyage (une seule fois)
-  (async () => {
-    try {
-      if (!localStorage.getItem('vhCleaned')) {
-        if ('serviceWorker' in navigator) {
-          const regs = await navigator.serviceWorker.getRegistrations();
-          for (const reg of regs) await reg.unregister();
-        }
-        if (window.caches && caches.keys) {
-          const keys = await caches.keys();
-          await Promise.all(keys.map(k => caches.delete(k)));
-        }
-        localStorage.setItem('vhCleaned', '1');
-        console.log('🧹 Cache nettoyé une fois.');
-      }
-    } catch (e) {
-      console.warn('Erreur nettoyage cache :', e);
-    }
-  })();
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ValenHub — L’équilibre financier simplifié</title>
+  <meta name="theme-color" content="#0B1120" />
+  <link rel="stylesheet" href="assets/style.css?v=1004" />
+</head>
+<body>
 
-  // Enregistrement normal du SW (si présent)
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(console.error);
-    });
-  }
-</script>
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="nav-brand">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" />
+        <span>VALENHUB</span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a class="active" href="index.html">Accueil</a></li>
+          <li><a href="dashboard.html">Tableau de bord</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="privacy.html">Confidentialité</a></li>
+          <li><a href="terms.html">Conditions</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENU -->
+  <main class="home">
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow" data-i18n="badge">Gratuit · Local · Intelligent</p>
+        <h1>Maîtrise tes finances avec clarté et sérénité.</h1>
+        <p data-i18n="intro">
+          ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.
+        </p>
+        <div class="cta">
+          <a href="dashboard.html" class="btn btn-primary" data-i18n="start">Commencer maintenant</a>
+          <a href="about.html" class="btn btn-secondary" data-i18n="discover">Découvrir</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+  </footer>
+
+  <!-- Scripts très légers -->
+  <script>
+    // Effet "header avec ombre" en scroll
+    const nav = document.querySelector('.navbar');
+    function onScroll(){
+      if (!nav) return;
+      if (window.scrollY > 4) nav.style.boxShadow = '0 6px 18px rgba(0,0,0,.25)';
+      else nav.style.boxShadow = 'none';
+    }
+    document.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  </script>
+</body>
+</html>
