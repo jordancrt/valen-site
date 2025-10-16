@@ -1,45 +1,88 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ValenHub — Clarté & Sérénité financière</title>
-  <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=1">
-</head>
-<body>
-  <header class="navbar">
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo"></div>
-        <span>VALENHUB</span>
-      </div>
-      <nav>
-        <ul class="links">
-          <li><a class="active" href="index.html">Accueil</a></li>
-          <li><a href="#">Fonctions</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
 
-  <main class="hero">
-    <div class="container">
-      <p class="badge">Gratuit · Local · Intelligent</p>
-      <h1>Maîtrise tes finances avec clarté et sérénité.</h1>
-      <p class="sub">
-        ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.
-      </p>
-      <div class="cta">
-        <a href="#" class="btn btn-primary">Commencer</a>
-        <a href="#" class="btn btn-secondary">Découvrir</a>
-      </div>
-    </div>
-  </main>
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg,#b388ff,#7c3aed);
+}
+.links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+.links a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: .4rem .8rem;
+  border-radius: 8px;
+}
+.links a:hover, .links a.active {
+  color: white;
+  background: rgba(255,255,255,0.08);
+}
 
-  <footer class="footer">
-    © 2025 ValenHub — Clarté & Sérénité financière.
-  </footer>
-</body>
-</html>
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 6rem 1rem;
+  background: radial-gradient(circle at 50% -20%, rgba(124,58,237,0.2), transparent 70%);
+}
+h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin-bottom: 1rem;
+}
+.badge {
+  display: inline-block;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50px;
+  padding: .3rem .8rem;
+  margin-bottom: 1rem;
+}
+.sub {
+  color: var(--muted);
+  max-width: 640px;
+  margin: 0 auto 2rem;
+}
+.cta {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: .8rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #0b0b14;
+}
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-secondary {
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* FOOTER */
+.footer {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  color: var(--muted);
+  text-align: center;
+  padding: 1.2rem;
+  font-size: .9rem;
+}
