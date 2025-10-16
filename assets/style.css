@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ValenHub — Clarté & Sérénité financière</title>
+  <meta name="theme-color" content="#0B1120" />
+  <link rel="stylesheet" href="assets/style.css?v=1">
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo"></div>
+        <span>VALENHUB</span>
+      </div>
+      <nav>
+        <ul class="links">
+          <li><a class="active" href="index.html">Accueil</a></li>
+          <li><a href="#">Fonctions</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
+  <main class="hero">
+    <div class="container">
+      <p class="badge">Gratuit · Local · Intelligent</p>
+      <h1>Maîtrise tes finances avec clarté et sérénité.</h1>
+      <p class="sub">
+        ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.
+      </p>
+      <div class="cta">
+        <a href="#" class="btn btn-primary">Commencer</a>
+        <a href="#" class="btn btn-secondary">Découvrir</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    © 2025 ValenHub — Clarté & Sérénité financière.
+  </footer>
+</body>
+</html>
