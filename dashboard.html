@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ValenHub — Tableau de bord</title>
+  <meta name="theme-color" content="#0B1120" />
+  <link rel="stylesheet" href="assets/style.css?v=2001" />
+  <!-- Chart.js (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <script src="assets/app.js?v=2001" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-container">
+      <a class="nav-brand" href="index.html">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" />
+        <span>VALENHUB</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a class="active" href="dashboard.html">Tableau de bord</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="privacy.html">Confidentialité</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <div class="container">
+      <!-- Bandeau résumé -->
+      <section class="row">
+        <div class="card kpi">
+          <h3>Patrimoine total</h3>
+          <p class="big" id="kpi-total">—</p>
+          <p class="muted small">Tous comptes & actifs confondus</p>
+        </div>
+        <div class="card kpi">
+          <h3>Variation mensuelle</h3>
+          <p class="big" id="kpi-variation">—</p>
+          <p class="muted small">Évolution depuis 30 jours</p>
+        </div>
+        <div class="card kpi">
+          <h3>Dépenses du mois</h3>
+          <p class="big" id="kpi-depenses">—</p>
+          <p class="muted small">Mise à jour locale</p>
+        </div>
+        <div class="card kpi">
+          <h3>Objectif atteint</h3>
+          <p class="big" id="kpi-objectif">—</p>
+          <p class="muted small">Progrès vers la cible</p>
+        </div>
+      </section>
+
+      <!-- Graphiques -->
+      <section class="row">
+        <div class="card">
+          <div class="card-head">
+            <h3>Évolution du patrimoine</h3>
+            <span class="sub muted">12 derniers mois</span>
+          </div>
+          <canvas id="chartPatrimoine" height="120"></canvas>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Répartition des actifs</h3>
+            <span class="sub muted">Portefeuille simulé</span>
+          </div>
+          <canvas id="chartRepartition" height="120"></canvas>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Dépenses par catégorie</h3>
+            <span class="sub muted">Mois courant</span>
+          </div>
+          <canvas id="chartDepenses" height="120"></canvas>
+        </div>
+      </section>
+
+      <!-- Actifs & “IA” tips -->
+      <section class="row">
+        <div class="card">
+          <div class="card-head">
+            <h3>Vos actifs (exemple)</h3>
+            <button class="btn btn-secondary btn-small" id="btn-randomize">Rafraîchir la démo</button>
+          </div>
+          <ul class="assets">
+            <li><span>💶 Épargne</span><b id="a-epargne">—</b></li>
+            <li><span>📈 Actions & ETF</span><b id="a-actions">—</b></li>
+            <li><span>₿ Crypto</span><b id="a-crypto">—</b></li>
+            <li><span>🏠 Immobilier</span><b id="a-immo">—</b></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Conseil automatique</h3>
+            <span class="sub muted">Démo locale (pas de conseil financier)</span>
+          </div>
+          <div class="ai">
+            <p id="ai-tip">—</p>
+            <div class="muted small">Astuce générée depuis vos montants simulés.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclaimers -->
+      <section class="card">
+        <h3>Avertissements</h3>
+        <ul class="bullets">
+          <li>ValenHub n’est pas un conseiller financier.</li>
+          <li>Les données affichées sont locales & pédagogiques.</li>
+          <li>Aucune transaction n’est exécutée via cette plateforme.</li>
+          <li>Respect RGPD : aucune donnée envoyée à nos serveurs.</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+    </div>
+  </footer>
+</body>
+</html>
