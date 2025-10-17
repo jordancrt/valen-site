@@ -136,3 +136,39 @@ html,body{
 @media (prefers-reduced-motion: reduce){
   .card, .reveal { transition: none !important; transform: none !important; }
 }
+/* Placeholders des cartes graph */
+.skeleton{
+  width:100%;
+  border-radius:12px;
+  background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.02), rgba(255,255,255,.06));
+  background-size: 600px 100%;
+  animation: shimmer 1.2s infinite linear;
+  min-height: 240px;
+}
+@keyframes shimmer{
+  0% { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+/* Canvas responsive */
+.card canvas{
+  width:100% !important;
+  height:260px !important;
+  display:block;
+}
+
+/* Grille KPI (si pas déjà présent) */
+.kpis{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:16px;
+  margin:16px 0 24px;
+}
+.kpi .big{ font-size:28px; font-weight:700; }
+@media (max-width:900px){
+  .kpis{ grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width:560px){
+  .kpis{ grid-template-columns: 1fr; }
+  .card canvas{ height:220px !important; }
+}
