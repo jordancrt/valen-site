@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ValenHub — Tableau de bord</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=2001" />
+  <link rel="stylesheet" href="assets/style.css?v=3001" />
 </head>
+
 <body>
   <!-- NAV -->
   <header class="navbar">
@@ -26,80 +27,49 @@
     </div>
   </header>
 
-  <!-- CONTENU -->
-  <main class="container" style="padding-top:48px; padding-bottom:64px;">
-    <section class="row kpis">
-      <div class="card">
+  <!-- DASHBOARD -->
+  <main class="dashboard container">
+    <!-- Section KPIs -->
+    <section class="kpis reveal">
+      <div class="card kpi">
         <h3>Patrimoine total</h3>
-        <p class="big" id="kpi-total">—</p>
+        <p class="big" id="kpi-wealth">—</p>
         <p class="muted small">Tous comptes & actifs confondus</p>
       </div>
-      <div class="card">
+      <div class="card kpi">
         <h3>Variation mensuelle</h3>
-        <p class="big" id="kpi-variation">—</p>
-        <p class="muted small">Évolution depuis 30 jours</p>
+        <p class="big" id="kpi-change">—</p>
+        <p class="muted small">Évolution sur 30 jours</p>
       </div>
-      <div class="card">
+      <div class="card kpi">
         <h3>Dépenses du mois</h3>
         <p class="big" id="kpi-expenses">—</p>
         <p class="muted small">Mise à jour locale</p>
       </div>
-      <div class="card">
+      <div class="card kpi">
         <h3>Objectif atteint</h3>
         <p class="big" id="kpi-goal">—</p>
         <p class="muted small">Progrès vers la cible</p>
       </div>
     </section>
 
-    <section class="row">
-      <div class="card">
-        <h3>Évolution du patrimoine</h3>
-        <p class="muted small">12 derniers mois</p>
-        <canvas id="chartWealth" height="110"></canvas>
-      </div>
-      <div class="card">
-        <h3>Dépenses par catégorie</h3>
-        <p class="muted small">Mois en cours</p>
-        <canvas id="chartExpenses" height="110"></canvas>
-      </div>
-      <div class="card">
-        <h3>Répartition des actifs</h3>
-        <p class="muted small">Portefeuille simulé</p>
-        <canvas id="chartAllocation" height="110"></canvas>
-      </div>
+    <!-- Graphiques -->
+    <section class="card reveal">
+      <h3>Évolution du patrimoine</h3>
+      <div class="skeleton" style="height:260px"></div>
+      <canvas id="chartWealth" hidden></canvas>
     </section>
 
-    <section class="row">
-      <div class="card">
-        <h3>Ajouter une opération (local)</h3>
-        <form id="op-form">
-          <div class="grid" style="grid-template-columns:1fr 1fr;">
-            <label>Type
-              <select name="type" required>
-                <option value="income">Revenu</option>
-                <option value="expense">Dépense</option>
-                <option value="asset">Actif</option>
-              </select>
-            </label>
-            <label>Montant (€)
-              <input name="amount" type="number" step="0.01" required />
-            </label>
-          </div>
-          <label>Catégorie
-            <input name="category" type="text" placeholder="Salaire, Loyer, ETF…" />
-          </label>
-          <button class="btn btn-primary" type="submit">Enregistrer (local)</button>
-          <p class="muted small">Tout est stocké en local sur ton appareil (localStorage).</p>
-        </form>
-      </div>
-      <div class="card">
-        <h3>Conseils rapides</h3>
-        <ul id="tips" class="muted small" style="line-height:1.8">
-          <li>💡 Fixe un objectif d’épargne mensuel réaliste (ex. 10%).</li>
-          <li>📊 Sépare dépenses fixes et variables pour mieux les piloter.</li>
-          <li>🧰 Diversifie : cash de sécurité, ETF globaux, un peu de crypto si tu veux.</li>
-        </ul>
-      </div>
+    <section class="card reveal">
+      <h3>Dépenses par catégorie</h3>
+      <div class="skeleton" style="height:260px"></div>
+      <canvas id="chartExpenses" hidden></canvas>
+    </section>
+
+    <section class="card reveal">
+      <h3>Répartition du portefeuille</h3>
+      <div class="skeleton" style="height:180px"></div>
+      <canvas id="chartAllocation" hidden></canvas>
     </section>
   </main>
 
@@ -108,8 +78,8 @@
     <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
 
-  <!-- Librairie charts + ton JS -->
+  <!-- Librairies -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
-  <script src="assets/app.js?v=2001"></script>
+  <script src="assets/app.js?v=3001"></script>
 </body>
 </html>
