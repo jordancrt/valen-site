@@ -1,152 +1,115 @@
-<main class="dashboard">
-  <div class="container">
-    <!-- Bandeau résumé (inchangé) -->
-    <section class="row">
-      <div class="card kpi">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ValenHub — Tableau de bord</title>
+  <meta name="theme-color" content="#0B1120" />
+  <link rel="stylesheet" href="assets/style.css?v=2001" />
+</head>
+<body>
+  <!-- NAV -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="nav-brand">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" />
+        <span>VALENHUB</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a class="active" href="dashboard.html">Tableau de bord</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENU -->
+  <main class="container" style="padding-top:48px; padding-bottom:64px;">
+    <section class="row kpis">
+      <div class="card">
         <h3>Patrimoine total</h3>
         <p class="big" id="kpi-total">—</p>
         <p class="muted small">Tous comptes & actifs confondus</p>
       </div>
-      <div class="card kpi">
+      <div class="card">
         <h3>Variation mensuelle</h3>
         <p class="big" id="kpi-variation">—</p>
         <p class="muted small">Évolution depuis 30 jours</p>
       </div>
-      <div class="card kpi">
+      <div class="card">
         <h3>Dépenses du mois</h3>
-        <p class="big" id="kpi-depenses">—</p>
+        <p class="big" id="kpi-expenses">—</p>
         <p class="muted small">Mise à jour locale</p>
       </div>
-      <div class="card kpi">
+      <div class="card">
         <h3>Objectif atteint</h3>
-        <p class="big" id="kpi-objectif">—</p>
+        <p class="big" id="kpi-goal">—</p>
         <p class="muted small">Progrès vers la cible</p>
       </div>
     </section>
 
-    <!-- Graphiques (inchangés) -->
     <section class="row">
       <div class="card">
-        <div class="card-head">
-          <h3>Évolution du patrimoine</h3>
-          <span class="sub muted">12 derniers mois</span>
-        </div>
-        <canvas id="chartPatrimoine" height="120"></canvas>
+        <h3>Évolution du patrimoine</h3>
+        <p class="muted small">12 derniers mois</p>
+        <canvas id="chartWealth" height="110"></canvas>
       </div>
-
       <div class="card">
-        <div class="card-head">
-          <h3>Répartition des actifs</h3>
-          <span class="sub muted">Portefeuille simulé</span>
-        </div>
-        <canvas id="chartRepartition" height="120"></canvas>
+        <h3>Dépenses par catégorie</h3>
+        <p class="muted small">Mois en cours</p>
+        <canvas id="chartExpenses" height="110"></canvas>
       </div>
-
       <div class="card">
-        <div class="card-head">
-          <h3>Dépenses par catégorie</h3>
-          <span class="sub muted">Mois courant</span>
-        </div>
-        <canvas id="chartDepenses" height="120"></canvas>
+        <h3>Répartition des actifs</h3>
+        <p class="muted small">Portefeuille simulé</p>
+        <canvas id="chartAllocation" height="110"></canvas>
       </div>
     </section>
 
-    <!-- Actifs + Conseil -->
     <section class="row">
       <div class="card">
-        <div class="card-head">
-          <h3>Vos actifs (exemple)</h3>
-          <button class="btn btn-secondary btn-small" id="btn-randomize">Rafraîchir la démo</button>
-        </div>
-        <ul class="assets">
-          <li><span>💶 Épargne</span><b id="a-epargne">—</b></li>
-          <li><span>📈 Actions & ETF</span><b id="a-actions">—</b></li>
-          <li><span>₿ Crypto</span><b id="a-crypto">—</b></li>
-          <li><span>🏠 Immobilier</span><b id="a-immo">—</b></li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <h3>Conseil automatique</h3>
-          <span class="sub muted">Démo locale (pas de conseil financier)</span>
-        </div>
-        <div class="ai">
-          <p id="ai-tip">—</p>
-          <div class="muted small">Astuce générée depuis vos montants simulés.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 🔧 Formulaire de saisie (remplace la démo) -->
-    <section class="row">
-      <div class="card" style="grid-column: span 12">
-        <div class="card-head">
-          <h3>Saisir mes montants (local)</h3>
-          <span class="sub muted">Rien n’est envoyé. Stockage local uniquement.</span>
-        </div>
-
-        <form id="form-data" class="form-grid">
-          <div>
-            <label>Épargne (€)</label>
-            <input type="number" id="f-epargne" min="0" step="100" required />
+        <h3>Ajouter une opération (local)</h3>
+        <form id="op-form">
+          <div class="grid" style="grid-template-columns:1fr 1fr;">
+            <label>Type
+              <select name="type" required>
+                <option value="income">Revenu</option>
+                <option value="expense">Dépense</option>
+                <option value="asset">Actif</option>
+              </select>
+            </label>
+            <label>Montant (€)
+              <input name="amount" type="number" step="0.01" required />
+            </label>
           </div>
-          <div>
-            <label>Actions & ETF (€)</label>
-            <input type="number" id="f-actions" min="0" step="100" required />
-          </div>
-          <div>
-            <label>Crypto (€)</label>
-            <input type="number" id="f-crypto" min="0" step="100" required />
-          </div>
-          <div>
-            <label>Immobilier (€)</label>
-            <input type="number" id="f-immo" min="0" step="500" required />
-          </div>
-
-          <div>
-            <label>Dépenses Logement (€/mois)</label>
-            <input type="number" id="f-logement" min="0" step="10" />
-          </div>
-          <div>
-            <label>Dépenses Alimentation (€/mois)</label>
-            <input type="number" id="f-alim" min="0" step="10" />
-          </div>
-          <div>
-            <label>Dépenses Transport (€/mois)</label>
-            <input type="number" id="f-transport" min="0" step="10" />
-          </div>
-          <div>
-            <label>Dépenses Loisirs (€/mois)</label>
-            <input type="number" id="f-loisirs" min="0" step="10" />
-          </div>
-          <div>
-            <label>Dépenses Divers (€/mois)</label>
-            <input type="number" id="f-divers" min="0" step="10" />
-          </div>
-
-          <div>
-            <label>Objectif Patrimoine (€)</label>
-            <input type="number" id="f-objectif" min="0" step="500" />
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <button type="button" class="btn" id="btn-reset">Réinitialiser (démo)</button>
-          </div>
+          <label>Catégorie
+            <input name="category" type="text" placeholder="Salaire, Loyer, ETF…" />
+          </label>
+          <button class="btn btn-primary" type="submit">Enregistrer (local)</button>
+          <p class="muted small">Tout est stocké en local sur ton appareil (localStorage).</p>
         </form>
       </div>
+      <div class="card">
+        <h3>Conseils rapides</h3>
+        <ul id="tips" class="muted small" style="line-height:1.8">
+          <li>💡 Fixe un objectif d’épargne mensuel réaliste (ex. 10%).</li>
+          <li>📊 Sépare dépenses fixes et variables pour mieux les piloter.</li>
+          <li>🧰 Diversifie : cash de sécurité, ETF globaux, un peu de crypto si tu veux.</li>
+        </ul>
+      </div>
     </section>
+  </main>
 
-    <!-- Disclaimers (inchangé) -->
-    <section class="card">
-      <h3>Avertissements</h3>
-      <ul class="bullets">
-        <li>ValenHub n’est pas un conseiller financier.</li>
-        <li>Les données affichées sont locales & pédagogiques.</li>
-        <li>Aucune transaction n’est exécutée via cette plateforme.</li>
-        <li>Respect RGPD : aucune donnée envoyée à nos serveurs.</li>
-      </ul>
-    </section>
-  </div>
-</main>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+  </footer>
+
+  <!-- Librairie charts + ton JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script src="assets/app.js?v=2001"></script>
+</body>
+</html>
