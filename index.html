@@ -5,41 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ValenHub — Clarté & Sérénité financière</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=1">
+  <link rel="stylesheet" href="assets/style.css?v=2001" />
 </head>
 <body>
+  <!-- NAV -->
   <header class="navbar">
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo"></div>
+    <div class="container nav-container">
+      <a class="nav-brand" href="index.html" aria-label="ValenHub">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" />
         <span>VALENHUB</span>
-      </div>
+      </a>
       <nav>
-        <ul class="links">
+        <ul class="nav-links">
           <li><a class="active" href="index.html">Accueil</a></li>
-          <li><a href="#">Fonctions</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="dashboard.html">Tableau de bord</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="privacy.html">Confidentialité</a></li>
+          <li><a href="terms.html">Conditions</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main class="hero">
-    <div class="container">
-      <p class="badge">Gratuit · Local · Intelligent</p>
-      <h1>Maîtrise tes finances avec clarté et sérénité.</h1>
-      <p class="sub">
-        ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.
-      </p>
-      <div class="cta">
-        <a href="#" class="btn btn-primary">Commencer</a>
-        <a href="#" class="btn btn-secondary">Découvrir</a>
+  <!-- HERO -->
+  <main class="home">
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Gratuit · Local · Intelligent</p>
+        <h1>Maîtrise tes finances avec clarté et sérénité.</h1>
+        <p class="sub">
+          ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et comprendre tes dépenses — sans abonnement, sans cloud.
+        </p>
+        <div class="cta">
+          <a href="dashboard.html" class="btn btn-primary">Commencer</a>
+          <a href="about.html" class="btn btn-secondary">Découvrir</a>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
-    © 2025 ValenHub — Clarté & Sérénité financière.
+    <div class="container">
+      <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+      <ul class="legal-mini">
+        <li>🛡️ Données locales uniquement (localStorage)</li>
+        <li>⚠️ Informations à titre pédagogique, pas de conseil financier</li>
+      </ul>
+    </div>
   </footer>
 </body>
 </html>
