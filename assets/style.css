@@ -87,3 +87,52 @@ html,body{
   .dashboard .row .card:nth-child(2){grid-column:span 6}
   .dashboard .row .card:nth-child(3){grid-column:span 12}
 }
+/* ===== Grid responsive pour les cartes ===== */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: 16px;
+  backdrop-filter: blur(6px);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.25); border-color: rgba(255,255,255,.14); }
+
+.kpis { grid-column: span 12; display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+.kpi   { grid-column: span 12; }
+@media (min-width: 640px){ .kpi{ grid-column: span 6;} }
+@media (min-width: 1024px){ .kpi{ grid-column: span 3;} }
+
+/* Charts: tailles fluides & compactes */
+.card canvas { width: 100% !important; height: auto; }
+#chartWealth, #chartExpenses { max-height: 260px !important; }
+#chartAllocation { max-height: 180px !important; }
+@media (min-width: 1280px){
+  #chartWealth, #chartExpenses { max-height: 280px !important; }
+  #chartAllocation { max-height: 160px !important; }
+}
+
+/* Skeleton loading (shimmer) */
+.skeleton { position: relative; overflow: hidden; background: rgba(255,255,255,.06); border-radius: 10px; }
+.skeleton::after {
+  content:""; position:absolute; inset:0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer { 100% { transform: translateX(100%);} }
+
+/* Apparition douce (révèle à l’entrée viewport) */
+.reveal { opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; }
+.reveal.is-in { opacity: 1; transform: translateY(0); }
+
+/* Respecte l'accessibilité */
+@media (prefers-reduced-motion: reduce){
+  .card, .reveal { transition: none !important; transform: none !important; }
+}
