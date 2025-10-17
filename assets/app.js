@@ -1,106 +1,99 @@
-// -- util --
-const LS = window.localStorage;
-
-// Données démo si vide
-const seed = {
-  wealth: [12000,13000,12500,14000,15500,16000,15800,17000,18200,19000,20500,21200],
-  expenses: [
-    { label: 'Logement', value: 850 },
-    { label: 'Courses', value: 280 },
-    { label: 'Transport', value: 120 },
-    { label: 'Loisirs', value: 160 },
+// ======== Données simulées ========
+const demo = {
+  wealthSeries: [15000, 15200, 15500, 15800, 16200, 16800, 17200, 17800, 18500, 19100, 19700, 20500],
+  expensesSeries: [
+    { label: 'Logement', value: 900 },
+    { label: 'Courses', value: 320 },
+    { label: 'Transport', value: 150 },
+    { label: 'Loisirs', value: 180 },
     { label: 'Santé', value: 60 }
   ],
   allocation: [
     { label: 'Cash', value: 20 },
-    { label: 'ETF', value: 55 },
-    { label: 'Crypto', value: 10 },
+    { label: 'ETF', value: 50 },
+    { label: 'Crypto', value: 15 },
     { label: 'Immobilier', value: 15 }
-  ],
-  monthSpend: 1470,
-  total: 21200,
-  goalProgress: 62
+  ]
 };
 
-function fmtEUR(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n); }
+// ======== Formatage ========
+const fmtMoney = n => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
 
-document.addEventListener('DOMContentLoaded', () => {
-  // ===== KPIs =====
-  document.getElementById('kpi-total').textContent = fmtEUR(seed.total);
-  const variation = seed.wealth.at(-1) - seed.wealth.at(-2);
-  const varPct = (variation / seed.wealth.at(-2)) * 100;
-  document.getElementById('kpi-variation').textContent =
-    `${variation >= 0 ? '+' : ''}${fmtEUR(variation)} (${varPct.toFixed(1)}%)`;
-  document.getElementById('kpi-expenses').textContent = fmtEUR(seed.monthSpend);
-  document.getElementById('kpi-goal').textContent = seed.goalProgress + '%';
+// ======== KPIs ========
+function updateKPIs() {
+  const total = demo.wealthSeries.at(-1);
+  const prev = demo.wealthSeries.at(-2);
+  const variation = total - prev;
+  const varPct = (variation / prev) * 100;
+  const spend = demo.expensesSeries.reduce((a, b) => a + b.value, 0);
 
-  // ===== Charts =====
-  const months = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+  document.getElementById('kpi-wealth').textContent = fmtMoney(total);
+  document.getElementById('kpi-change').textContent = `${variation >= 0 ? '+' : ''}${varPct.toFixed(1)} %`;
+  document.getElementById('kpi-expenses').textContent = fmtMoney(spend);
+  document.getElementById('kpi-goal').textContent = Math.floor((total / 30000) * 100) + ' %';
+}
 
-  // Wealth (line)
+// ======== Charts ========
+function initCharts() {
+  const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+
+  // Wealth
   new Chart(document.getElementById('chartWealth'), {
     type: 'line',
     data: {
       labels: months,
       datasets: [{
-        data: seed.wealth,
+        data: demo.wealthSeries,
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139,92,246,0.2)',
         tension: 0.35,
-        borderWidth: 2,
-        pointRadius: 0
+        fill: true
       }]
     },
     options: {
-      responsive: true,
-      plugins: { legend: { display:false } },
+      plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { display:false } },
-        y: { grid: { color:'rgba(255,255,255,.08)' } }
+        x: { grid: { display: false } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' } }
       }
     }
   });
 
-  // Expenses (bar)
+  // Expenses
   new Chart(document.getElementById('chartExpenses'), {
     type: 'bar',
     data: {
-      labels: seed.expenses.map(e=>e.label),
-      datasets: [{ data: seed.expenses.map(e=>e.value), borderWidth:1 }]
+      labels: demo.expensesSeries.map(e => e.label),
+      datasets: [{
+        data: demo.expensesSeries.map(e => e.value),
+        backgroundColor: 'rgba(99,102,241,0.8)',
+      }]
     },
     options: {
-      plugins: { legend: { display:false } },
-      scales: { y: { beginAtZero:true } }
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
     }
   });
 
-  // Allocation (doughnut)
+  // Allocation
   new Chart(document.getElementById('chartAllocation'), {
     type: 'doughnut',
     data: {
-      labels: seed.allocation.map(a=>a.label),
-      datasets: [{ data: seed.allocation.map(a=>a.value) }]
+      labels: demo.allocation.map(a => a.label),
+      datasets: [{
+        data: demo.allocation.map(a => a.value),
+        backgroundColor: ['#8b5cf6', '#6366f1', '#10b981', '#f59e0b']
+      }]
     },
     options: {
-      plugins: { legend: { position:'bottom' } },
-      cutout: '58%'
+      plugins: { legend: { position: 'bottom' } },
+      cutout: '60%'
     }
   });
+}
 
-  // ===== Form local add =====
-  const form = document.getElementById('op-form');
-  if (form){
-    form.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(form).entries());
-      const amount = parseFloat(data.amount || '0');
-      if (data.type === 'expense') {
-        // met à jour dépense mensuelle locale
-        seed.monthSpend += Math.abs(amount);
-        document.getElementById('kpi-expenses').textContent = fmtEUR(seed.monthSpend);
-      } else if (data.type === 'income' || data.type === 'asset') {
-        seed.total += Math.abs(amount);
-        document.getElementById('kpi-total').textContent = fmtEUR(seed.total);
-      }
-      form.reset();
-    });
-  }
+// ======== Lazy reveal (apparition fluide) ========
+document.addEventListener('DOMContentLoaded', () => {
+  updateKPIs();
+  initCharts();
 });
