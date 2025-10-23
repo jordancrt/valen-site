@@ -1,108 +1,121 @@
-// ====== Helpers
-const € = n => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n);
-function revealCanvas(id){
-  const el = document.getElementById(id);
-  if(!el) return;
-  // supprime le skeleton (l'élément juste avant)
-  const prev = el.previousElementSibling;
-  if (prev && prev.classList.contains('skeleton')) prev.remove();
-  el.hidden = false; // affiche le canvas
-}
+/* ValenHub – data locale + KPIs + charts (Chart.js) */
 
-// ====== Données démo (tu pourras brancher plus tard)
-const demo = {
-  wealth: [15000,15200,15500,15800,16200,16800,17200,17800,18500,19100,19700,20500],
-  expenses: [
-    {label:'Logement', value: 900},
-    {label:'Courses',  value: 320},
-    {label:'Transport',value: 150},
-    {label:'Loisirs',  value: 180},
-    {label:'Santé',    value:  60}
-  ],
-  alloc: [
-    {label:'Cash',       value:20},
-    {label:'ETF',        value:50},
-    {label:'Crypto',     value:15},
-    {label:'Immobilier', value:15}
-  ]
+const LS = window.localStorage;
+const DATA_KEY = 'vh-data-v1';
+
+// ====== Données démo (si rien en local) ======
+const demoData = {
+  wealthHistory: [31500, 32200, 33000, 33750, 34100, 34600, 35250, 36000, 36550, 37000, 37450, 37545],
+  monthlyChangePct: 6.0,                     // %
+  monthlyExpenses: 8135,                     // €
+  goal: { target: 52000, current: 37545 },   // €
+  expensesByCat: { Logement: 1200, Courses: 620, Transport: 210, Loisirs: 380, Santé: 140, Abonnements: 95 },
+  allocation:  { Liquidités: 22, Actions: 48, Crypto: 8, Immobilier: 18, Autres: 4 }
 };
 
-// ====== KPIs
-function updateKPIs(){
-  const last = demo.wealth.at(-1), prev = demo.wealth.at(-2);
-  const varPct = ((last - prev) / prev) * 100;
-  const spend  = demo.expenses.reduce((s,e)=>s+e.value,0);
-  document.getElementById('kpi-wealth').textContent   = €(last);
-  document.getElementById('kpi-change').textContent   = `${varPct>=0?'+':''}${varPct.toFixed(1)} %`;
-  document.getElementById('kpi-expenses').textContent = €(spend);
-  document.getElementById('kpi-goal').textContent     = Math.min(100, Math.round(last/30000*100)) + ' %';
+// ====== Utils ======
+const fmt = new Intl.NumberFormat('fr-FR', { style:'currency', currency:'EUR', maximumFractionDigits:0 });
+const pct = (x) => `${x.toFixed(1)} %`;
+
+// ====== Load / Save ======
+function loadData() {
+  try {
+    const raw = LS.getItem(DATA_KEY);
+    if (!raw) return demoData;
+    return JSON.parse(raw);
+  } catch { return demoData; }
+}
+function saveData(d){ try { LS.setItem(DATA_KEY, JSON.stringify(d)); } catch {} }
+
+// ====== KPIs ======
+function updateKPIs(d) {
+  const wealth = d.wealthHistory[d.wealthHistory.length - 1] || 0;
+  document.getElementById('kpi-wealth').textContent   = fmt.format(wealth);
+  document.getElementById('kpi-change').textContent   = pct(d.monthlyChangePct);
+  document.getElementById('kpi-expenses').textContent = fmt.format(d.monthlyExpenses);
+
+  const goalPct = Math.max(0, Math.min(100, (d.goal.current / d.goal.target) * 100));
+  document.getElementById('kpi-goal').textContent = pct(goalPct);
 }
 
-// ====== Charts (Chart.js v4)
-function initCharts(){
-  const months = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+// ====== Charts ======
+let wealthChart, expChart, allocChart;
 
-  // Ligne : Évolution patrimoine
-  revealCanvas('chartWealth');
-  new Chart(document.getElementById('chartWealth'), {
-    type:'line',
-    data:{
-      labels: months,
-      datasets:[{
-        data: demo.wealth,
-        borderColor:'#8b5cf6',
-        backgroundColor:'rgba(139,92,246,.18)',
-        pointRadius:0,
-        tension:.35,
-        fill:true
+function renderCharts(d) {
+  // On retire les skeletons et on montre les canvas
+  for (const s of document.querySelectorAll('.skeleton')) s.remove();
+  for (const c of document.querySelectorAll('canvas[hidden]')) c.hidden = false;
+
+  // Labels mois (derniers 12)
+  const labels = ['M-11','M-10','M-9','M-8','M-7','M-6','M-5','M-4','M-3','M-2','M-1','M'];
+
+  // 1) Wealth line
+  const ctxW = document.getElementById('chartWealth').getContext('2d');
+  wealthChart?.destroy();
+  wealthChart = new Chart(ctxW, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Patrimoine (€)',
+        data: d.wealthHistory,
+        tension: 0.35,
+        fill: true
       }]
     },
-    options:{
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{grid:{display:false}},
-        y:{grid:{color:'rgba(255,255,255,.06)'}}
-      }
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => fmt.format(v) } } }
     }
   });
 
-  // Barres : Dépenses
-  revealCanvas('chartExpenses');
-  new Chart(document.getElementById('chartExpenses'), {
-    type:'bar',
-    data:{
-      labels: demo.expenses.map(e=>e.label),
-      datasets:[{
-        data: demo.expenses.map(e=>e.value),
-        backgroundColor:'rgba(99,102,241,.9)',
-        borderRadius:8
-      }]
+  // 2) Dépenses barres
+  const ctxE = document.getElementById('chartExpenses').getContext('2d');
+  expChart?.destroy();
+  expChart = new Chart(ctxE, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(d.expensesByCat),
+      datasets: [{ label: 'Dépenses (€)', data: Object.values(d.expensesByCat) }]
     },
-    options:{
-      plugins:{legend:{display:false}},
-      scales:{y:{beginAtZero:true}}
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => fmt.format(v) } } }
     }
   });
 
-  // Doughnut : Allocation
-  revealCanvas('chartAllocation');
-  new Chart(document.getElementById('chartAllocation'), {
-    type:'doughnut',
-    data:{
-      labels: demo.alloc.map(a=>a.label),
-      datasets:[{
-        data: demo.alloc.map(a=>a.value),
-        backgroundColor:['#8b5cf6','#6366f1','#10b981','#f59e0b']
-      }]
+  // 3) Allocation donut
+  const ctxA = document.getElementById('chartAllocation').getContext('2d');
+  allocChart?.destroy();
+  allocChart = new Chart(ctxA, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(d.allocation),
+      datasets: [{ data: Object.values(d.allocation) }]
     },
-    options:{
-      plugins:{legend:{position:'bottom'}},
-      cutout:'60%'
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' } }
     }
   });
 }
 
+// ====== Init ======
 document.addEventListener('DOMContentLoaded', () => {
-  updateKPIs();
-  initCharts();
+  const data = loadData();
+  updateKPIs(data);
+  renderCharts(data);
+
+  // Petit “reveal” sur les cartes
+  const io = new IntersectionObserver((ents) => {
+    ents.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('in');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 });
