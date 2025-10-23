@@ -115,7 +115,13 @@
   </footer>
 
   <!-- Librairies + App -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
-  <script src="assets/app.js?v=4001"></script>
+  <!-- Chart.js CDN (pour les graphiques) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Notre wrapper -->
+<script type="module" src="assets/api-wrapper.js"></script>
+
+<!-- Le code du dashboard qui consomme le wrapper -->
+<script type="module" src="assets/dashboard.js"></script>
 </body>
 </html>
