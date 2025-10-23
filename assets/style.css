@@ -204,3 +204,18 @@ main {
   padding: 48px 0;
 }
 .footer { margin-top: 0; }
+/* ===== Fix hauteur page & footer collé ===== */
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; }
+
+main { 
+  flex: 1; 
+  /* adapte la hauteur du bloc héros à l’écran */
+  min-height: calc(100vh - 64px - 60px); /* header ~64, footer ~60 */
+}
+
+.hero { 
+  display: grid; 
+  place-items: center; 
+  padding: 4rem 1rem; 
+}
