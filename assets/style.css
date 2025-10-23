@@ -172,3 +172,17 @@ html,body{
   .kpis{ grid-template-columns: 1fr; }
   .card canvas{ height:220px !important; }
 }
+/* ==== Layout pleine hauteur + footer collé proprement ==== */
+html, body { height: 100%; }
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main { 
+  flex: 1;                 /* pousse le footer en bas */
+  display: flex;
+  align-items: center;     /* centre verticalement le contenu */
+  padding: 48px 0;         /* respire un peu */
+}
+.footer { margin-top: 0; } /* on évite les grands blancs */
