@@ -1,0 +1,108 @@
+// /api/get-accounts.js
+import crypto from "crypto";
+
+// lit la clé symétrique depuis var d'env (base64)
+function getKey() {
+  const b64 = process.env.CLIENT_KEY;
+  if (!b64) throw new Error("Missing CLIENT_KEY in env");
+  return Buffer.from(b64, "base64"); // 32 bytes attendus pour AES-256
+}
+
+// déchiffre le payload renvoyé par exchange-public-token.js
+function decryptPacked(packedB64) {
+  const packed = Buffer.from(packedB64, "base64");
+  // structure attendue : iv(12) + tag(16) + ciphertext
+  const iv = packed.slice(0, 12);
+  const tag = packed.slice(12, 28);
+  const ciphertext = packed.slice(28);
+
+  const key = getKey();
+  const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+  decipher.setAuthTag(tag);
+  const decrypted = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
+  return decrypted.toString("utf8");
+}
+
+export default async function handler(req, res) {
+  try {
+    if (req.method !== "GET") {
+      return res.status(405).json({ error: "method_not_allowed" });
+    }
+
+    // header Authorization: "Bearer <encrypted_access_token>"
+    const auth = req.headers.authorization || "";
+    const m = auth.match(/^Bearer\s+(.+)/);
+    if (!m) return res.status(401).json({ error: "missing_authorization" });
+
+    const encrypted = m[1];
+
+    // déchiffrer -> doit contenir (par ex) JSON { "sub":"user-123", "iat":..., ... }
+    let payloadText;
+    try {
+      payloadText = decryptPacked(encrypted);
+    } catch (e) {
+      return res.status(401).json({ error: "invalid_token" });
+    }
+
+    // parse payload si on veut valider plus (exp, sub, ...). Ici on parse et on continue
+    let payload;
+    try {
+      payload = JSON.parse(payloadText);
+    } catch (e) {
+      // si payload n'est pas JSON, tu peux adapter la validation
+      payload = { raw: payloadText };
+    }
+
+    // Ici tu peux faire des vérifs : payload.sub, exp, etc.
+    // Exemple : si on veut limiter à un "client_id" : if(payload.client !== "valen-client") -> 403
+
+    // ---------- MOCK DATA (à remplacer par vraie source) ----------
+    const now = Date.now();
+    const accounts = [
+      { id: "acc-1", type: "Compte courant", provider: "BNP Paribas", balance: 12450.75, currency: "EUR" },
+      { id: "acc-2", type: "Livret A", provider: "La Banque", balance: 8750.2, currency: "EUR" },
+      { id: "acc-3", type: "Actions - Apple", provider: "Bourse", balance: 37200.0, currency: "EUR" },
+      { id: "acc-4", type: "Crypto - BTC", provider: "Wallet", balance: 4200.5, currency: "EUR" }
+    ];
+
+    // calcule patrimoine total
+    const patrimoineTotal = accounts.reduce((s, a) => s + (a.balance || 0), 0);
+
+    const response = {
+      ok: true,
+      user: payload.sub || "anon",
+      timestamp: now,
+      patrimoineTotal,
+      accounts,
+      // ajoute des métriques mock
+      kpis: {
+        monthlyVariationPct: 6.0,
+        expensesThisMonth: 8135,
+        goalProgressPct: 72.2
+      },
+      // données pour graphiques
+      chart: {
+        // wealth evolution : 12 monthly points
+        wealthMonthly: {
+          labels: ["Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct"],
+          values: [30000,30500,31000,31800,32500,33000,33500,34200,34800,35500,36200,37000]
+        },
+        // expenses by category
+        expensesByCategory: {
+          labels: ["Logement","Alimentation","Transports","Loisirs","Autres"],
+          values: [2400,1200,350,300,1400]
+        },
+        // allocation
+        allocation: {
+          labels: ["Immobilier","Actions & fonds","Crypto","Epargne"],
+          values: [20,50,10,20]
+        }
+      }
+    };
+
+    return res.status(200).json(response);
+  } catch (err) {
+    console.error("get-accounts error:", err);
+    return res.status(500).json({ error: "server_error", details: String(err) });
+  }
+}
