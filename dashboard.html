@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ValenHub — Tableau de bord</title>
+  <title>ValenHub – Tableau de bord</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=3001" />
+  <link rel="stylesheet" href="assets/style.css?v=4001" />
 </head>
-
 <body>
   <!-- NAV -->
   <header class="navbar">
@@ -27,50 +26,52 @@
     </div>
   </header>
 
-  <!-- DASHBOARD -->
-  <main class="dashboard container">
-    <!-- Section KPIs -->
-    <section class="kpis reveal">
-      <div class="card kpi">
-        <h3>Patrimoine total</h3>
-        <p class="big" id="kpi-wealth">—</p>
-        <p class="muted small">Tous comptes & actifs confondus</p>
-      </div>
-      <div class="card kpi">
-        <h3>Variation mensuelle</h3>
-        <p class="big" id="kpi-change">—</p>
-        <p class="muted small">Évolution sur 30 jours</p>
-      </div>
-      <div class="card kpi">
-        <h3>Dépenses du mois</h3>
-        <p class="big" id="kpi-expenses">—</p>
-        <p class="muted small">Mise à jour locale</p>
-      </div>
-      <div class="card kpi">
-        <h3>Objectif atteint</h3>
-        <p class="big" id="kpi-goal">—</p>
-        <p class="muted small">Progrès vers la cible</p>
-      </div>
-    </section>
+  <!-- CONTENU -->
+  <main class="page">
+    <div class="container">
+      <!-- KPIs -->
+      <section class="kpis-grid">
+        <div class="card kpi">
+          <h3>Patrimoine total</h3>
+          <p class="big" id="kpi-wealth">—</p>
+          <p class="muted small">Tous comptes & actifs confondus</p>
+        </div>
+        <div class="card kpi">
+          <h3>Variation mensuelle</h3>
+          <p class="big" id="kpi-change">—</p>
+          <p class="muted small">Évolution sur 30 jours</p>
+        </div>
+        <div class="card kpi">
+          <h3>Dépenses du mois</h3>
+          <p class="big" id="kpi-expenses">—</p>
+          <p class="muted small">Mise à jour locale</p>
+        </div>
+        <div class="card kpi">
+          <h3>Objectif atteint</h3>
+          <p class="big" id="kpi-goal">—</p>
+          <p class="muted small">Progrès vers la cible</p>
+        </div>
+      </section>
 
-    <!-- Graphiques -->
-    <section class="card reveal">
-      <h3>Évolution du patrimoine</h3>
-      <div class="skeleton" style="height:260px"></div>
-      <canvas id="chartWealth" hidden></canvas>
-    </section>
+      <!-- Graphiques -->
+      <section class="card reveal">
+        <h3>Évolution du patrimoine</h3>
+        <div class="skeleton" style="height:260px"></div>
+        <canvas id="chartWealth" hidden></canvas>
+      </section>
 
-    <section class="card reveal">
-      <h3>Dépenses par catégorie</h3>
-      <div class="skeleton" style="height:260px"></div>
-      <canvas id="chartExpenses" hidden></canvas>
-    </section>
+      <section class="card reveal">
+        <h3>Dépenses par catégorie</h3>
+        <div class="skeleton" style="height:260px"></div>
+        <canvas id="chartExpenses" hidden></canvas>
+      </section>
 
-    <section class="card reveal">
-      <h3>Répartition du portefeuille</h3>
-      <div class="skeleton" style="height:180px"></div>
-      <canvas id="chartAllocation" hidden></canvas>
-    </section>
+      <section class="card reveal">
+        <h3>Répartition du portefeuille</h3>
+        <div class="skeleton" style="height:180px"></div>
+        <canvas id="chartAllocation" hidden></canvas>
+      </section>
+    </div>
   </main>
 
   <!-- FOOTER -->
@@ -78,8 +79,8 @@
     <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
 
-  <!-- Librairies -->
- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
-  <script src="assets/app.js?v=3001"></script>
+  <!-- Librairies + App -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script src="assets/app.js?v=4001"></script>
 </body>
 </html>
