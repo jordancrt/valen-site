@@ -1,229 +1,169 @@
-/* =========== Données & stockage local (démo) =========== */
-const LS_KEY = "vh-demo-data";
+// --- données de démo (localStorage) ---
+const LS = window.localStorage;
+const DEMO_KEY = "vh-demo-data";
 
-const defaultData = {
-  wealthHistory: [32000, 33000, 34200, 34700, 35500, 36500, 37545],
-  monthChangePct: 6.0,
-  expensesMonth: 8135,
-  goalPct: 72.2,
-  expensesByCat: [
-    { label: "Logement", value: 2200 },
-    { label: "Alimentation", value: 780 },
-    { label: "Transports", value: 410 },
-    { label: "Loisirs", value: 350 },
-    { label: "Impôts & charges", value: 3095 },
-    { label: "Autres", value: 1300 },
-  ],
-  allocation: [
-    { label: "Actions & fonds", value: 45 },
-    { label: "Immobilier", value: 30 },
-    { label: "Crypto", value: 8 },
-    { label: "Épargne", value: 12 },
-    { label: "Autres", value: 5 },
-  ],
-  accounts: [
-    { name: "Compte courant", type: "Banque", amount: 3450 },
-    { name: "Broker", type: "Titres", amount: 22450 },
-    { name: "Livret A", type: "Épargne", amount: 7200 },
-    { name: "Wallet", type: "Crypto", amount: 445 },
-  ],
-};
+function defaultDemoData() {
+  const today = new Date();
+  // 12 mois d’historique
+  const months = [...Array(12)].map((_, i) => {
+    const d = new Date(today);
+    d.setMonth(d.getMonth() - (11 - i));
+    return d.toISOString().slice(0, 7); // YYYY-MM
+  });
+
+  // valeurs “patrimoine” (simulées)
+  let base = 28000;
+  const wealth = months.map(() => {
+    base += (Math.random() - 0.3) * 2000;
+    return Math.max(10000, Math.round(base));
+  });
+
+  // dépenses et variation
+  const expenses = Math.round(6000 + Math.random() * 4000);
+  const change = ((wealth[wealth.length - 1] - wealth[wealth.length - 2]) / wealth[wealth.length - 2]) * 100;
+  const goal = 60 + Math.random() * 30;
+
+  // comptes (pour la légende)
+  const accounts = [
+    { name: "Compte courant", amount: 3500 },
+    { name: "Épargne", amount: 12000 },
+    { name: "CTO/PEA", amount: 16000 },
+    { name: "Crypto", amount: 2000 }
+  ];
+
+  return { months, wealth, expenses, change, goal, accounts };
+}
 
 function loadData() {
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    return raw ? JSON.parse(raw) : structuredClone(defaultData);
-  } catch {
-    return structuredClone(defaultData);
-  }
-}
-function saveData(d) {
-  localStorage.setItem(LS_KEY, JSON.stringify(d));
+  const raw = LS.getItem(DEMO_KEY);
+  return raw ? JSON.parse(raw) : defaultDemoData();
 }
 
-/* =========== Formatage =========== */
-const fmtEUR = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
-const fmtPct = new Intl.NumberFormat("fr-FR", { style: "percent", maximumFractionDigits: 1 });
-
-/* =========== UI: KPIs & listes =========== */
-function sumAccounts(accounts) {
-  return accounts.reduce((t, a) => t + (Number(a.amount) || 0), 0);
-}
-function updateKPIs(data) {
-  const wealth = data.wealthHistory.at(-1) ?? sumAccounts(data.accounts);
-  document.getElementById("kpi-wealth").textContent = fmtEUR.format(wealth);
-  document.getElementById("kpi-variation").textContent = fmtPct.format((data.monthChangePct || 0) / 100);
-  document.getElementById("kpi-expenses").textContent = fmtEUR.format(data.expensesMonth || 0);
-  document.getElementById("kpi-goal").textContent = fmtPct.format((data.goalPct || 0) / 100);
-}
-function renderAccounts(data) {
-  const ul = document.getElementById("accountsList");
-  ul.innerHTML = "";
-  if (!data.accounts?.length) {
-    ul.innerHTML = `<li class="muted">Aucun compte pour l’instant.</li>`;
-    return;
-  }
-  for (const acc of data.accounts) {
-    const li = document.createElement("li");
-    li.className = "account-row";
-    li.innerHTML = `
-      <span class="acc-name">${acc.name}</span>
-      <span class="acc-type">${acc.type}</span>
-      <span class="acc-amt">${fmtEUR.format(Number(acc.amount) || 0)}</span>
-      <button class="btn btn-ghost" title="Supprimer">✕</button>
-    `;
-    li.querySelector("button").onclick = () => {
-      data.accounts = data.accounts.filter(a => a !== acc);
-      saveData(data);
-      hydrate(data, true);
-    };
-    ul.appendChild(li);
-  }
+function saveData(data) {
+  LS.setItem(DEMO_KEY, JSON.stringify(data));
 }
 
-/* =========== Charts =========== */
-let chartWealth, chartExpenses, chartAllocation;
+let data = loadData();
 
-function showCanvas(id) {
-  const cv = document.getElementById(id);
-  if (!cv) return cv;
-  cv.hidden = false;
-  const sk = cv.closest(".skeleton");
-  if (sk) sk.classList.remove("skeleton");
-  return cv;
+// --- KPI ---
+function fmtMoney(v) {
+  return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v);
+}
+function fmtPct(v) {
+  return `${v.toFixed(1)} %`;
 }
 
-function drawWealth(data) {
-  const cv = showCanvas("chartWealth");
-  if (!cv) return;
-  const labels = ["M-6", "M-5", "M-4", "M-3", "M-2", "M-1", "M"];
-  chartWealth?.destroy();
-  chartWealth = new Chart(cv, {
+function updateKPIs() {
+  const last = data.wealth[data.wealth.length - 1];
+  document.getElementById("kpi-wealth").textContent = fmtMoney(last);
+  document.getElementById("kpi-expenses").textContent = fmtMoney(data.expenses);
+  document.getElementById("kpi-change").textContent = fmtPct(data.change);
+  document.getElementById("kpi-goal").textContent = fmtPct(data.goal);
+}
+
+// --- graphique Chart.js ---
+let chart;
+function renderChart() {
+  const ctx = document.getElementById("chartWealth");
+  if (!ctx) return;
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
     type: "line",
     data: {
-      labels,
+      labels: data.months,
       datasets: [{
         label: "Patrimoine (€)",
-        data: data.wealthHistory,
-        tension: 0.35,
-        fill: true,
-      }],
+        data: data.wealth,
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.35
+      }]
     },
     options: {
-      plugins: { legend: { display: false } },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          callbacks: {
+            label: (ctx) => fmtMoney(ctx.parsed.y)
+          }
+        }
+      },
       scales: {
-        y: { ticks: { callback: v => fmtEUR.format(v).replace(/\u00A0/g, " ") } }
+        x: {
+          grid: { display: false }
+        },
+        y: {
+          ticks: {
+            callback: (v) => fmtMoney(v)
+          }
+        }
       }
     }
   });
 }
 
-function drawExpenses(data) {
-  const cv = showCanvas("chartExpenses");
-  if (!cv) return;
-  chartExpenses?.destroy();
-  chartExpenses = new Chart(cv, {
-    type: "bar",
-    data: {
-      labels: data.expensesByCat.map(x => x.label),
-      datasets: [{
-        label: "Dépenses (€)",
-        data: data.expensesByCat.map(x => x.value),
-        borderRadius: 8,
-      }]
-    },
-    options: {
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { ticks: { callback: v => fmtEUR.format(v).replace(/\u00A0/g, " ") } }
-      }
-    }
+// --- légende comptes ---
+function renderAccounts() {
+  const ul = document.getElementById("accounts-legend");
+  if (!ul) return;
+  ul.innerHTML = "";
+  data.accounts.forEach(a => {
+    const li = document.createElement("li");
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.gap = "12px";
+    li.innerHTML = `<span class="muted">${a.name}</span><strong>${fmtMoney(a.amount)}</strong>`;
+    ul.appendChild(li);
   });
 }
 
-function drawAllocation(data) {
-  const cv = showCanvas("chartAllocation");
-  if (!cv) return;
-  chartAllocation?.destroy();
-  chartAllocation = new Chart(cv, {
-    type: "doughnut",
-    data: {
-      labels: data.allocation.map(x => x.label),
-      datasets: [{
-        data: data.allocation.map(x => x.value),
-      }]
-    },
-    options: {
-      plugins: { legend: { position: "bottom" } },
-      cutout: "60%",
-    }
-  });
-}
-
-/* =========== Actions =========== */
-function addAccountFlow(data) {
-  const name = prompt("Nom du compte (ex: Banque A, Broker, Wallet)…");
-  if (!name) return;
-  const type = prompt("Type (Banque, Titres, Crypto, Épargne, Autres)…") || "Autres";
-  const amt = Number(prompt("Montant (en €)") || 0);
-  data.accounts.push({ name, type, amount: amt });
-
-  // on met à jour la répartition (simple heuristique de démo)
-  const mapTypeToAlloc = {
-    "Banque": "Épargne",
-    "Titres": "Actions & fonds",
-    "Crypto": "Crypto",
-    "Épargne": "Épargne",
-    "Autres": "Autres",
-  };
-  const bucket = mapTypeToAlloc[type] || "Autres";
-  const total = data.allocation.reduce((t, x) => t + x.value, 0);
-  // on ajuste légèrement le bucket lié
-  const idx = data.allocation.findIndex(x => x.label === bucket);
-  if (idx >= 0) data.allocation[idx].value = Math.min(100, data.allocation[idx].value + 2);
-  // normalisation rapide (pour garder ~100%)
-  const newTotal = data.allocation.reduce((t, x) => t + x.value, 0);
-  data.allocation.forEach(x => x.value = +(x.value * 100 / newTotal).toFixed(1));
-
-  // on pousse le patrimoine courant
-  const old = data.wealthHistory.at(-1) ?? 0;
-  data.wealthHistory = [...data.wealthHistory.slice(-6), old + amt];
-
-  saveData(data);
-  hydrate(data, true);
-}
-
-function resetDemo() {
-  const d = structuredClone(defaultData);
-  saveData(d);
-  hydrate(d, true);
-}
-
-function hydrate(data, animate = false) {
-  updateKPIs(data);
-  renderAccounts(data);
-  drawWealth(data);
-  drawExpenses(data);
-  drawAllocation(data);
-
-  // petit reveal
-  if (animate) {
-    document.querySelectorAll(".reveal").forEach(el => {
-      el.classList.remove("reveal");
-      void el.offsetWidth; // reflow
-      el.classList.add("reveal");
-    });
+// --- actions UI ---
+document.getElementById("btn-refresh")?.addEventListener("click", () => {
+  // simulate un petit “tick” de marché
+  const last = data.wealth[data.wealth.length - 1];
+  const next = Math.max(10000, Math.round(last * (1 + (Math.random() - 0.45) * 0.02)));
+  data.wealth.push(next);
+  data.months.push(new Date().toISOString().slice(0, 7));
+  if (data.wealth.length > 12) {
+    data.wealth.shift();
+    data.months.shift();
   }
-}
-
-/* =========== Boot =========== */
-document.addEventListener("DOMContentLoaded", () => {
-  const data = loadData();
-  hydrate(data);
-
-  document.getElementById("btn-add-account").onclick = () => addAccountFlow(data);
-  document.getElementById("btn-refresh").onclick = () => hydrate(loadData(), true);
-  document.getElementById("btn-reset").onclick = () => {
-    if (confirm("Réinitialiser la démo locale ?")) resetDemo();
-  };
+  data.change = ((data.wealth[data.wealth.length - 1] - data.wealth[data.wealth.length - 2]) / data.wealth[data.wealth.length - 2]) * 100;
+  saveData(data);
+  updateKPIs();
+  renderChart();
 });
+
+document.getElementById("btn-reset")?.addEventListener("click", () => {
+  data = defaultDemoData();
+  saveData(data);
+  updateKPIs();
+  renderChart();
+  renderAccounts();
+});
+
+document.getElementById("btn-add-account")?.addEventListener("click", () => {
+  const name = prompt("Nom du compte (ex: Livret A, PEA, Crypto…) :");
+  const amountStr = prompt("Montant actuel (€) :");
+  const amount = Number(String(amountStr).replace(/[^\d.-]/g, ""));
+  if (!name || !Number.isFinite(amount)) return;
+  data.accounts.push({ name, amount });
+  // on reflète sur le patrimoine
+  const last = data.wealth[data.wealth.length - 1] + amount;
+  data.wealth[data.wealth.length - 1] = last;
+  saveData(data);
+  updateKPIs();
+  renderChart();
+  renderAccounts();
+});
+
+// --- init ---
+updateKPIs();
+renderChart();
+renderAccounts();
