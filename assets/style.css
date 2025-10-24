@@ -219,3 +219,32 @@ main {
   place-items: center; 
   padding: 4rem 1rem; 
 }
+/* --- Dashboard layout --- */
+.kpis-grid {
+  display: grid; gap: 16px; margin-bottom: 16px;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+}
+@media (max-width: 1120px){ .kpis-grid{ grid-template-columns: repeat(2,1fr);} }
+@media (max-width: 640px){ .kpis-grid{ grid-template-columns: 1fr; } }
+
+.card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 16px 18px; }
+.kpi .big { font-size: 28px; font-weight: 700; margin: 6px 0; }
+
+.actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.actions .badge { font-size: 12px; padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,0.07); }
+
+.accounts { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.account-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 10px; align-items: center; }
+.account-row .acc-name { font-weight: 600; }
+.account-row .acc-type { opacity: .8; font-size: 14px; }
+.account-row .acc-amt { font-feature-settings: "tnum"; }
+
+.btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.14); }
+.btn-ghost:hover { background: rgba(255,255,255,0.06); }
+
+/* skeleton + reveal */
+.skeleton { position: relative; overflow: hidden; border-radius: 12px; background: rgba(255,255,255,0.04); }
+.skeleton::after { content: ""; position: absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent); animation: sh 1.1s linear infinite; }
+@keyframes sh { from{ transform: translateX(-100%);} to{ transform: translateX(100%);} }
+.reveal { animation: rv .45s ease-out; }
+@keyframes rv { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform:none; } }
