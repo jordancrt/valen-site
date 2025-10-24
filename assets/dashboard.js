@@ -61,52 +61,94 @@ function updateKPIs() {
   document.getElementById("kpi-goal").textContent = fmtPct(data.goal);
 }
 
-// --- graphique Chart.js ---
-let chart;
-function renderChart() {
-  const ctx = document.getElementById("chartWealth");
-  if (!ctx) return;
+// Conserver une référence globale pour pouvoir détruire le graph avant de le recréer
+let wealthChart = null;
 
-  if (chart) chart.destroy();
+function renderChart(labels, data) {
+  const canvas = document.getElementById('chartWealth');
+  if (!canvas) return;
 
-  chart = new Chart(ctx, {
-    type: "line",
+  // 1) Si un chart existe déjà, on le détruit (évite superpositions)
+  if (wealthChart) {
+    wealthChart.destroy();
+    wealthChart = null;
+  }
+
+  // 2) Contexte 2D
+  const ctx = canvas.getContext('2d');
+
+  // 3) Créer le chart avec des options "anti-bug" Safari
+  wealthChart = new Chart(ctx, {
+    type: 'line',
     data: {
-      labels: data.months,
+      labels,
       datasets: [{
-        label: "Patrimoine (€)",
-        data: data.wealth,
-        borderWidth: 2,
+        label: "Patrimoine",
+        data,
+        tension: 0.33,
         pointRadius: 0,
-        tension: 0.35
+        borderWidth: 2,
+        borderColor: 'rgba(168,85,247,1)',     // violet
+        backgroundColor: 'rgba(168,85,247,0.15)',
+        fill: true,
       }]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: false,            // <-- clé : on gère la hauteur en CSS
+      resizeDelay: 200,                      // throttle les recalculs (Safari)
+      animation: false,                      // évite le clignotement au 1er rendu
       plugins: {
         legend: { display: false },
         tooltip: {
-          mode: "index",
+          mode: 'index',
           intersect: false,
           callbacks: {
-            label: (ctx) => fmtMoney(ctx.parsed.y)
+            label: (ctx) => (new Intl.NumberFormat('fr-FR', { style:'currency', currency:'EUR' }).format(ctx.parsed.y))
           }
         }
       },
+      interaction: { mode: 'index', intersect: false },
       scales: {
         x: {
-          grid: { display: false }
+          grid: { display: false },
+          ticks: { color: 'rgba(255,255,255,.7)' }
         },
         y: {
+          grid: { color: 'rgba(255,255,255,.06)' },
           ticks: {
-            callback: (v) => fmtMoney(v)
+            color: 'rgba(255,255,255,.7)',
+            callback: (v) => new Intl.NumberFormat('fr-FR', { notation:'compact' }).format(v)
           }
         }
       }
     }
   });
 }
+
+// 4) Rendu initial quand la page est prête
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('is-ready');
+
+  // Exemple de données (remplace par tes valeurs réelles)
+  const labels = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
+  const data    = [25500, 26200, 26950, 27100, 28000, 28650, 29200, 29800, 30500, 31100, 31600, 32100];
+
+  renderChart(labels, data);
+});
+
+// 5) Debounce du resize (évite 100 appels de suite)
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  if (resizeTimer) clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    // On redessine avec les mêmes données (ou récupère les nouvelles)
+    if (!wealthChart) return;
+    const labels = wealthChart.data.labels;
+    const data   = wealthChart.data.datasets[0].data;
+    renderChart(labels, data);
+  }, 200);
+});
 
 // --- légende comptes ---
 function renderAccounts() {
