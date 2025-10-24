@@ -301,3 +301,31 @@ main {
   .account-row{ grid-template-columns: 1fr auto; grid-auto-flow:row; }
   .account-row .acc-type{ display:none; }
 }
+/* grille du dashboard */
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr; /* gauche / droite */
+  gap: 24px;
+}
+
+/* colonne gauche : empile la toolbar + les KPI */
+.dash-left { display: grid; gap: 24px; }
+
+/* KPI 2 x 2 */
+.kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* carte “collante” : le graph reste visible au scroll */
+.sticky { position: sticky; top: 96px; }
+
+/* petite liste comptes sous le graph */
+.accounts { list-style: none; padding: 0; margin: 0; }
+.accounts li { padding: 6px 0; border-top: 1px solid rgba(255,255,255,.06); }
+.accounts li:first-child { border-top: 0; }
+
+/* toolbar compacte */
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
