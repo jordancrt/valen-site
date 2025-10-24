@@ -368,3 +368,66 @@ main {
 .accounts { list-style: none; margin: 0; padding: 0; }
 .accounts li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: 1px solid rgba(255,255,255,.06); }
 .accounts li:first-child { border-top: 0; }
+/* ===== Dashboard grid ===== */
+.dashboard { padding: 24px 0 120px; }    /* gros padding bas -> plus de chevauchement avec le footer */
+.footer { margin-top: 24px; position: static; }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 360px minmax(0,1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.col-left { display: grid; gap: 16px; }
+.col-right { display: grid; gap: 16px; }
+
+.card { margin: 0; } /* on laisse la grille gérer les espacements */
+
+/* Panneau d'actions */
+.actions .actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 10px;
+  margin: 10px 0 6px;
+}
+
+.actions .btn { width: 100%; }
+
+/* Chart header (titre + sélecteur) */
+.card-header {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.select {
+  appearance: none;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font: inherit;
+}
+
+/* Squelette pour réserver la hauteur avant le rendu du canvas */
+.skeleton {
+  width: 100%;
+  border-radius: 16px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+  background-size: 200% 100%;
+  animation: shine 1.8s linear infinite;
+  pointer-events: none;
+}
+@keyframes shine {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
