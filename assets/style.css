@@ -1,433 +1,100 @@
+/* ====== Base thème ====== */
 :root{
   --bg:#0B1120;
   --panel:#111827;
   --text:#F5F6F7;
   --muted:#94A3B8;
-  --accent:#A78BFA; /* violet doux */
-  --accent-2:#8B5CF6; /* hover */
+  --accent:#A78BFA;
+  --accent2:#8B5CF6;
   --radius:14px;
 }
-
 *{box-sizing:border-box}
-html,body{
-  margin:0; padding:0;
+html,body{margin:0;padding:0;height:100%}
+body{
+  min-height:100vh;display:flex;flex-direction:column;
   background: radial-gradient(1200px 600px at 50% 0%, rgba(167,139,250,.18), transparent 60%), var(--bg);
   color:var(--text);
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
-/* Containers */
-.container{max-width:1080px; margin:0 auto; padding:0 24px}
+/* ====== Nav ====== */
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.navbar{position:sticky;top:0;z-index:10;backdrop-filter:saturate(120%) blur(10px);background:rgba(11,17,32,.6);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-container{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-brand{display:flex;gap:10px;align-items:center;color:var(--text);text-decoration:none}
+.nav-brand img{width:28px;height:28px;border-radius:8px}
+.nav-brand span{font-weight:700;letter-spacing:.6px}
+.nav-links{display:flex;gap:18px;list-style:none;margin:0;padding:0}
+.nav-links a{color:var(--muted);text-decoration:none;font-weight:500}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
 
-/* NAV */
-.navbar{
-  position:sticky; top:0; z-index:10;
-  backdrop-filter:saturate(120%) blur(10px);
-  background:rgba(11,17,32,.6);
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-.nav-container{display:flex; align-items:center; justify-content:space-between; height:64px}
-.nav-brand{display:flex; gap:10px; align-items:center; color:var(--text); text-decoration:none}
-.nav-brand img{width:28px; height:28px; border-radius:8px}
-.nav-brand span{font-weight:700; letter-spacing:.6px}
-.nav-links{display:flex; gap:18px; list-style:none; margin:0; padding:0}
-.nav-links a{color:var(--muted); text-decoration:none; font-weight:500}
-.nav-links a:hover, .nav-links a.active{color:var(--text)}
-
-/* HERO */
-.home .hero{padding:72px 0 56px}
-.eyebrow{display:inline-block; padding:8px 12px; font-size:13px; color:#DCE3F0; border:1px solid rgba(255,255,255,.1); border-radius:999px; background:rgba(167,139,250,.08)}
-.home h1{font-size:48px; line-height:1.1; margin:18px 0}
-.home .sub{max-width:720px; color:var(--muted)}
-.cta{display:flex; gap:12px; margin-top:22px}
-
-/* DASHBOARD layout */
-.dashboard .row{display:grid; gap:18px; grid-template-columns:repeat(12,1fr); margin:22px 0}
+/* ====== Cards & boutons ====== */
 .card{
-  grid-column: span 12;
-  background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+  background: rgba(255,255,255,.035);
   border:1px solid rgba(255,255,255,.08);
   border-radius:var(--radius);
-  padding:18px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.18) inset;
-}
-.card-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:12px}
-.kpi .big{font-size:28px; font-weight:800}
-.big{font-size:24px; font-weight:700}
-.small{font-size:12px}
-.sub{font-size:14px}
-.muted{color:var(--muted)}
-
-.assets{list-style:none; margin:0; padding:0}
-.assets li{display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px dashed rgba(255,255,255,.06)}
-.assets li:last-child{border-bottom:none}
-
-.btn{
-  border:1px solid rgba(255,255,255,.14);
-  background:transparent;
-  color:var(--text); padding:12px 18px; border-radius:12px;
-  text-decoration:none; font-weight:600; cursor:pointer;
-}
-.btn:hover{border-color:rgba(255,255,255,.3)}
-.btn-primary{
-  background:linear-gradient(135deg, var(--accent), var(--accent-2));
-  border:none; color:white; box-shadow:0 6px 16px rgba(139,92,246,.35);
-}
-.btn-primary:hover{filter:brightness(1.05)}
-.btn-secondary{background:transparent; border:1px solid rgba(167,139,250,.5); color:#E9E6FF}
-.btn-small{padding:8px 12px; font-size:13px}
-
-.footer{border-top:1px solid rgba(255,255,255,.06); padding:18px 0; margin-top:22px}
-.legal-mini{display:flex; gap:16px; list-style:disc; margin:8px 0 0 18px; color:var(--muted); font-size:12px}
-
-/* Grid responsive */
-@media (min-width:760px){
-  .dashboard .row .kpi{grid-column:span 3}
-  .dashboard .row .card:nth-child(1){grid-column:span 6}
-  .dashboard .row .card:nth-child(2){grid-column:span 6}
-  .dashboard .row .card:nth-child(3){grid-column:span 12}
-}
-/* ===== Grid responsive pour les cartes ===== */
-.dashboard {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 16px;
-  align-items: start;
-}
-.card {
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 14px;
-  padding: 16px;
-  backdrop-filter: blur(6px);
+  padding:16px 18px;
+  backdrop-filter: blur(8px);
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
-.card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.25); border-color: rgba(255,255,255,.14); }
+.card:hover{ transform: translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.25); border-color:rgba(255,255,255,.14)}
+.card h3{margin:0 0 8px 0}
+.big{font-size:28px;font-weight:800}
+.small{font-size:12px}
+.muted{color:var(--muted)}
 
-.kpis { grid-column: span 12; display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-.kpi   { grid-column: span 12; }
-@media (min-width: 640px){ .kpi{ grid-column: span 6;} }
-@media (min-width: 1024px){ .kpi{ grid-column: span 3;} }
-
-/* Charts: tailles fluides & compactes */
-.card canvas { width: 100% !important; height: auto; }
-#chartWealth, #chartExpenses { max-height: 260px !important; }
-#chartAllocation { max-height: 180px !important; }
-@media (min-width: 1280px){
-  #chartWealth, #chartExpenses { max-height: 280px !important; }
-  #chartAllocation { max-height: 160px !important; }
+.btn{
+  border:1px solid rgba(255,255,255,.14); background:transparent; color:var(--text);
+  padding:12px 16px; border-radius:12px; font-weight:600; cursor:pointer;
+}
+.btn-ghost:hover{background:rgba(255,255,255,.06)}
+.btn-primary{
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  border:none;color:#fff;box-shadow:0 6px 16px rgba(139,92,246,.35);
 }
 
-/* Skeleton loading (shimmer) */
-.skeleton { position: relative; overflow: hidden; background: rgba(255,255,255,.06); border-radius: 10px; }
-.skeleton::after {
-  content:""; position:absolute; inset:0;
-  transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
-  animation: shimmer 1.2s infinite;
-}
-@keyframes shimmer { 100% { transform: translateX(100%);} }
+/* ====== Footer ====== */
+.footer{border-top:1px solid rgba(255,255,255,.06);padding:18px 0;margin-top:24px}
 
-/* Apparition douce (révèle à l’entrée viewport) */
-.reveal { opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; }
-.reveal.is-in { opacity: 1; transform: translateY(0); }
-
-/* Respecte l'accessibilité */
-@media (prefers-reduced-motion: reduce){
-  .card, .reveal { transition: none !important; transform: none !important; }
+/* ====== DASHBOARD propre ====== */
+.dashboard{padding:32px 5% 120px} /* gros padding bas => pas de chevauchement footer */
+.dashboard-grid{
+  display:grid;
+  grid-template-columns: 360px minmax(0,1fr); /* gauche / droite */
+  gap:24px; align-items:start;
 }
-/* Placeholders des cartes graph */
+@media (max-width:960px){ .dashboard-grid{grid-template-columns:1fr} }
+
+.col-left{display:grid;gap:16px}
+
+/* Toolbar */
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.btn-group{display:flex;gap:10px;flex-wrap:wrap}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.14)}
+
+/* KPI grid */
+.kpis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:900px){ .kpis-grid{grid-template-columns:1fr} }
+.kpi .big{font-size:28px;line-height:1.15}
+
+/* Colonne droite */
+.col-right{display:grid;gap:16px}
+
+/* Charts */
+.chart-box{min-height:380px}
+.chart-box canvas{display:block;width:100% !important;height:360px !important}
+#chartExpenses{height:320px !important}
+.sticky{position:sticky;top:96px}
+
+/* Comptes list */
+.accounts{list-style:none;margin:0;padding:0}
+.accounts li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-top:1px solid rgba(255,255,255,.06)}
+.accounts li:first-child{border-top:0}
+
+/* Skeleton unique */
 .skeleton{
-  width:100%;
-  border-radius:12px;
-  background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.02), rgba(255,255,255,.06));
-  background-size: 600px 100%;
-  animation: shimmer 1.2s infinite linear;
-  min-height: 240px;
+  width:100%;border-radius:16px;pointer-events:none;min-height:360px;
+  background:linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.08), rgba(255,255,255,.04));
+  background-size:200% 100%; animation:shine 1.8s linear infinite;
 }
-@keyframes shimmer{
-  0% { background-position: -600px 0; }
-  100% { background-position: 600px 0; }
-}
-
-/* Canvas responsive */
-.card canvas{
-  width:100% !important;
-  height:260px !important;
-  display:block;
-}
-
-/* Grille KPI (si pas déjà présent) */
-.kpis{
-  display:grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap:16px;
-  margin:16px 0 24px;
-}
-.kpi .big{ font-size:28px; font-weight:700; }
-@media (max-width:900px){
-  .kpis{ grid-template-columns: repeat(2,1fr); }
-}
-@media (max-width:560px){
-  .kpis{ grid-template-columns: 1fr; }
-  .card canvas{ height:220px !important; }
-}
-/* ==== Layout pleine hauteur + footer collé proprement ==== */
-html, body { height: 100%; }
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-main { 
-  flex: 1;                 /* pousse le footer en bas */
-  display: flex;
-  align-items: center;     /* centre verticalement le contenu */
-  padding: 48px 0;         /* respire un peu */
-}
-.footer { margin-top: 0; } /* on évite les grands blancs */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:50}
-.modal[hidden]{display:none}
-.modal-box{background:rgba(16,22,40,.95);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;min-width:320px;max-width:560px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
-.modal-box h3{margin:0 0 8px 0}
-.modal-box input, .modal-box select{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px;color:#fff}
-html, body { height: 100%; }
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-main { 
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 48px 0;
-}
-.footer { margin-top: 0; }
-/* ===== Fix hauteur page & footer collé ===== */
-html, body { height: 100%; }
-body { display: flex; flex-direction: column; }
-
-main { 
-  flex: 1; 
-  /* adapte la hauteur du bloc héros à l’écran */
-  min-height: calc(100vh - 64px - 60px); /* header ~64, footer ~60 */
-}
-
-.hero { 
-  display: grid; 
-  place-items: center; 
-  padding: 4rem 1rem; 
-}
-/* --- Dashboard layout --- */
-.kpis-grid {
-  display: grid; gap: 16px; margin-bottom: 16px;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
-}
-@media (max-width: 1120px){ .kpis-grid{ grid-template-columns: repeat(2,1fr);} }
-@media (max-width: 640px){ .kpis-grid{ grid-template-columns: 1fr; } }
-
-.card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 16px 18px; }
-.kpi .big { font-size: 28px; font-weight: 700; margin: 6px 0; }
-
-.actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.actions .badge { font-size: 12px; padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,0.07); }
-
-.accounts { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-.account-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 10px; align-items: center; }
-.account-row .acc-name { font-weight: 600; }
-.account-row .acc-type { opacity: .8; font-size: 14px; }
-.account-row .acc-amt { font-feature-settings: "tnum"; }
-
-.btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.14); }
-.btn-ghost:hover { background: rgba(255,255,255,0.06); }
-
-/* skeleton + reveal */
-.skeleton { position: relative; overflow: hidden; border-radius: 12px; background: rgba(255,255,255,0.04); }
-.skeleton::after { content: ""; position: absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent); animation: sh 1.1s linear infinite; }
-@keyframes sh { from{ transform: translateX(-100%);} to{ transform: translateX(100%);} }
-.reveal { animation: rv .45s ease-out; }
-@keyframes rv { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform:none; } }
-/* ————— Toolbar propre ————— */
-.toolbar{
-  display:grid;
-  grid-template-columns: 1fr auto;
-  align-items:center;
-  gap:12px;
-  margin-bottom:16px;
-  position:relative;
-  z-index:1; /* évite tout chevauchement */
-}
-.btn-group{ display:flex; gap:10px; flex-wrap:wrap; }
-.toolbar .badge{
-  font-size:12px; padding:4px 10px; border-radius:999px;
-  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.08);
-}
-
-/* ————— Grille des KPI plus fluide ————— */
-.kpis-grid{
-  display:grid; gap:16px; margin-bottom:16px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-.kpi .big{ font-size:26px; line-height:1.15; }
-
-/* ————— Cartes & sections ————— */
-.card{ background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.08);
-       border-radius:14px; padding:16px 18px; backdrop-filter: blur(10px); }
-.card h3{ margin-bottom:8px; }
-
-/* ————— Squelettes & reveal (déjà présent, on homogénéise) ————— */
-.skeleton{ position:relative; overflow:hidden; border-radius:12px; background:rgba(255,255,255,.04);}
-.skeleton::after{ content:""; position:absolute; inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
-  animation:sh 1.15s linear infinite; }
-@keyframes sh{ from{transform:translateX(-100%)} to{transform:translateX(100%)} }
-.reveal{ animation:rv .45s ease-out; }
-@keyframes rv{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
-
-/* ————— Liste des comptes ————— */
-.accounts{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
-.account-row{ display:grid; grid-template-columns: 1fr auto auto auto; gap:10px; align-items:center; }
-.account-row .acc-name{ font-weight:600; }
-.account-row .acc-type{ opacity:.8; font-size:14px; }
-.account-row .acc-amt{ font-feature-settings:"tnum"; }
-.btn-ghost{ background:transparent; border:1px solid rgba(255,255,255,.14); }
-.btn-ghost:hover{ background:rgba(255,255,255,.06); }
-
-/* ————— Petits écrans ————— */
-@media (max-width: 900px){
-  .toolbar{ grid-template-columns:1fr; }
-  .btn-group{ justify-content:flex-start; }
-  .account-row{ grid-template-columns: 1fr auto; grid-auto-flow:row; }
-  .account-row .acc-type{ display:none; }
-}
-/* grille du dashboard */
-.dash-grid {
-  display: grid;
-  grid-template-columns: 1.25fr 1fr; /* gauche / droite */
-  gap: 24px;
-}
-
-/* colonne gauche : empile la toolbar + les KPI */
-.dash-left { display: grid; gap: 24px; }
-
-/* KPI 2 x 2 */
-.kpis-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-}
-
-/* carte “collante” : le graph reste visible au scroll */
-.sticky { position: sticky; top: 96px; }
-
-/* petite liste comptes sous le graph */
-.accounts { list-style: none; padding: 0; margin: 0; }
-.accounts li { padding: 6px 0; border-top: 1px solid rgba(255,255,255,.06); }
-.accounts li:first-child { border-top: 0; }
-
-/* toolbar compacte */
-.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-/* ---- Mise en page dashboard plus robuste ---- */
-.home { padding-bottom: 96px; } /* évite que la dernière carte touche le footer */
-.dash-grid {
-  display: grid;
-  grid-template-columns: 1fr;      /* mobile */
-  gap: 24px;
-}
-@media (min-width: 1100px) {
-  .dash-grid { grid-template-columns: 1.3fr 1fr; } /* gauche / droite sur desktop */
-}
-
-/* Colonne gauche : spacing constant */
-.dash-left { display: grid; gap: 24px; }
-
-/* KPI en 1 colonne sur mobile, 2 sur desktop */
-.kpis-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-}
-@media (min-width: 900px) {
-  .kpis-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-}
-
-/* Carte "sticky" : reste visible sans sauter */
-.sticky { position: sticky; top: 96px; }
-
-/* Wrapper du graphique : hauteur explicite pour Safari/Chart.js */
-#chartBox { min-height: 380px; }
-#chartBox canvas {
-  display: block;
-  width: 100% !important;
-  height: 360px !important; /* hauteur stable */
-}
-
-/* Liste comptes sous le graph */
-.accounts { list-style: none; margin: 0; padding: 0; }
-.accounts li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: 1px solid rgba(255,255,255,.06); }
-.accounts li:first-child { border-top: 0; }
-/* ===== Dashboard grid ===== */
-.dashboard { padding: 24px 0 120px; }    /* gros padding bas -> plus de chevauchement avec le footer */
-.footer { margin-top: 24px; position: static; }
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 360px minmax(0,1fr);
-  gap: 24px;
-  align-items: start;
-}
-
-.col-left { display: grid; gap: 16px; }
-.col-right { display: grid; gap: 16px; }
-
-.card { margin: 0; } /* on laisse la grille gérer les espacements */
-
-/* Panneau d'actions */
-.actions .actions-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 10px;
-  margin: 10px 0 6px;
-}
-
-.actions .btn { width: 100%; }
-
-/* Chart header (titre + sélecteur) */
-.card-header {
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.select {
-  appearance: none;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #fff;
-  border-radius: 10px;
-  padding: 8px 12px;
-  font: inherit;
-}
-
-/* Squelette pour réserver la hauteur avant le rendu du canvas */
-.skeleton {
-  width: 100%;
-  border-radius: 16px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-  background-size: 200% 100%;
-  animation: shine 1.8s linear infinite;
-  pointer-events: none;
-}
-@keyframes shine {
-  from { background-position: 200% 0; }
-  to   { background-position: -200% 0; }
-}
-
-/* Responsive */
-@media (max-width: 960px) {
-  .dashboard-grid { grid-template-columns: 1fr; }
-}
+@keyframes shine{from{background-position:200% 0}to{background-position:-200% 0}}
