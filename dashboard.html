@@ -74,13 +74,17 @@
 
       <!-- ===== Colonne droite (graph) ===== -->
       <aside class="dash-right">
-        <section class="card reveal sticky">
-          <h3>Évolution du patrimoine</h3>
-          <canvas id="chartWealth" height="360"></canvas>
+  <section class="card sticky">
+    <h3>Évolution du patrimoine</h3>
 
-          <ul class="accounts" id="accounts-legend" style="margin-top:10px"></ul>
-        </section>
-      </aside>
+    <!-- WRAPPER avec hauteur mini pour Safari -->
+    <div id="chartBox">
+      <canvas id="chartWealth"></canvas>
+    </div>
+
+    <ul class="accounts" id="accounts-legend" style="margin-top:10px"></ul>
+  </section>
+</aside>
 
     </div>
   </main>
