@@ -248,3 +248,56 @@ main {
 @keyframes sh { from{ transform: translateX(-100%);} to{ transform: translateX(100%);} }
 .reveal { animation: rv .45s ease-out; }
 @keyframes rv { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform:none; } }
+/* ————— Toolbar propre ————— */
+.toolbar{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+  position:relative;
+  z-index:1; /* évite tout chevauchement */
+}
+.btn-group{ display:flex; gap:10px; flex-wrap:wrap; }
+.toolbar .badge{
+  font-size:12px; padding:4px 10px; border-radius:999px;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.08);
+}
+
+/* ————— Grille des KPI plus fluide ————— */
+.kpis-grid{
+  display:grid; gap:16px; margin-bottom:16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.kpi .big{ font-size:26px; line-height:1.15; }
+
+/* ————— Cartes & sections ————— */
+.card{ background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.08);
+       border-radius:14px; padding:16px 18px; backdrop-filter: blur(10px); }
+.card h3{ margin-bottom:8px; }
+
+/* ————— Squelettes & reveal (déjà présent, on homogénéise) ————— */
+.skeleton{ position:relative; overflow:hidden; border-radius:12px; background:rgba(255,255,255,.04);}
+.skeleton::after{ content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
+  animation:sh 1.15s linear infinite; }
+@keyframes sh{ from{transform:translateX(-100%)} to{transform:translateX(100%)} }
+.reveal{ animation:rv .45s ease-out; }
+@keyframes rv{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+
+/* ————— Liste des comptes ————— */
+.accounts{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.account-row{ display:grid; grid-template-columns: 1fr auto auto auto; gap:10px; align-items:center; }
+.account-row .acc-name{ font-weight:600; }
+.account-row .acc-type{ opacity:.8; font-size:14px; }
+.account-row .acc-amt{ font-feature-settings:"tnum"; }
+.btn-ghost{ background:transparent; border:1px solid rgba(255,255,255,.14); }
+.btn-ghost:hover{ background:rgba(255,255,255,.06); }
+
+/* ————— Petits écrans ————— */
+@media (max-width: 900px){
+  .toolbar{ grid-template-columns:1fr; }
+  .btn-group{ justify-content:flex-start; }
+  .account-row{ grid-template-columns: 1fr auto; grid-auto-flow:row; }
+  .account-row .acc-type{ display:none; }
+}
