@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ValenHub – Tableau de bord</title>
+  <title>ValenHub — Tableau de bord</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=4001" />
+  <link rel="stylesheet" href="assets/style.css?v=1011" />
 </head>
-<body class="page-dashboard">
+<body>
 
-  <!-- NAV -->
+  <!-- HEADER -->
   <header class="navbar">
     <div class="container nav-container">
       <div class="nav-brand">
@@ -19,7 +19,7 @@
       <nav>
         <ul class="nav-links">
           <li><a href="index.html">Accueil</a></li>
-          <li><a class="active" href="dashboard.html">Tableau de bord</a></li>
+          <li><a class="active" href="tableau de bord.html">Tableau de bord</a></li>
           <li><a href="about.html">À propos</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
@@ -27,79 +27,71 @@
     </div>
   </header>
 
-  <main class="container" style="padding-block:24px;">
-    <!-- Barre d’actions propre -->
-<section class="card toolbar">
-  <div class="left">
-    <span class="badge">Démo locale</span>
-  </div>
-  <div class="right btn-group">
-    <button class="btn btn-secondary" id="btn-refresh">Rafraîchir</button>
-    <button class="btn btn-secondary" id="btn-reset">Réinitialiser</button>
-    <button class="btn btn-primary"   id="btn-add-account">Ajouter un compte</button>
-  </div>
-</section>
+  <!-- CONTENU -->
+  <main class="home">
+    <div class="container dash-grid">
 
-    <!-- KPIs -->
-    <section class="kpis-grid">
-      <div class="card kpi">
-        <h3>Patrimoine total</h3>
-        <p class="big" id="kpi-wealth">—</p>
-        <p class="muted small">Tous comptes & actifs confondus</p>
-      </div>
-      <div class="card kpi">
-        <h3>Variation mensuelle</h3>
-        <p class="big" id="kpi-variation">—</p>
-        <p class="muted small">Évolution sur 30 jours</p>
-      </div>
-      <div class="card kpi">
-        <h3>Dépenses du mois</h3>
-        <p class="big" id="kpi-expenses">—</p>
-        <p class="muted small">Mise à jour locale</p>
-      </div>
-      <div class="card kpi">
-        <h3>Objectif atteint</h3>
-        <p class="big" id="kpi-goal">—</p>
-        <p class="muted small">Progrès vers la cible</p>
-      </div>
-    </section>
+      <!-- ===== Colonne gauche ===== -->
+      <div class="dash-left">
 
-    <!-- Graphiques -->
-    <section class="card reveal">
-      <h3>Évolution du patrimoine</h3>
-      <div class="skeleton" style="height:260px">
-        <canvas id="chartWealth" hidden></canvas>
-      </div>
-    </section>
+        <!-- barre d’actions -->
+        <section class="card toolbar">
+          <div class="left">
+            <span class="badge">Démo locale</span>
+          </div>
+          <div class="right btn-group">
+            <button class="btn btn-secondary" id="btn-refresh">Rafraîchir</button>
+            <button class="btn btn-secondary" id="btn-reset">Réinitialiser</button>
+            <button class="btn btn-primary" id="btn-add-account">Ajouter un compte</button>
+          </div>
+        </section>
 
-    <section class="card reveal">
-      <h3>Dépenses par catégorie</h3>
-      <div class="skeleton" style="height:260px">
-        <canvas id="chartExpenses" hidden></canvas>
-      </div>
-    </section>
+        <!-- KPI -->
+        <section class="kpis-grid">
+          <div class="card kpi">
+            <h3>Patrimoine total</h3>
+            <p class="big" id="kpi-wealth">—</p>
+            <p class="muted small">Tous comptes & actifs confondus</p>
+          </div>
+          <div class="card kpi">
+            <h3>Variation mensuelle</h3>
+            <p class="big" id="kpi-change">—</p>
+            <p class="muted small">Évolution sur 30 jours</p>
+          </div>
+          <div class="card kpi">
+            <h3>Dépenses du mois</h3>
+            <p class="big" id="kpi-expenses">—</p>
+            <p class="muted small">Mise à jour locale</p>
+          </div>
+          <div class="card kpi">
+            <h3>Objectif atteint</h3>
+            <p class="big" id="kpi-goal">—</p>
+            <p class="muted small">Progrès vers la cible</p>
+          </div>
+        </section>
 
-    <section class="card reveal">
-      <h3>Répartition du portefeuille</h3>
-      <div class="skeleton" style="height:200px">
-        <canvas id="chartAllocation" hidden></canvas>
       </div>
-    </section>
 
-    <!-- Liste des comptes -->
-    <section class="card reveal">
-      <h3>Comptes connectés (démo locale)</h3>
-      <ul id="accountsList" class="accounts"></ul>
-      <p class="muted small">Astuce : ajoute un compte (banque, broker, wallet…) avec le bouton ci-dessus. Ces données restent <strong>uniquement</strong> dans ton navigateur (localStorage).</p>
-    </section>
+      <!-- ===== Colonne droite (graph) ===== -->
+      <aside class="dash-right">
+        <section class="card reveal sticky">
+          <h3>Évolution du patrimoine</h3>
+          <canvas id="chartWealth" height="360"></canvas>
+
+          <ul class="accounts" id="accounts-legend" style="margin-top:10px"></ul>
+        </section>
+      </aside>
+
+    </div>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
     <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
   </footer>
 
-  <!-- Librairie charts + JS du tableau de bord -->
+  <!-- Librairie et script -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="assets/dashboard.js?v=4001"></script>
+  <script src="assets/dashboard.js?v=1001"></script>
 </body>
 </html>
