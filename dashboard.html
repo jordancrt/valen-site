@@ -28,66 +28,76 @@
   </header>
 
   <!-- CONTENU -->
-  <main class="home">
-    <div class="container dash-grid">
+  <main class="dashboard">
+  <div class="container dashboard-grid">
+    <!-- Colonne gauche = actions + KPI -->
+    <aside class="col-left">
 
-      <!-- ===== Colonne gauche ===== -->
-      <div class="dash-left">
+      <!-- Panneau d'actions -->
+      <section class="card actions">
+        <h3>Comptes & actions</h3>
+        <div class="actions-grid">
+          <button class="btn btn-secondary" id="btn-refresh">Rafraîchir</button>
+          <button class="btn btn-secondary" id="btn-demo">Démo locale</button>
+          <button class="btn btn-secondary" id="btn-reset">Réinitialiser</button>
+          <button class="btn btn-primary" id="btn-add">Ajouter un compte</button>
+        </div>
+        <p class="muted small" id="accounts-info">Aucun compte pour le moment.</p>
+      </section>
 
-        <!-- barre d’actions -->
-        <section class="card toolbar">
-          <div class="left">
-            <span class="badge">Démo locale</span>
+      <!-- KPI cartes -->
+      <section class="card kpi">
+        <h3>Patrimoine total</h3>
+        <p class="big" id="kpi-wealth">—</p>
+        <p class="muted small">Tous comptes & actifs confondus</p>
+      </section>
+
+      <section class="card kpi">
+        <h3>Variation mensuelle</h3>
+        <p class="big" id="kpi-change">—</p>
+        <p class="muted small">Évolution sur 30 jours</p>
+      </section>
+
+      <section class="card kpi">
+        <h3>Dépenses du mois</h3>
+        <p class="big" id="kpi-expenses">—</p>
+        <p class="muted small">Mise à jour locale</p>
+      </section>
+
+      <section class="card kpi">
+        <h3>Objectif atteint</h3>
+        <p class="big" id="kpi-goal">—</p>
+        <p class="muted small">Progrès vers la cible</p>
+      </section>
+    </aside>
+
+    <!-- Colonne droite = graphiques -->
+    <section class="col-right">
+      <section class="card">
+        <div class="card-header">
+          <h3>Évolution du patrimoine</h3>
+          <div class="chart-controls">
+            <select id="range-select" class="select">
+              <option value="1M">1 mois</option>
+              <option value="3M">3 mois</option>
+              <option value="6M">6 mois</option>
+              <option value="1Y" selected>1 an</option>
+            </select>
           </div>
-          <div class="right btn-group">
-            <button class="btn btn-secondary" id="btn-refresh">Rafraîchir</button>
-            <button class="btn btn-secondary" id="btn-reset">Réinitialiser</button>
-            <button class="btn btn-primary" id="btn-add-account">Ajouter un compte</button>
-          </div>
-        </section>
+        </div>
+        <!-- squelette hauteur fixe pour éviter le “clignotement” -->
+        <div class="skeleton" style="height:300px"></div>
+        <canvas id="chartWealth" height="300"></canvas>
+      </section>
 
-        <!-- KPI -->
-        <section class="kpis-grid">
-          <div class="card kpi">
-            <h3>Patrimoine total</h3>
-            <p class="big" id="kpi-wealth">—</p>
-            <p class="muted small">Tous comptes & actifs confondus</p>
-          </div>
-          <div class="card kpi">
-            <h3>Variation mensuelle</h3>
-            <p class="big" id="kpi-change">—</p>
-            <p class="muted small">Évolution sur 30 jours</p>
-          </div>
-          <div class="card kpi">
-            <h3>Dépenses du mois</h3>
-            <p class="big" id="kpi-expenses">—</p>
-            <p class="muted small">Mise à jour locale</p>
-          </div>
-          <div class="card kpi">
-            <h3>Objectif atteint</h3>
-            <p class="big" id="kpi-goal">—</p>
-            <p class="muted small">Progrès vers la cible</p>
-          </div>
-        </section>
-
-      </div>
-
-      <!-- ===== Colonne droite (graph) ===== -->
-      <aside class="dash-right">
-  <section class="card sticky">
-    <h3>Évolution du patrimoine</h3>
-
-    <!-- WRAPPER avec hauteur mini pour Safari -->
-    <div id="chartBox">
-      <canvas id="chartWealth"></canvas>
-    </div>
-
-    <ul class="accounts" id="accounts-legend" style="margin-top:10px"></ul>
-  </section>
-</aside>
-
-    </div>
-  </main>
+      <section class="card">
+        <h3>Dépenses par catégorie</h3>
+        <div class="skeleton" style="height:260px"></div>
+        <canvas id="chartExpenses" height="260"></canvas>
+      </section>
+    </section>
+  </div>
+</main>
 
   <!-- FOOTER -->
   <footer class="footer">
