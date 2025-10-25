@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Comparateur — ValenCompare</title>
+  <link rel="stylesheet" href="assets/style.css?v=1012" />
+</head>
+<body>
+<header class="navbar">
+  <div class="container nav-container">
+    <a class="nav-brand" href="index.html"><img src="assets/icon-192.png" alt=""><span>VALENCOMPARE</span></a>
+    <nav><ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a class="active" href="comparateur.html">Comparateur</a></li>
+      <li><a href="cryptos.html">Cryptos</a></li>
+      <li><a href="etf.html">ETF</a></li>
+      <li><a href="plateformes.html">Plateformes</a></li>
+      <li><a href="espace.html">Espace perso</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<main class="container" style="padding:32px 0 64px">
+  <div class="card">
+    <div class="toolbar">
+      <input id="q" class="input" placeholder="Ex: meilleur rendement stablecoin, ETF S&P500, crypto IA..." />
+      <div class="btn-group">
+        <select id="category" class="select">
+          <option value="crypto" selected>Crypto</option>
+          <option value="etf">ETF</option>
+          <option value="platform">Plateformes</option>
+        </select>
+        <button class="btn btn-primary" id="search">Comparer</button>
+      </div>
+    </div>
+    <div id="results" class="grid" style="display:grid;gap:14px;"></div>
+  </div>
+</main>
+
+<footer class="footer"><div class="container"><p>© 2025 ValenCompare</p></div></footer>
+<script src="assets/compare.js" defer></script>
+</body>
+</html>
