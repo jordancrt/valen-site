@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ValenHub – Tableau de bord</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=6000" />
+  <link rel="stylesheet" href="assets/style.css?v=7001" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -28,12 +28,13 @@
     </div>
   </header>
 
-  <!-- TABLEAU DE BORD SUR UNE SEULE PAGE -->
+  <!-- DASHBOARD (une seule page) -->
   <main class="dashboard dashboard-onepage">
     <div class="container dashboard-grid">
 
-      <!-- Colonne gauche -->
+      <!-- COLONNE GAUCHE -->
       <div class="col-left">
+
         <section class="card">
           <h3>Comptes & actions</h3>
           <div class="toolbar">
@@ -44,28 +45,27 @@
             </div>
             <button class="btn btn-primary btn-small" id="btn-add">Ajouter un compte</button>
           </div>
-          <ul class="accounts" id="accountsList">
-            <li>Aucun compte connecté</li>
-          </ul>
+          <ul class="accounts" id="accountsList"><li>Aucun compte connecté</li></ul>
+          <p class="muted small">Connexion future : banques / crypto / trading via clé publique chiffrée (sans identifiants).</p>
         </section>
 
         <div class="kpis-grid">
           <section class="card kpi">
             <h3>Patrimoine total</h3>
             <p class="big" id="kpi-wealth">0 €</p>
-            <p class="muted small">Tous comptes confondus</p>
+            <p class="muted small">Tous comptes & actifs confondus</p>
           </section>
 
           <section class="card kpi">
             <h3>Variation mensuelle</h3>
             <p class="big" id="kpi-delta">0 %</p>
-            <p class="muted small">Évolution sur 30 jours</p>
+            <p class="muted small">Depuis début de mois</p>
           </section>
 
           <section class="card kpi">
             <h3>Dépenses du mois</h3>
-            <p class="big" id="kpi-expenses">8135 €</p>
-            <p class="muted small">Mise à jour locale</p>
+            <p class="big" id="kpi-expenses">0 €</p>
+            <p class="muted small">Toutes catégories</p>
           </section>
 
           <section class="card kpi">
@@ -74,9 +74,18 @@
             <p class="muted small">Progrès vers la cible</p>
           </section>
         </div>
+
+        <section class="card">
+          <h3>Saisie rapide</h3>
+          <div class="btn-group">
+            <button class="btn btn-ghost btn-small" id="open-spend">+ Dépense</button>
+            <button class="btn btn-ghost btn-small" id="open-budget">⚙︎ Budget cat.</button>
+            <button class="btn btn-ghost btn-small" id="open-invest">⬆ Dépôt / Invest.</button>
+          </div>
+        </section>
       </div>
 
-      <!-- Colonne droite -->
+      <!-- COLONNE DROITE -->
       <div class="col-right">
         <section class="card">
           <div class="card-header">
@@ -105,13 +114,85 @@
     </div>
   </main>
 
-  <!-- PIED DE PAGE -->
   <footer class="footer">
     <div class="container">
       <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
     </div>
   </footer>
 
-  <script src="assets/dashboard.js?v=6000"></script>
+  <!-- ===== Modales ===== -->
+
+  <!-- Ajouter un compte -->
+  <dialog id="dlg-account" class="modal">
+    <form method="dialog" class="modal-box" id="form-account">
+      <h3>Ajouter un compte</h3>
+      <p class="muted small" style="margin-top:-6px">Banque / crypto / courtage (virtuel, sans identifiants).</p>
+      <label>Nom du compte</label>
+      <input name="name" required placeholder="Boursorama / Binance / PEA…" />
+      <label style="margin-top:8px">Type</label>
+      <select name="type">
+        <option>Banque</option>
+        <option>Crypto</option>
+        <option>Trading</option>
+        <option>Épargne</option>
+      </select>
+      <label style="margin-top:8px">Solde initial (€)</label>
+      <input name="balance" type="number" step="0.01" required value="0" />
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
+        <button class="btn btn-ghost" value="cancel">Annuler</button>
+        <button class="btn btn-primary" value="default">Ajouter</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Saisir une dépense -->
+  <dialog id="dlg-spend" class="modal">
+    <form method="dialog" class="modal-box" id="form-spend">
+      <h3>Nouvelle dépense</h3>
+      <label>Catégorie</label>
+      <input name="category" list="cats" required placeholder="Logement / Alimentation / Transport…" />
+      <datalist id="cats"></datalist>
+      <label style="margin-top:8px">Montant (€)</label>
+      <input name="amount" type="number" step="0.01" required />
+      <label style="margin-top:8px">Compte (optionnel)</label>
+      <select name="account"><option value="">—</option></select>
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
+        <button class="btn btn-ghost" value="cancel">Annuler</button>
+        <button class="btn btn-primary" value="default">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Définir / ajuster budget catégorie -->
+  <dialog id="dlg-budget" class="modal">
+    <form method="dialog" class="modal-box" id="form-budget">
+      <h3>Budget de catégorie</h3>
+      <label>Catégorie</label>
+      <input name="category" list="cats" required />
+      <label style="margin-top:8px">Budget mensuel (€)</label>
+      <input name="budget" type="number" step="0.01" required />
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
+        <button class="btn btn-ghost" value="cancel">Annuler</button>
+        <button class="btn btn-primary" value="default">Valider</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Dépôt / investissement -->
+  <dialog id="dlg-invest" class="modal">
+    <form method="dialog" class="modal-box" id="form-invest">
+      <h3>Dépôt / investissement</h3>
+      <label>Compte</label>
+      <select name="account" required></select>
+      <label style="margin-top:8px">Montant (€)</label>
+      <input name="amount" type="number" step="0.01" required />
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
+        <button class="btn btn-ghost" value="cancel">Annuler</button>
+        <button class="btn btn-primary" value="default">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="assets/dashboard.js?v=7001"></script>
 </body>
 </html>
