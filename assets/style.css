@@ -98,3 +98,36 @@ body{
   background-size:200% 100%; animation:shine 1.8s linear infinite;
 }
 @keyframes shine{from{background-position:200% 0}to{background-position:-200% 0}}
+/* ===== Mise en page compacte pour tout voir sans scroll ===== */
+.dashboard-onepage .dashboard-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  align-items: stretch;
+  height: calc(100vh - 120px); /* toute la hauteur visible */
+}
+
+.dashboard-onepage .col-left,
+.dashboard-onepage .col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dashboard-onepage .chart-box {
+  flex: 1;
+  min-height: 280px;
+}
+
+.dashboard-onepage .kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1000px) {
+  .dashboard-onepage .dashboard-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
