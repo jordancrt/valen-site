@@ -1,0 +1,20 @@
+{
+  "name": "valenhub",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "ValenHub — Clarté & Sérénité financière.",
+  "main": "index.html",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "keywords": [
+    "finance",
+    "dashboard",
+    "budget",
+    "crypto",
+    "banque",
+    "valenhub"
+  ],
+  "author": "Jordan",
+  "license": "MIT"
+}
