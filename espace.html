@@ -23,10 +23,151 @@
 
 <main class="container" style="padding:28px 0 80px">
   <!-- COLLE ICI TON DASHBOARD (les cartes KPI, courbes, boutons “Ajouter un compte”, etc.) -->
-</main>
+<main class="dashboard dashboard-onepage">
+  <div class="container dashboard-grid">
 
-<footer class="footer"><div class="container"><p>© 2025 ValenHub</p></div></footer>
-<script src="assets/app.js" defer></script>
-<script src="assets/dashboard.js" defer></script>
-</body>
-</html>
+    <!-- Colonne gauche -->
+    <div class="col-left">
+
+      <section class="card">
+        <h3>Comptes & actions</h3>
+        <div class="toolbar">
+          <div class="btn-group">
+            <button class="btn btn-ghost btn-small" id="btn-refresh">Rafraîchir</button>
+            <button class="btn btn-ghost btn-small" id="btn-demo">Démo locale</button>
+            <button class="btn btn-ghost btn-small" id="btn-reset">Réinitialiser</button>
+          </div>
+          <button class="btn btn-primary btn-small" id="btn-add">Ajouter un compte</button>
+        </div>
+        <ul class="accounts" id="accountsList"><li>Aucun compte connecté</li></ul>
+        <p class="muted small">Connexion future : banques/crypto/courtage via clé publique chiffrée (lecture seule).</p>
+      </section>
+
+      <div class="kpis-grid">
+        <section class="card kpi">
+          <h3>Patrimoine total</h3>
+          <p class="big" id="kpi-wealth">0 €</p>
+          <p class="muted small">Tous comptes & actifs confondus</p>
+        </section>
+
+        <section class="card kpi">
+          <h3>Variation mensuelle</h3>
+          <p class="big" id="kpi-delta">0 %</p>
+          <p class="muted small">Depuis début de mois</p>
+        </section>
+
+        <section class="card kpi">
+          <h3>Dépenses du mois</h3>
+          <p class="big" id="kpi-expenses">0 €</p>
+          <p class="muted small">Toutes catégories</p>
+        </section>
+
+        <section class="card kpi">
+          <h3>Objectif atteint</h3>
+          <p class="big" id="kpi-goal">0 %</p>
+          <p class="muted small">Progrès vers la cible</p>
+        </section>
+      </div>
+
+      <section class="card">
+        <h3>Saisie rapide</h3>
+        <div class="btn-group">
+          <button class="btn btn-ghost btn-small" id="open-spend">+ Dépense</button>
+          <button class="btn btn-ghost btn-small" id="open-budget">⚙︎ Budget cat.</button>
+          <button class="btn btn-ghost btn-small" id="open-invest">⬆ Dépôt / Invest.</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Colonne droite -->
+    <div class="col-right">
+      <section class="card">
+        <div class="card-header">
+          <h3>Évolution du patrimoine</h3>
+          <select id="rangeWealth" class="select">
+            <option value="6m">6 mois</option>
+            <option value="1y" selected>1 an</option>
+            <option value="3y">3 ans</option>
+          </select>
+        </div>
+        <div class="chart-box">
+          <div id="sk-wealth" class="skeleton"></div>
+          <canvas id="chartWealth" hidden></canvas>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Dépenses par catégorie</h3>
+        <div class="chart-box" style="min-height:320px">
+          <div id="sk-exp" class="skeleton"></div>
+          <canvas id="chartExpenses" hidden></canvas>
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+  <!-- Modales -->
+  <dialog id="dlg-account" class="modal">
+    <form method="dialog" class="modal-box" id="form-account">
+      <h3>Ajouter un compte</h3>
+      <label>Nom du compte</label>
+      <input name="name" required placeholder="Boursorama / Binance / PEA…" />
+      <label style="margin-top:8px">Type</label>
+      <select name="type">
+        <option>Banque</option><option>Crypto</option><option>Trading</option><option>Épargne</option>
+      </select>
+      <label style="margin-top:8px">Solde initial (€)</label>
+      <input name="balance" type="number" step="0.01" required value="0" />
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button class="btn btn-ghost" value="cancel">Annuler</button>
+        <button class="btn btn-primary" value="default">Ajouter</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-spend" class="modal">
+    <form method="dialog" class="modal-box" id="form-spend">
+      <h3>Nouvelle dépense</h3>
+      <label>Catégorie</label>
+      <input name="category" list="cats" required placeholder="Logement / Alimentation / Transport…" />
+      <datalist id="cats"></datalist>
+      <label style="margin-top:8px">Montant (€)</label>
+      <input name="amount" type="number" step="0.01" required />
+      <label style="margin-top:8px">Compte (optionnel)</label>
+      <select name="account"><option value="">—</option></select>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button class="btn btn-ghost" value="cancel">Annuler</button>
+        <button class="btn btn-primary" value="default">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-budget" class="modal">
+    <form method="dialog" class="modal-box" id="form-budget">
+      <h3>Budget de catégorie</h3>
+      <label>Catégorie</label>
+      <input name="category" list="cats" required />
+      <label style="margin-top:8px">Budget mensuel (€)</label>
+      <input name="budget" type="number" step="0.01" required />
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button class="btn btn-ghost" value="cancel">Annuler</button>
+        <button class="btn btn-primary" value="default">Valider</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-invest" class="modal">
+    <form method="dialog" class="modal-box" id="form-invest">
+      <h3>Dépôt / investissement</h3>
+      <label>Compte</label>
+      <select name="account" required></select>
+      <label style="margin-top:8px">Montant (€)</label>
+      <input name="amount" type="number" step="0.01" required />
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button class="btn btn-ghost" value="cancel">Annuler</button>
+        <button class="btn btn-primary" value="default">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+</main>
