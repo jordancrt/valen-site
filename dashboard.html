@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ValenHub — Tableau de bord</title>
+  <title>ValenHub – Tableau de bord</title>
   <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=1011" />
+  <link rel="stylesheet" href="assets/style.css?v=6000" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-container">
-      <div class="nav-brand">
+      <a class="nav-brand" href="index.html">
         <img src="assets/icon-192.png" alt="Logo ValenHub" />
         <span>VALENHUB</span>
-      </div>
+      </a>
       <nav>
         <ul class="nav-links">
           <li><a href="index.html">Accueil</a></li>
@@ -27,86 +28,90 @@
     </div>
   </header>
 
-  <!-- CONTENU -->
-  <main class="dashboard">
-  <div class="container dashboard-grid">
-    <!-- Colonne gauche = actions + KPI -->
-    <aside class="col-left">
+  <!-- TABLEAU DE BORD SUR UNE SEULE PAGE -->
+  <main class="dashboard dashboard-onepage">
+    <div class="container dashboard-grid">
 
-      <!-- Panneau d'actions -->
-      <section class="card actions">
-        <h3>Comptes & actions</h3>
-        <div class="actions-grid">
-          <button class="btn btn-secondary" id="btn-refresh">Rafraîchir</button>
-          <button class="btn btn-secondary" id="btn-demo">Démo locale</button>
-          <button class="btn btn-secondary" id="btn-reset">Réinitialiser</button>
-          <button class="btn btn-primary" id="btn-add">Ajouter un compte</button>
+      <!-- Colonne gauche -->
+      <div class="col-left">
+        <section class="card">
+          <h3>Comptes & actions</h3>
+          <div class="toolbar">
+            <div class="btn-group">
+              <button class="btn btn-ghost btn-small" id="btn-refresh">Rafraîchir</button>
+              <button class="btn btn-ghost btn-small" id="btn-demo">Démo locale</button>
+              <button class="btn btn-ghost btn-small" id="btn-reset">Réinitialiser</button>
+            </div>
+            <button class="btn btn-primary btn-small" id="btn-add">Ajouter un compte</button>
+          </div>
+          <ul class="accounts" id="accountsList">
+            <li>Aucun compte connecté</li>
+          </ul>
+        </section>
+
+        <div class="kpis-grid">
+          <section class="card kpi">
+            <h3>Patrimoine total</h3>
+            <p class="big" id="kpi-wealth">0 €</p>
+            <p class="muted small">Tous comptes confondus</p>
+          </section>
+
+          <section class="card kpi">
+            <h3>Variation mensuelle</h3>
+            <p class="big" id="kpi-delta">0 %</p>
+            <p class="muted small">Évolution sur 30 jours</p>
+          </section>
+
+          <section class="card kpi">
+            <h3>Dépenses du mois</h3>
+            <p class="big" id="kpi-expenses">8135 €</p>
+            <p class="muted small">Mise à jour locale</p>
+          </section>
+
+          <section class="card kpi">
+            <h3>Objectif atteint</h3>
+            <p class="big" id="kpi-goal">0 %</p>
+            <p class="muted small">Progrès vers la cible</p>
+          </section>
         </div>
-        <p class="muted small" id="accounts-info">Aucun compte pour le moment.</p>
-      </section>
+      </div>
 
-      <!-- KPI cartes -->
-      <section class="card kpi">
-        <h3>Patrimoine total</h3>
-        <p class="big" id="kpi-wealth">—</p>
-        <p class="muted small">Tous comptes & actifs confondus</p>
-      </section>
-
-      <section class="card kpi">
-        <h3>Variation mensuelle</h3>
-        <p class="big" id="kpi-change">—</p>
-        <p class="muted small">Évolution sur 30 jours</p>
-      </section>
-
-      <section class="card kpi">
-        <h3>Dépenses du mois</h3>
-        <p class="big" id="kpi-expenses">—</p>
-        <p class="muted small">Mise à jour locale</p>
-      </section>
-
-      <section class="card kpi">
-        <h3>Objectif atteint</h3>
-        <p class="big" id="kpi-goal">—</p>
-        <p class="muted small">Progrès vers la cible</p>
-      </section>
-    </aside>
-
-    <!-- Colonne droite = graphiques -->
-    <section class="col-right">
-      <section class="card">
-        <div class="card-header">
-          <h3>Évolution du patrimoine</h3>
-          <div class="chart-controls">
-            <select id="range-select" class="select">
-              <option value="1M">1 mois</option>
-              <option value="3M">3 mois</option>
-              <option value="6M">6 mois</option>
-              <option value="1Y" selected>1 an</option>
+      <!-- Colonne droite -->
+      <div class="col-right">
+        <section class="card">
+          <div class="card-header">
+            <h3>Évolution du patrimoine</h3>
+            <select id="rangeWealth" class="select">
+              <option value="6m">6 mois</option>
+              <option value="1y" selected>1 an</option>
+              <option value="3y">3 ans</option>
             </select>
           </div>
-        </div>
-        <!-- squelette hauteur fixe pour éviter le “clignotement” -->
-        <div class="skeleton" style="height:300px"></div>
-        <canvas id="chartWealth" height="300"></canvas>
-      </section>
+          <div class="chart-box">
+            <div id="sk-wealth" class="skeleton"></div>
+            <canvas id="chartWealth" hidden></canvas>
+          </div>
+        </section>
 
-      <section class="card">
-        <h3>Dépenses par catégorie</h3>
-        <div class="skeleton" style="height:260px"></div>
-        <canvas id="chartExpenses" height="260"></canvas>
-      </section>
-    </section>
-  </div>
-</main>
+        <section class="card">
+          <h3>Dépenses par catégorie</h3>
+          <div class="chart-box" style="min-height:320px">
+            <div id="sk-exp" class="skeleton"></div>
+            <canvas id="chartExpenses" hidden></canvas>
+          </div>
+        </section>
+      </div>
 
-  <!-- FOOTER -->
+    </div>
+  </main>
+
+  <!-- PIED DE PAGE -->
   <footer class="footer">
-    <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+    <div class="container">
+      <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+    </div>
   </footer>
 
-  <!-- Librairie et script -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="assets/dashboard.js?v=1001"></script>
-<script>document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('is-ready'));</script>
+  <script src="assets/dashboard.js?v=6000"></script>
 </body>
 </html>
