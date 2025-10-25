@@ -1,173 +1,329 @@
-// ====== STATE LOCAL ======
-const LS = window.localStorage;
-const LS_KEY = 'vh-accounts';
+/* ====== ÉTAT & PERSISTANCE ====== */
+const STORE_KEY = "valenhub-state-v1";
+const now = new Date();
 
-let state = {
-  accounts: [],   // { id, name, balance }
-  expenses: 8135, // démo
-  goal: 50000,    // objectif fictif
+const State = {
+  accounts: [],           // [{id,name,type,balance}]
+  categories: {},         // { "Alimentation": {budget: 300, spent: 120}, ... }
+  history: [],            // [{dateISO, wealth}]
+  monthStartWealth: 0,    // base pour variation mensuelle
+  goalAmount: 20000,      // objectif simple
 };
 
-function loadState() {
+function load() {
   try {
-    const raw = LS.getItem(LS_KEY);
-    if (raw) state.accounts = JSON.parse(raw);
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) return JSON.parse(raw);
   } catch {}
+  return {...State};
 }
 
-function saveState() {
-  try { LS.setItem(LS_KEY, JSON.stringify(state.accounts)); } catch {}
+function save() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(State));
 }
 
-function formatCurrency(v) {
-  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v);
-}
+/* ====== UTILITAIRES ====== */
+const € = (n) => (n||0).toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
+const pct = (n) => `${(n||0).toFixed(1).replace(".0","")} %`;
+function monthStart() { const d=new Date(); d.setDate(1); d.setHours(0,0,0,0); return d; }
 
-// ====== KPI CALC ======
-function calcWealth() {
-  return state.accounts.reduce((sum,a)=> sum + (Number(a.balance)||0), 0);
-}
-function calcMonthlyChange(wealth) {
-  // démo simple : 3%–6%
-  return Math.round((wealth ? 3 + Math.random()*3 : 0) * 10) / 10;
-}
-function calcGoalProgress(wealth) {
-  return Math.max(0, Math.min(100, Math.round((wealth / state.goal) * 100)));
-}
+/* ====== UI : RÉFÉRENCES ====== */
+const elWealth   = document.getElementById("kpi-wealth");
+const elDelta    = document.getElementById("kpi-delta");
+const elExp      = document.getElementById("kpi-expenses");
+const elGoal     = document.getElementById("kpi-goal");
+const elAccList  = document.getElementById("accountsList");
+const selectRange= document.getElementById("rangeWealth");
+const datalistCats = document.getElementById("cats");
 
-// ====== DOM HOOKS ======
-const elWealth   = document.getElementById('kpi-wealth');
-const elChange   = document.getElementById('kpi-change');
-const elExpenses = document.getElementById('kpi-expenses');
-const elGoal     = document.getElementById('kpi-goal');
-const elAccountsInfo = document.getElementById('accounts-info');
+/* Modales */
+const dlgAccount = document.getElementById("dlg-account");
+const dlgSpend   = document.getElementById("dlg-spend");
+const dlgBudget  = document.getElementById("dlg-budget");
+const dlgInvest  = document.getElementById("dlg-invest");
 
-function updateKPIs() {
-  const wealth = calcWealth();
-  const change = calcMonthlyChange(wealth);
-  const goal   = calcGoalProgress(wealth);
+/* Boutons ouverture modales */
+document.getElementById("btn-add").onclick     = () => dlgAccount.showModal();
+document.getElementById("open-spend").onclick  = () => { syncAccountsSelects(); dlgSpend.showModal(); };
+document.getElementById("open-budget").onclick = () => dlgBudget.showModal();
+document.getElementById("open-invest").onclick = () => { syncAccountsSelects(); dlgInvest.showModal(); };
 
-  elWealth && (elWealth.textContent = formatCurrency(wealth));
-  elChange && (elChange.textContent = `${change} %`);
-  elExpenses && (elExpenses.textContent = formatCurrency(state.expenses));
-  elGoal && (elGoal.textContent = `${goal} %`);
+/* Autres boutons */
+document.getElementById("btn-reset").onclick = () => { if(confirm("Réinitialiser les données locales ?")) { localStorage.removeItem(STORE_KEY); location.reload(); } };
+document.getElementById("btn-demo").onclick  = demoData;
+document.getElementById("btn-refresh").onclick = () => { computeAll(); renderAll(); };
 
-  // info comptes
-  const n = state.accounts.length;
-  if (elAccountsInfo) {
-    elAccountsInfo.textContent = n
-      ? `${n} ${n>1 ? 'comptes' : 'compte'} connectés — patrimoine: ${formatCurrency(wealth)}`
-      : `Aucun compte pour le moment.`;
+/* ====== GESTION DES FORMULAIRES ====== */
+document.getElementById("form-account").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const acc = {
+    id: crypto.randomUUID(),
+    name: String(f.get("name")).trim(),
+    type: f.get("type"),
+    balance: Number(f.get("balance")||0),
+  };
+  State.accounts.push(acc);
+  save(); computeAll(); renderAll();
+  dlgAccount.close();
+  e.target.reset();
+});
+
+document.getElementById("form-spend").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const cat = String(f.get("category")).trim() || "Autre";
+  const amt = Math.abs(Number(f.get("amount")||0));
+  const accId= String(f.get("account")||"");
+
+  // met à jour catégorie
+  if(!State.categories[cat]) State.categories[cat] = {budget:0, spent:0};
+  State.categories[cat].spent += amt;
+
+  // déduit du compte si choisi
+  if (accId) {
+    const acc = State.accounts.find(a=>a.id===accId);
+    if (acc) acc.balance -= amt;
   }
 
-  // refresh chart avec wealth (démo)
-  renderWealthChartWith(wealth);
-}
+  save(); computeAll(); renderAll();
+  dlgSpend.close(); e.target.reset();
+});
 
-// ====== ACTIONS ======
-function addAccountFlow() {
-  const name = prompt('Nom du compte (ex: Compte courant, Livret A, PEA) :');
-  if (!name) return;
+document.getElementById("form-budget").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const cat = String(f.get("category")).trim();
+  const bud = Math.max(0, Number(f.get("budget")||0));
+  if(!cat) return;
+  if(!State.categories[cat]) State.categories[cat] = {budget:0, spent:0};
+  State.categories[cat].budget = bud;
+  save(); computeAll(); renderAll();
+  dlgBudget.close(); e.target.reset();
+});
 
-  const balStr = prompt('Solde initial en € (ex: 2500) :', '2500');
-  const balance = Number(balStr.replace(',', '.'));
-  if (Number.isNaN(balance)) return alert('Montant invalide.');
+document.getElementById("form-invest").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const accId= String(f.get("account"));
+  const amt = Math.abs(Number(f.get("amount")||0));
+  const acc = State.accounts.find(a=>a.id===accId);
+  if(acc){ acc.balance += amt; }
+  // on considère un dépôt/investissement comme une hausse de patrimoine
+  pushHistoryPoint();
+  save(); computeAll(); renderAll();
+  dlgInvest.close(); e.target.reset();
+});
 
-  state.accounts.push({ id: Date.now(), name, balance });
-  saveState();
-  updateKPIs();
-}
-
-function demoSeed() {
-  state.accounts = [
-    { id: 1, name: 'Courant', balance: 3200 },
-    { id: 2, name: 'Livret A', balance: 8200 },
-    { id: 3, name: 'PEA', balance: 19700 },
+/* Remplir listes de comptes dans les modales */
+function syncAccountsSelects(){
+  const selects = [
+    document.querySelector('#form-spend select[name="account"]'),
+    document.querySelector('#form-invest select[name="account"]'),
   ];
-  saveState();
-  updateKPIs();
+  for(const sel of selects){
+    sel.innerHTML = '<option value="">—</option>' + State.accounts.map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
+  }
 }
 
-function resetDemo() {
-  if (!confirm('Réinitialiser les comptes locaux ?')) return;
-  state.accounts = [];
-  saveState();
-  updateKPIs();
+/* Remplir datalist catégories */
+function syncCategoriesDatalist(){
+  datalistCats.innerHTML = Object.keys(State.categories).sort().map(c=>`<option value="${c}">`).join('');
 }
 
-function refreshData() {
-  // Pour plus tard: appel API -> synchro agrégateur
-  updateKPIs();
+/* ====== CALCULS KPI ====== */
+function totalWealth(){ return State.accounts.reduce((s,a)=>s+(a.balance||0),0); }
+function monthDeltaPct(){
+  const base = State.monthStartWealth || 0;
+  const cur  = totalWealth();
+  if(base<=0) return 0;
+  return ( (cur - base) / base ) * 100;
+}
+function monthExpenses(){
+  return Object.values(State.categories).reduce((s,c)=>s+(c.spent||0),0);
+}
+function goalPct(){
+  const w = totalWealth();
+  if(State.goalAmount<=0) return 0;
+  return Math.min(100, (w/State.goalAmount)*100);
 }
 
-// boutons
-document.getElementById('btn-add')?.addEventListener('click', addAccountFlow);
-document.getElementById('btn-demo')?.addEventListener('click', demoSeed);
-document.getElementById('btn-reset')?.addEventListener('click', resetDemo);
-document.getElementById('btn-refresh')?.addEventListener('click', refreshData);
+/* Historique : ajoute un point “aujourd’hui” basé sur le total */
+function pushHistoryPoint(){
+  const point = { dateISO: new Date().toISOString(), wealth: totalWealth() };
+  // garde 36 points max
+  State.history.push(point);
+  if(State.history.length>36) State.history.shift();
+}
 
-// ====== CHARTS (wealth) ======
-let wealthChart;
+/* Initialise monthStartWealth au 1er du mois si vide */
+function ensureMonthStart(){
+  if(!State.monthStartWealth){
+    State.monthStartWealth = totalWealth();
+  }
+}
 
-function renderWealthChartWith(currentWealth) {
-  const ctx = document.getElementById('chartWealth');
-  if (!ctx) return;
+/* ====== RENDU UI ====== */
+function renderAccounts(){
+  if(State.accounts.length===0){
+    elAccList.innerHTML = "<li>Aucun compte connecté</li>";
+    return;
+  }
+  elAccList.innerHTML = State.accounts.map(a=>`
+    <li class="account-row">
+      <span class="acc-name">${a.name}</span>
+      <span class="acc-type muted">${a.type}</span>
+      <span class="acc-amt">${€(a.balance)}</span>
+      <button class="btn btn-ghost btn-small" data-acc="${a.id}">−</button>
+    </li>
+  `).join('');
 
-  // labels sur 12 mois (démo)
-  const months = Array.from({length:12}, (_,i)=> new Date(Date.now() - (11-i)*30*24*3600*1000))
-    .map(d => d.toLocaleDateString('fr-FR',{ month:'short'}));
-
-  // série démo lissée autour du patrimoine actuel
-  let value = currentWealth || 30000;
-  const data = months.map(() => {
-    value = value * (0.98 + Math.random()*0.05);
-    return Math.max(0, Math.round(value));
-  });
-
-  // enlève le squelette au premier rendu
-  ctx.previousElementSibling?.remove();
-
-  if (wealthChart) wealthChart.destroy();
-  wealthChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: months,
-      datasets: [{
-        label: 'Patrimoine',
-        data,
-        borderWidth: 2,
-        tension: 0.28,
-        pointRadius: 0,
-      }]
-    },
-    options: {
-      maintainAspectRatio: false,
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: { mode: 'index', intersect: false }
-      },
-      scales: {
-        x: {
-          grid: { display:false },
-          ticks: { maxRotation:0, autoSkip:true }
-        },
-        y: {
-          grid: { color:'rgba(255,255,255,0.08)'},
-          ticks: { callback: v => formatCurrency(v) }
-        }
-      },
-      interaction: { mode: 'nearest', intersect: false }
+  // suppression de compte
+  elAccList.querySelectorAll("button[data-acc]").forEach(btn=>{
+    btn.onclick = () => {
+      const id = btn.dataset.acc;
+      State.accounts = State.accounts.filter(a=>a.id!==id);
+      save(); computeAll(); renderAll();
     }
   });
 }
 
-// ====== INIT ======
-function init() {
-  loadState();
-  updateKPIs();
-  // premier rendu si aucun compte
-  if (!state.accounts.length) renderWealthChartWith(30000);
-  document.getElementById('range-select')?.addEventListener('change', updateKPIs);
+/* ====== CHARTS ====== */
+let chartWealth=null, chartExpenses=null;
+
+function renderWealth(range="1y"){
+  const wrap = document.getElementById("chartWealth");
+  const sk   = document.getElementById("sk-wealth");
+  const ctx  = wrap.getContext("2d");
+
+  // fabrique une série lissée
+  const points = [...State.history];
+  if(points.length<6){
+    // si pas d’historique, génère une courbe douce autour du total actuel
+    const base = totalWealth() || 32000;
+    for(let i=6;i>=0;i--){
+      const noise = (Math.sin(i)*0.015 + Math.random()*0.01) * base;
+      points.unshift({dateISO: new Date(Date.now()-i*30*24*3600e3).toISOString(), wealth: Math.max(0, base*(0.9+Math.random()*0.2) + noise)});
+    }
+  }
+
+  const lastMonths = range==="6m"? 6 : range==="3y"? 36 : 12;
+  const sliced = points.slice(-lastMonths);
+
+  const labels = sliced.map(p => {
+    const d = new Date(p.dateISO);
+    return d.toLocaleDateString("fr-FR",{month:"short"});
+  });
+  const data   = sliced.map(p => p.wealth);
+
+  if(chartWealth) chartWealth.destroy();
+  chartWealth = new Chart(ctx, {
+    type: "line",
+    data: { labels, datasets:[{
+      label: "Patrimoine",
+      data, tension:.3, borderWidth:2,
+      borderColor:"rgba(167,139,250,.95)", pointRadius:0, fill:true,
+      backgroundColor:"rgba(167,139,250,.10)",
+    }]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{mode:"index",intersect:false} },
+      scales:{ x:{ grid:{display:false}}, y:{ ticks:{ callback:v=>€(v).replace(" €"," €") } } }
+    }
+  });
+
+  sk.hidden = true; wrap.hidden = false;
 }
-document.addEventListener('DOMContentLoaded', init);
+
+function renderExpenses(){
+  const wrap = document.getElementById("chartExpenses");
+  const sk   = document.getElementById("sk-exp");
+  const ctx  = wrap.getContext("2d");
+
+  const cats = Object.keys(State.categories);
+  const spent= cats.map(c => State.categories[c].spent||0);
+  const budget= cats.map(c => State.categories[c].budget||0);
+
+  if(chartExpenses) chartExpenses.destroy();
+  chartExpenses = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: cats.length? cats : ["Aucune catégorie"],
+      datasets:[
+        {label:"Dépenses", data: spent, borderWidth:0, backgroundColor:"rgba(255,255,255,.25)"},
+        {label:"Budget",   data: budget, borderWidth:1, borderColor:"rgba(167,139,250,.9)", backgroundColor:"rgba(167,139,250,.15)"},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:"bottom"} },
+      scales:{ x:{ grid:{display:false}}, y:{ ticks:{ callback:v=>€(v).replace(" €"," €") } } }
+    }
+  });
+
+  sk.hidden = true; wrap.hidden = false;
+}
+
+/* ====== RENDU KPI & SYNCHRO ====== */
+function computeAll(){
+  ensureMonthStart();
+  // met à jour datalist catégories
+  syncCategoriesDatalist();
+}
+
+function renderKPIs(){
+  const w = totalWealth();
+  const d = monthDeltaPct();
+  const e = monthExpenses();
+  const g = goalPct();
+
+  elWealth.textContent = €(w);
+  elDelta.textContent  = pct(d);
+  elExp.textContent    = €(e).replace(" €"," €");
+  elGoal.textContent   = pct(g);
+}
+
+function renderAll(){
+  renderAccounts();
+  renderKPIs();
+  renderWealth(selectRange.value);
+  renderExpenses();
+}
+
+/* ====== DÉMO ====== */
+function demoData(){
+  // si déjà des comptes, on n’écrase pas
+  if(State.accounts.length===0){
+    State.accounts = [
+      {id:crypto.randomUUID(), name:"Boursorama", type:"Banque",  balance: 2100},
+      {id:crypto.randomUUID(), name:"Binance",    type:"Crypto",  balance: 12500},
+      {id:crypto.randomUUID(), name:"PEA",        type:"Trading", balance: 9300},
+    ];
+  }
+  State.categories = {
+    "Logement":     {budget: 900, spent: 900},
+    "Alimentation": {budget: 350, spent: 290},
+    "Transport":    {budget: 120, spent: 95},
+    "Loisirs":      {budget: 200, spent: 140},
+  };
+  State.monthStartWealth = totalWealth() * 0.97; // base pour voir une variation positive
+  // Historique fictif
+  State.history = [];
+  for(let i=11;i>=0;i--){
+    const d = new Date(); d.setMonth(d.getMonth()-i);
+    const base = totalWealth()* (0.9 + Math.random()*0.2);
+    State.history.push({dateISO: d.toISOString(), wealth: Math.round(base)});
+  }
+  save(); computeAll(); renderAll();
+}
+
+/* ====== INIT ====== */
+Object.assign(State, load());
+computeAll(); renderAll();
+
+/* Changement de plage du graphique */
+selectRange.addEventListener("change", ()=> renderWealth(selectRange.value));
+
+/* Journaling simple du patrimoine (une fois à l’ouverture) */
+pushHistoryPoint(); save();
