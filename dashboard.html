@@ -4,195 +4,141 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ValenHub – Tableau de bord</title>
-  <meta name="theme-color" content="#0B1120" />
-  <link rel="stylesheet" href="assets/style.css?v=7001" />
+  <link rel="stylesheet" href="assets/style.css?v=8000" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background: #0b0f1a; color: #f5f5f7; font-family: "Inter", sans-serif; }
+    .dashboard-container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .header h1 { font-size: 28px; font-weight: 700; color: #fff; }
+    .add-btn {
+      background: linear-gradient(135deg, #6d5dfc, #9b8cff);
+      border: none; padding: 10px 16px; border-radius: 10px;
+      color: white; font-weight: 600; cursor: pointer;
+    }
+    .add-btn:hover { filter: brightness(1.1); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px 20px;
+      backdrop-filter: blur(8px);
+      transition: 0.25s;
+    }
+    .card:hover { border-color: rgba(255,255,255,0.15); }
+
+    .card h3 { margin: 0 0 10px; font-weight: 600; font-size: 16px; color: #e2e3e8; }
+    .value { font-size: 24px; font-weight: 700; color: #fff; }
+    .muted { color: #a1a6b1; font-size: 13px; }
+
+    #chartWealth { width: 100%; height: 260px; }
+
+    .accounts-table {
+      width: 100%; border-collapse: collapse; margin-top: 20px;
+    }
+    .accounts-table th, .accounts-table td {
+      padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.05);
+      text-align: left;
+    }
+    .accounts-table th { color: #9fa6b9; font-weight: 600; font-size: 13px; }
+    .accounts-table td { color: #e9e9f2; font-size: 14px; }
+
+    .delete-btn {
+      background: none; border: none; color: #ff7b7b; cursor: pointer;
+      font-weight: 600;
+    }
+
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center; z-index: 50; }
+    .modal.hidden { display: none; }
+    .modal-content {
+      background: #121622;
+      padding: 24px; border-radius: 14px;
+      max-width: 380px; width: 100%;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .modal-content h2 { margin-top: 0; color: #fff; font-size: 20px; }
+    .modal-content input, .modal-content select {
+      width: 100%; margin-top: 8px; margin-bottom: 14px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; color: #fff; padding: 10px;
+    }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+    .cancel-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+    .confirm-btn { background: linear-gradient(135deg, #6d5dfc, #9b8cff); border: none; color: white; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+  </style>
 </head>
 <body>
-
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="container nav-container">
-      <a class="nav-brand" href="index.html">
-        <img src="assets/icon-192.png" alt="Logo ValenHub" />
-        <span>VALENHUB</span>
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a class="active" href="tableau de bord.html">Tableau de bord</a></li>
-          <li><a href="about.html">À propos</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
+  <div class="dashboard-container">
+    <div class="header">
+      <h1>Tableau de bord</h1>
+      <button class="add-btn" id="addAccountBtn">+ Ajouter un compte</button>
     </div>
-  </header>
 
-  <!-- DASHBOARD (une seule page) -->
-  <main class="dashboard dashboard-onepage">
-    <div class="container dashboard-grid">
-
-      <!-- COLONNE GAUCHE -->
-      <div class="col-left">
-
-        <section class="card">
-          <h3>Comptes & actions</h3>
-          <div class="toolbar">
-            <div class="btn-group">
-              <button class="btn btn-ghost btn-small" id="btn-refresh">Rafraîchir</button>
-              <button class="btn btn-ghost btn-small" id="btn-demo">Démo locale</button>
-              <button class="btn btn-ghost btn-small" id="btn-reset">Réinitialiser</button>
-            </div>
-            <button class="btn btn-primary btn-small" id="btn-add">Ajouter un compte</button>
-          </div>
-          <ul class="accounts" id="accountsList"><li>Aucun compte connecté</li></ul>
-          <p class="muted small">Connexion future : banques / crypto / trading via clé publique chiffrée (sans identifiants).</p>
-        </section>
-
-        <div class="kpis-grid">
-          <section class="card kpi">
-            <h3>Patrimoine total</h3>
-            <p class="big" id="kpi-wealth">0 €</p>
-            <p class="muted small">Tous comptes & actifs confondus</p>
-          </section>
-
-          <section class="card kpi">
-            <h3>Variation mensuelle</h3>
-            <p class="big" id="kpi-delta">0 %</p>
-            <p class="muted small">Depuis début de mois</p>
-          </section>
-
-          <section class="card kpi">
-            <h3>Dépenses du mois</h3>
-            <p class="big" id="kpi-expenses">0 €</p>
-            <p class="muted small">Toutes catégories</p>
-          </section>
-
-          <section class="card kpi">
-            <h3>Objectif atteint</h3>
-            <p class="big" id="kpi-goal">0 %</p>
-            <p class="muted small">Progrès vers la cible</p>
-          </section>
-        </div>
-
-        <section class="card">
-          <h3>Saisie rapide</h3>
-          <div class="btn-group">
-            <button class="btn btn-ghost btn-small" id="open-spend">+ Dépense</button>
-            <button class="btn btn-ghost btn-small" id="open-budget">⚙︎ Budget cat.</button>
-            <button class="btn btn-ghost btn-small" id="open-invest">⬆ Dépôt / Invest.</button>
-          </div>
-        </section>
+    <div class="cards">
+      <div class="card">
+        <h3>Patrimoine total</h3>
+        <div class="value" id="totalWealth">0 €</div>
+        <p class="muted">Tous comptes confondus</p>
       </div>
-
-      <!-- COLONNE DROITE -->
-      <div class="col-right">
-        <section class="card">
-          <div class="card-header">
-            <h3>Évolution du patrimoine</h3>
-            <select id="rangeWealth" class="select">
-              <option value="6m">6 mois</option>
-              <option value="1y" selected>1 an</option>
-              <option value="3y">3 ans</option>
-            </select>
-          </div>
-          <div class="chart-box">
-            <div id="sk-wealth" class="skeleton"></div>
-            <canvas id="chartWealth" hidden></canvas>
-          </div>
-        </section>
-
-        <section class="card">
-          <h3>Dépenses par catégorie</h3>
-          <div class="chart-box" style="min-height:320px">
-            <div id="sk-exp" class="skeleton"></div>
-            <canvas id="chartExpenses" hidden></canvas>
-          </div>
-        </section>
+      <div class="card">
+        <h3>Variation mensuelle</h3>
+        <div class="value" id="monthVariation">0%</div>
+        <p class="muted">Évolution sur 30 jours</p>
       </div>
-
+      <div class="card">
+        <h3>Dépenses du mois</h3>
+        <div class="value" id="expensesMonth">0 €</div>
+        <p class="muted">Mise à jour locale</p>
+      </div>
+      <div class="card">
+        <h3>Objectif atteint</h3>
+        <div class="value" id="goalProgress">0%</div>
+        <p class="muted">Progrès vers la cible</p>
+      </div>
     </div>
-  </main>
 
-  <footer class="footer">
-    <div class="container">
-      <p>© 2025 ValenHub — Clarté & Sérénité financière.</p>
+    <div class="card" style="margin-top:30px;">
+      <h3>Évolution du patrimoine</h3>
+      <canvas id="chartWealth"></canvas>
     </div>
-  </footer>
 
-  <!-- ===== Modales ===== -->
+    <div class="card" style="margin-top:30px;">
+      <h3>Comptes connectés</h3>
+      <table class="accounts-table" id="accountsTable">
+        <thead>
+          <tr>
+            <th>Nom</th><th>Type</th><th>Solde</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="4" class="muted">Aucun compte ajouté</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-  <!-- Ajouter un compte -->
-  <dialog id="dlg-account" class="modal">
-    <form method="dialog" class="modal-box" id="form-account">
-      <h3>Ajouter un compte</h3>
-      <p class="muted small" style="margin-top:-6px">Banque / crypto / courtage (virtuel, sans identifiants).</p>
-      <label>Nom du compte</label>
-      <input name="name" required placeholder="Boursorama / Binance / PEA…" />
-      <label style="margin-top:8px">Type</label>
-      <select name="type">
+  <!-- MODALE AJOUT DE COMPTE -->
+  <div class="modal hidden" id="accountModal">
+    <div class="modal-content">
+      <h2>Ajouter un compte</h2>
+      <input type="text" id="accName" placeholder="Nom du compte (ex : Binance, Revolut)" />
+      <select id="accType">
         <option>Banque</option>
         <option>Crypto</option>
         <option>Trading</option>
         <option>Épargne</option>
       </select>
-      <label style="margin-top:8px">Solde initial (€)</label>
-      <input name="balance" type="number" step="0.01" required value="0" />
-      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
-        <button class="btn btn-ghost" value="cancel">Annuler</button>
-        <button class="btn btn-primary" value="default">Ajouter</button>
+      <input type="number" id="accBalance" placeholder="Solde initial (€)" />
+      <div class="modal-actions">
+        <button class="cancel-btn" id="cancelModal">Annuler</button>
+        <button class="confirm-btn" id="confirmModal">Ajouter</button>
       </div>
-    </form>
-  </dialog>
+    </div>
+  </div>
 
-  <!-- Saisir une dépense -->
-  <dialog id="dlg-spend" class="modal">
-    <form method="dialog" class="modal-box" id="form-spend">
-      <h3>Nouvelle dépense</h3>
-      <label>Catégorie</label>
-      <input name="category" list="cats" required placeholder="Logement / Alimentation / Transport…" />
-      <datalist id="cats"></datalist>
-      <label style="margin-top:8px">Montant (€)</label>
-      <input name="amount" type="number" step="0.01" required />
-      <label style="margin-top:8px">Compte (optionnel)</label>
-      <select name="account"><option value="">—</option></select>
-      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
-        <button class="btn btn-ghost" value="cancel">Annuler</button>
-        <button class="btn btn-primary" value="default">Enregistrer</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- Définir / ajuster budget catégorie -->
-  <dialog id="dlg-budget" class="modal">
-    <form method="dialog" class="modal-box" id="form-budget">
-      <h3>Budget de catégorie</h3>
-      <label>Catégorie</label>
-      <input name="category" list="cats" required />
-      <label style="margin-top:8px">Budget mensuel (€)</label>
-      <input name="budget" type="number" step="0.01" required />
-      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
-        <button class="btn btn-ghost" value="cancel">Annuler</button>
-        <button class="btn btn-primary" value="default">Valider</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- Dépôt / investissement -->
-  <dialog id="dlg-invest" class="modal">
-    <form method="dialog" class="modal-box" id="form-invest">
-      <h3>Dépôt / investissement</h3>
-      <label>Compte</label>
-      <select name="account" required></select>
-      <label style="margin-top:8px">Montant (€)</label>
-      <input name="amount" type="number" step="0.01" required />
-      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
-        <button class="btn btn-ghost" value="cancel">Annuler</button>
-        <button class="btn btn-primary" value="default">Enregistrer</button>
-      </div>
-    </form>
-  </dialog>
-
-  <script src="assets/dashboard.js?v=7001"></script>
+  <script src="assets/dashboard.js?v=8000"></script>
 </body>
 </html>
