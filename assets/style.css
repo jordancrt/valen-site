@@ -131,3 +131,37 @@ body{
     height: auto;
   }
 }
+/* ===== Home premium ===== */
+.hero-wrap{padding:72px 0 24px;background:radial-gradient(800px 360px at 50% 0,rgba(167,139,250,.12),transparent 60%)}
+.hero{
+  display:grid; gap:16px;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items:center;
+}
+.hero h1{font-size:46px; line-height:1.1; margin:0}
+.hero p.sub{color:#94A3B8; max-width:620px}
+.hero-cta{display:flex; gap:12px; margin-top:8px}
+.hero-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px; padding:16px;
+  height:220px;
+}
+
+/* search bar comparateur */
+.search-bar{
+  display:grid; grid-template-columns: 1fr 160px 140px; gap:10px; align-items:center; margin-bottom:12px;
+}
+.input{
+  height:42px; border-radius:12px; padding:0 12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.03); color:#fff;
+}
+.filters{display:flex; gap:8px; margin:8px 0 14px}
+.chip{border:1px solid rgba(255,255,255,.14); background:transparent; color:#fff; border-radius:999px; padding:6px 12px; cursor:pointer}
+.chip-active{background:rgba(167,139,250,.18); border-color:rgba(167,139,250,.6)}
+.result-grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:16px}
+.result .result-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px}
+.badge{font-size:12px; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12)}
+.skeleton{border-radius:12px; background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.08),rgba(255,255,255,.04)); background-size:200% 100%; animation:sk 1.4s linear infinite}
+@keyframes sk{from{background-position:200% 0} to{background-position:-200% 0}}
