@@ -1,44 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Comparateur — ValenCompare</title>
-  <link rel="stylesheet" href="assets/style.css?v=1012" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ValenCompare — Comparateur</title>
+  <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-<header class="navbar">
-  <div class="container nav-container">
-    <a class="nav-brand" href="index.html"><img src="assets/icon-192.png" alt=""><span>VALENCOMPARE</span></a>
-    <nav><ul class="nav-links">
-      <li><a href="index.html">Accueil</a></li>
-      <li><a class="active" href="comparateur.html">Comparateur</a></li>
-      <li><a href="cryptos.html">Cryptos</a></li>
-      <li><a href="etf.html">ETF</a></li>
-      <li><a href="plateformes.html">Plateformes</a></li>
-      <li><a href="espace.html">Espace perso</a></li>
-    </ul></nav>
-  </div>
-</header>
-
-<main class="container" style="padding:32px 0 64px">
-  <div class="card">
-    <div class="toolbar">
-      <input id="q" class="input" placeholder="Ex: meilleur rendement stablecoin, ETF S&P500, crypto IA..." />
-      <div class="btn-group">
-        <select id="category" class="select">
-          <option value="crypto" selected>Crypto</option>
-          <option value="etf">ETF</option>
-          <option value="platform">Plateformes</option>
-        </select>
-        <button class="btn btn-primary" id="search">Comparer</button>
-      </div>
+  <header class="navbar">
+    <div class="container nav-container">
+      <a class="nav-brand" href="index.html"><span>VALENCOMPARE</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a class="active" href="comparateur.html">Comparateur</a></li>
+        <li><a href="#">Cryptos</a></li>
+        <li><a href="#">ETF</a></li>
+        <li><a href="#">Plateformes</a></li>
+        <li><a href="espace.html">Espace perso</a></li>
+      </ul>
     </div>
-    <div id="results" class="grid" style="display:grid;gap:14px;"></div>
-  </div>
-</main>
+  </header>
 
-<footer class="footer"><div class="container"><p>© 2025 ValenCompare</p></div></footer>
-<script src="assets/compare.js" defer></script>
+  <main class="container" style="padding:32px 0 40px">
+    <!-- Barre de recherche -->
+    <form id="searchForm" class="search-bar card">
+      <input id="query" class="input" placeholder="Ex : meilleur rendement, frais bas, PEA…" />
+      <select id="domain" class="input">
+        <option value="crypto">Crypto</option>
+        <option value="etf">ETF</option>
+        <option value="platform">Plateforme</option>
+      </select>
+      <button class="btn btn-primary" type="submit">Comparer</button>
+    </form>
+
+    <!-- Filtres rapides -->
+    <div class="filters">
+      <button data-tag="rendement" class="chip">Rendement</button>
+      <button data-tag="frais" class="chip">Frais bas</button>
+      <button data-tag="sécurité" class="chip">Sécurité</button>
+      <button data-tag="pea" class="chip">Eligible PEA</button>
+    </div>
+
+    <!-- Résultats -->
+    <section id="results" class="result-grid"></section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© 2025 ValenCompare</div>
+  </footer>
+
+  <script src="assets/compare.js" defer></script>
 </body>
 </html>
