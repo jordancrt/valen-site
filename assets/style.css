@@ -271,3 +271,95 @@ main.container {
   from {opacity: 0;}
   to {opacity: 1;}
 }
+/* ===== Accueil premium (hero + sections) ===== */
+:root{
+  --bg:#0B1120; --panel:#111827; --text:#F5F6F7; --muted:#94A3B8;
+  --accent:#A78BFA; --accent-2:#8B5CF6; --radius:16px;
+}
+
+/* Bloc héro */
+.hero-pro{
+  position:relative; overflow:hidden;
+  padding:64px 0 32px;
+  background:
+    radial-gradient(1000px 500px at 20% -10%, rgba(167,139,250,.18), transparent 60%),
+    radial-gradient(900px 400px at 80% -10%, rgba(139,92,246,.18), transparent 60%);
+}
+.hero-grid{
+  display:grid; gap:28px;
+  grid-template-columns: 1.15fr 1fr;
+}
+@media (max-width: 980px){ .hero-grid{ grid-template-columns: 1fr; } }
+
+.hero-left .badge{
+  display:inline-block; padding:8px 12px; font-size:12px;
+  border-radius:999px; color:#EAE7FF;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(167,139,250,.08);
+}
+.hero-left h1{
+  margin:14px 0 10px; font-size:44px; line-height:1.05; letter-spacing:-.3px;
+}
+.hero-left .sub{ color:var(--muted); max-width:640px; }
+.hero-left .cta{ display:flex; gap:12px; margin-top:18px; flex-wrap:wrap; }
+.hero-left .trust{ margin:16px 0 0; padding:0; list-style:none; display:flex; gap:16px; flex-wrap:wrap; color:var(--muted); font-size:13px; }
+
+/* Boutons */
+.btn{ border:1px solid rgba(255,255,255,.14); border-radius:12px; padding:11px 16px; color:#fff; text-decoration:none; font-weight:600; transition:all .22s ease; }
+.btn:hover{ border-color:rgba(255,255,255,.28); transform:translateY(-1px); }
+.btn-primary{ background:linear-gradient(135deg, var(--accent), var(--accent-2)); border:none; box-shadow:0 8px 22px rgba(139,92,246,.35); }
+.btn-primary:hover{ filter:brightness(1.05); transform:translateY(-2px); }
+.btn-secondary{ background:transparent; }
+
+/* Aperçu (glass) */
+.preview{
+  position:relative; border-radius:18px;
+  padding:14px; border:1px solid rgba(255,255,255,.10);
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  backdrop-filter: blur(10px);
+  min-height:280px;
+}
+.preview-head{ display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; margin-bottom:10px; }
+.preview-head .dot{ width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.25); display:inline-block; }
+.preview-body{ display:grid; gap:10px; }
+.skeleton{ position:relative; overflow:hidden; border-radius:10px; background:rgba(255,255,255,.06); }
+.skeleton::after{ content:""; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent); animation:shimmer 1.2s infinite; }
+.skeleton.line{ height:16px; }
+.skeleton.chart{ height:180px; margin-top:6px; }
+@keyframes shimmer { 100%{ transform:translateX(100%);} 0%{ transform:translateX(-100%);} }
+
+/* Blob décoratif */
+.preview .blob{
+  position:absolute; inset:auto -40px -40px auto; width:240px; height:240px; filter: blur(40px);
+  background: radial-gradient(circle at 30% 30%, rgba(167,139,250,.45), rgba(139,92,246,.0) 60%);
+  pointer-events:none; animation:float 6s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+/* Features */
+.features{ padding:18px 0 8px; }
+.feature-grid{ display:grid; gap:16px; grid-template-columns: repeat(4, minmax(220px, 1fr)); }
+@media (max-width: 1100px){ .feature-grid{ grid-template-columns: repeat(2,1fr);} }
+@media (max-width: 640px){ .feature-grid{ grid-template-columns: 1fr; } }
+
+.card.feature{
+  border-radius:16px; padding:18px; text-decoration:none; color:var(--text);
+  background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.card.feature:hover{ transform:translateY(-4px); border-color:rgba(167,139,250,.35); box-shadow:0 14px 34px rgba(139,92,246,.18); }
+.card.feature h3{ margin:0 0 6px; }
+.card.feature .muted{ color:var(--muted); }
+
+/* Steps */
+.steps{ padding:24px 0 40px; }
+.steps h2{ margin-bottom:12px; font-size:24px; }
+.steps-grid{ display:grid; gap:16px; grid-template-columns: repeat(3, minmax(220px, 1fr)); }
+@media (max-width: 960px){ .steps-grid{ grid-template-columns:1fr; } }
+
+.step{ position:relative; border-radius:16px; padding:18px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.08); }
+.step-num{
+  width:28px; height:28px; border-radius:999px; display:grid; place-items:center;
+  background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; font-weight:700; font-size:14px;
+  box-shadow:0 8px 18px rgba(139,92,246,.35); margin-bottom:8px;
+}
