@@ -363,3 +363,11 @@ main.container {
   background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; font-weight:700; font-size:14px;
   box-shadow:0 8px 18px rgba(139,92,246,.35); margin-bottom:8px;
 }
+/* grille résultats comparateur */
+.grid .card.feature { min-height: 120px; }
+.input, .select {
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:12px; padding:10px 12px; color:#fff; font: inherit;
+}
+.select { appearance: none; }
