@@ -1,142 +1,75 @@
-/* ===============================
-   ValenCompare – Comparateur simple
-   IDs attendus dans la page :
-   #q (input), #type (select), #btnSearch (button),
-   #grid (container résultats), #count (span compteur)
-   =============================== */
+<script>
+// --- Sélecteurs
+const $q = document.getElementById('q');
+const $type = document.getElementById('type');
+const $btn = document.getElementById('btnSearch');
+const $grid = document.getElementById('grid');
+const $count = document.getElementById('count');
 
-const el = {
-  q: document.getElementById("q"),
-  type: document.getElementById("type"),
-  btn: document.getElementById("btnSearch"),
-  grid: document.getElementById("grid"),
-  count: document.getElementById("count"),
-};
+// --- Charge les datasets en parallèle
+let DATA = { crypto: [], etf: [], plateforme: [] };
 
-// --- Petites données locales (démo) ---
-// Tu pourras remplacer ces tableaux par des appels API plus tard.
-const DATA = {
-  crypto: [
-    { name: "Bitcoin", ticker: "BTC", cap: 1300, change24h: -0.8, fees: "—", note: "Réseau le plus sûr" },
-    { name: "Ethereum", ticker: "ETH", cap: 480, change24h: 1.2, fees: "—", note: "Smart contracts" },
-    { name: "Solana", ticker: "SOL", cap: 85, change24h: 3.9, fees: "—", note: "TPS élevé" },
-    { name: "USDT (Tether)", ticker: "USDT", cap: 110, change24h: 0.0, fees: "—", note: "Stablecoin" },
-    { name: "USDC", ticker: "USDC", cap: 35, change24h: 0.0, fees: "—", note: "Stablecoin" },
-  ],
-  etf: [
-    { name: "SPDR S&P 500", ticker: "SPY", expense: 0.09, ytd: 14.2, provider: "State Street" },
-    { name: "Vanguard S&P 500", ticker: "VOO", expense: 0.03, ytd: 14.1, provider: "Vanguard" },
-    { name: "iShares Core MSCI World", ticker: "IWDA", expense: 0.20, ytd: 12.3, provider: "BlackRock" },
-    { name: "Lyxor MSCI EMU", ticker: "MSE", expense: 0.25, ytd: 10.6, provider: "Amundi" },
-  ],
-  plateforme: [
-    { name: "Binance", type: "Exchange", fees: "0.1% spot", custody: "CEX", kyc: true, note: "Liquidité élevée" },
-    { name: "Kraken", type: "Exchange", fees: "0.16/0.26%", custody: "CEX", kyc: true, note: "Réputation solide" },
-    { name: "Trade Republic", type: "Courtier", fees: "1 € / ordre", custody: "Broker", kyc: true, note: "ETF plan" },
-    { name: "DEGIRO", type: "Courtier", fees: "faibles", custody: "Broker", kyc: true, note: "Frais agressifs" },
-  ],
-};
+async function loadData() {
+  const [cryptos, etfs, plats] = await Promise.all([
+    fetch('assets/data/cryptos.json').then(r=>r.json()),
+    fetch('assets/data/etf.json').then(r=>r.json()),
+    fetch('assets/data/platforms.json').then(r=>r.json()),
+  ]);
+  DATA.crypto = cryptos;
+  DATA.etf = etfs;
+  DATA.plateforme = plats;
+}
+function norm(s){ return (s||'').toString().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,''); }
 
-// --- Utils ---
-const fmt = {
-  k: (n) => (n >= 1000 ? (n / 1000).toFixed(1) + " T€" : n.toFixed(0) + " Md€"),
-  pct: (n) => `${(n >= 0 ? "+" : "")}${n.toFixed(1)}%`,
-};
-
-// --- Rendu des cartes ---
-function renderItems(type, items) {
-  el.grid.innerHTML = "";
-  if (!items.length) {
-    el.grid.innerHTML = `<div class="card" style="grid-column:1/-1"><p class="muted">Aucun résultat pour cette recherche.</p></div>`;
-    el.count.textContent = "";
-    return;
+// --- Rendu d’une “carte” résultat
+function card(item, t){
+  if(t==='crypto'){
+    return `
+      <div class="card feature">
+        <h3>${item.name} <span class="muted">(${item.ticker})</span></h3>
+        <p class="muted">Cap.: ${(item.cap/1e9).toFixed(0)} Md€ — Risque: ${item.risk}</p>
+        <div class="small">Rendement stable: ${item.yield ? item.yield+'%' : '—'}</div>
+      </div>`;
   }
-  el.count.textContent = `${items.length} résultat${items.length > 1 ? "s" : ""}`;
-
-  const frags = document.createDocumentFragment();
-
-  items.forEach((it) => {
-    const card = document.createElement("article");
-    card.className = "card reveal";
-    card.style.padding = "14px 16px";
-
-    if (type === "crypto") {
-      card.innerHTML = `
-        <div class="card-head" style="margin-bottom:6px">
-          <h3 style="margin:0">${it.name} <span class="muted">• ${it.ticker}</span></h3>
-          <span class="badge" style="font-size:12px; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08)">${fmt.pct(it.change24h)}</span>
-        </div>
-        <p class="muted" style="margin:4px 0 10px">Capitalisation ~ ${fmt.k(it.cap)}</p>
-        <p class="small" style="opacity:.9">${it.note}</p>
-      `;
-    } else if (type === "etf") {
-      card.innerHTML = `
-        <div class="card-head" style="margin-bottom:6px">
-          <h3 style="margin:0">${it.name} <span class="muted">• ${it.ticker}</span></h3>
-          <span class="badge" style="font-size:12px; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08)">${it.provider}</span>
-        </div>
-        <ul class="assets" style="margin:0">
-          <li><span>Frais annuels</span><strong>${it.expense.toFixed(2)}%</strong></li>
-          <li><span>Perf YTD</span><strong>${fmt.pct(it.ytd)}</strong></li>
-        </ul>
-      `;
-    } else {
-      // plateforme
-      card.innerHTML = `
-        <div class="card-head" style="margin-bottom:6px">
-          <h3 style="margin:0">${it.name} <span class="muted">• ${it.type}</span></h3>
-        </div>
-        <ul class="assets" style="margin:0">
-          <li><span>Frais</span><strong>${it.fees}</strong></li>
-          <li><span>Garde</span><strong>${it.custody}</strong></li>
-          <li><span>KYC</span><strong>${it.kyc ? "Oui" : "Non"}</strong></li>
-        </ul>
-        <p class="small" style="opacity:.9; margin-top:6px">${it.note || ""}</p>
-      `;
-    }
-
-    frags.appendChild(card);
-  });
-
-  el.grid.appendChild(frags);
+  if(t==='etf'){
+    return `
+      <div class="card feature">
+        <h3>${item.name} <span class="muted">(${item.ticker})</span></h3>
+        <p class="muted">Fournisseur: ${item.provider}</p>
+        <div class="small">TER: ${item.ter}% — Risque: ${item.risk}</div>
+      </div>`;
+  }
+  // plateforme
+  return `
+    <div class="card feature">
+      <h3>${item.name}</h3>
+      <p class="muted">${item.kind}</p>
+      <div class="small">Frais: ${item.fees} — Confiance: ${item.trust}</div>
+    </div>`;
 }
 
-// --- Recherche / filtrage ---
+// --- Recherche + tri simple
 function search() {
-  const type = el.type.value || "crypto";
-  const q = (el.q.value || "").trim().toLowerCase();
+  const t = $type.value;                       // crypto | etf | plateforme
+  const needle = norm($q.value);
 
-  // source
-  let items = DATA[type] ? [...DATA[type]] : [];
-
-  // filtre texte
-  if (q) {
-    items = items.filter((it) =>
-      Object.values(it).some((v) => String(v).toLowerCase().includes(q))
-    );
+  let rows = DATA[t] || [];
+  if(needle){
+    rows = rows.filter(x => norm(Object.values(x).join(' ')).includes(needle));
   }
 
-  // tri léger « pertinent »
-  if (type === "crypto") {
-    // tri par cap décroissante
-    items.sort((a, b) => (b.cap || 0) - (a.cap || 0));
-  } else if (type === "etf") {
-    // tri par frais croissants
-    items.sort((a, b) => (a.expense || 0) - (b.expense || 0));
-  } else {
-    // plateformes : tri par nom
-    items.sort((a, b) => a.name.localeCompare(b.name));
-  }
+  // tri par critère pertinent
+  if(t==='crypto') rows = rows.sort((a,b)=>(b.cap||0)-(a.cap||0));
+  if(t==='etf') rows = rows.sort((a,b)=>(a.ter||0)-(b.ter||0));
+  if(t==='plateforme') rows = rows.sort((a,b)=> String(a.fees).localeCompare(String(b.fees)));
 
-  renderItems(type, items);
+  $grid.innerHTML = rows.map(r => card(r,t)).join('') || `<div class="muted">Aucun résultat.</div>`;
+  $count.textContent = rows.length ? `${rows.length} résultat(s)` : '';
 }
 
-// --- Écoutes ---
-el.btn?.addEventListener("click", search);
-el.q?.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") search();
-});
-el.type?.addEventListener("change", search);
+$btn.addEventListener('click', search);
+$q.addEventListener('keydown', e=>{ if(e.key==='Enter') search(); });
 
-// --- Premier rendu (état par défaut) ---
-search();
+// Init
+loadData().then(search);
+</script>
