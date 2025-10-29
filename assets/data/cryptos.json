@@ -1,5 +1,0 @@
-[
-  { "name": "Bitcoin",  "marketCap": 520000000000, "perf1y": 120, "volatility": "élevée", "badge": "blue chip", "url": "https://bitcoin.org" },
-  { "name": "Ethereum", "marketCap": 240000000000, "perf1y": 90,  "volatility": "élevée", "url": "https://ethereum.org" },
-  { "name": "Solana",   "marketCap": 75000000000,  "perf1y": 250, "volatility": "très élevée" }
-]

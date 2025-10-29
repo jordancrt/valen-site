@@ -1,4 +1,0 @@
-[
-  { "name": "Lyxor MSCI World", "isin": "FR0010315770", "provider":"Amundi", "ter": 0.3, "perf5y": 65, "pea": true, "badge": "large cap", "url":"https://www.amundietf.fr" },
-  { "name": "iShares Core S&P 500", "isin": "IE00B5BMR087", "provider":"BlackRock", "ter": 0.07, "perf5y": 75, "pea": false }
-]

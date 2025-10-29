@@ -1,5 +1,0 @@
-[
-  { "name": "Degiro", "fees": "0–2€ / ordre", "products": ["Actions","ETF"], "security":"Régulé NL", "url":"https://www.degiro.fr", "badge":"frais bas" },
-  { "name": "Trade Republic", "fees": "1€ / ordre", "products": ["Actions","ETF","Plans"], "security":"Régulé DE" },
-  { "name": "Binance", "fees": "0.1%", "products": ["Crypto"], "security":"Proof of reserves" }
-]
