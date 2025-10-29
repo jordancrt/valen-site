@@ -50,3 +50,18 @@
 <footer class="footer"><div class="container">© 2025 ValenHub</div></footer>
 <script src="assets/profil.js"></script>
 </body></html>
+const badge=document.getElementById('badge'),desc=document.getElementById('desc'),alloc=document.getElementById('alloc');
+const btn=document.getElementById('btnEval'),res=document.getElementById('result');let chart;
+function val(n){const r=document.querySelector(`input[name="${n}"]:checked`);return r?+r.value:0}
+btn.addEventListener('click',()=>{const score=val('q1')+val('q2');let profil,al,txt;
+if(score<=1){profil='Faible';al=[['ETF Monde',70],['Monétaire',20],['Obligations',10]];txt='Tolérance au risque faible, priorité stabilité.'}
+else if(score<=3){profil='Modéré';al=[['ETF Monde',60],['ETF Thématiques',20],['Obligations',20]];txt='Équilibre rendement/risque avec horizon intermédiaire.'}
+else {profil='Dynamique';al=[['ETF Monde',40],['Tech/Thématiques',30],['Crypto',30]];txt='Recherche de performance avec forte volatilité.'}
+badge.textContent=profil;desc.textContent=txt;
+alloc.innerHTML=al.map(([k,v])=>`<li><span>${k}</span><strong>${v}%</strong></li>`).join('');
+res.style.display='block'; renderProj(al)});
+function renderProj(al){const c=document.getElementById('proj').getContext('2d');const months=60;const base=10000;const dca=200;
+const growth=al.reduce((s,[k,v])=>s+v*(k.includes('Crypto')?0.14:k.includes('Tech')?0.10:k.includes('Thématiques')?0.08:k.includes('Obligations')?0.03:0.07),0)/100;
+const labels=[...Array(months).keys()].map(i=>`M${i+1}`);let total=base;const data=[];for(let i=0;i<months;i++){total=(total+dca)*(1+growth/12);data.push(Math.round(total))}
+if(chart)chart.destroy(); chart=new Chart(c,{type:'line',data:{labels,datasets:[{data,fill:true,tension:.35,borderWidth:2}]},options:{plugins:{legend:{display:false}}})}
+document.getElementById('btnPush').addEventListener('click',()=>{const favs=JSON.parse(localStorage.getItem('valenhub-favs')||'[]');favs.push({name:'Portefeuille modèle',ticker:'',type:'alloc',note:badge.textContent});localStorage.setItem('valenhub-favs',JSON.stringify(favs));alert('Ajouté au Dashboard ✔')});
