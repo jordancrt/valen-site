@@ -1,5 +1,0 @@
-[
-  { "name": "Amundi MSCI World", "ticker": "CW8", "ter": 0.18, "risk": "Moyen", "provider": "Amundi" },
-  { "name": "iShares Core S&P 500","ticker": "CSPX","ter": 0.07, "risk": "Moyen", "provider": "iShares" },
-  { "name": "Lyxor MSCI EM", "ticker": "LEM", "ter": 0.20, "risk": "Élevé", "provider": "Lyxor" }
-]

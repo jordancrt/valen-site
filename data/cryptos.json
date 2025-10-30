@@ -1,5 +1,0 @@
-[
-  { "name": "Bitcoin",  "ticker": "BTC", "yield": 0,   "risk": "Élevé", "cap": 1250000000000 },
-  { "name": "Ethereum", "ticker": "ETH", "yield": 0,   "risk": "Élevé", "cap": 450000000000 },
-  { "name": "USDC",     "ticker": "USDC","yield": 4.3, "risk": "Faible","cap": 32000000000 }
-]

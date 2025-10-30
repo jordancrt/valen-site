@@ -1,5 +1,0 @@
-[
-  { "name": "Binance", "kind": "Crypto", "fees": "0.1%", "trust": "3/5" },
-  { "name": "Trade Republic", "kind": "Courtage", "fees": "1 € ordre", "trust": "4/5" },
-  { "name": "DEGIRO", "kind": "Courtage", "fees": "bas", "trust": "4/5" }
-]
