@@ -1,48 +1,75 @@
-<!doctype html><html lang="fr">
+<!doctype html>
+<html lang="fr">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ValenHub — Clarté & Sérénité financière</title>
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0B1120">
-<link rel="stylesheet" href="assets/style.css">
-<script defer src="assets/app.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ValenHub — Clarté & Sérénité financières</title>
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-<header class="navbar">
-  <div class="container nav-container">
-    <a class="nav-brand" href="index.html"><img src="assets/icon-192.png" alt=""><span>VALENHUB</span></a>
-    <nav><ul class="nav-links">
-      <li><a class="active" href="index.html">Accueil</a></li>
-      <li><a href="dashboard.html">Tableau de bord</a></li>
-      <li><a href="comparateur.html">Comparateur</a></li>
-      <li><a href="profil.html">Profil</a></li>
-    </ul></nav>
-  </div>
-</header>
-
-<main class="hero">
-  <div class="wrap container">
-    <span class="badge">Gratuit · Local · Sans inscription</span>
-    <h1>Maîtrise ton argent avec simplicité.</h1>
-    <p class="sub">ValenHub t’aide à suivre ton budget, visualiser ton patrimoine et découvrir des idées d’investissement adaptées à ton profil.</p>
-    <div class="cta">
-      <a class="btn btn-primary" href="dashboard.html">Ouvrir mon tableau de bord</a>
-      <a class="btn" href="comparateur.html">Comparer des investissements</a>
+  <!-- NAV -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a class="nav-brand" href="index.html">
+        <img src="assets/icon-192.png" alt="">
+        <span>VALENHUB</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a class="active" href="index.html">Accueil</a></li>
+          <li><a href="comparateur.html">Comparateur</a></li>
+          <li><a href="assets/data/dashboard.html">Tableau de bord</a></li>
+          <li><a href="assets/data/profil.html">Profil</a></li>
+        </ul>
+      </nav>
     </div>
+  </header>
 
-    <div class="risk-grid">
-      <a class="risk-card r-low" href="profil.html#faible"><h3>Risque faible</h3><p class="muted">ETF monde, monétaires, fonds euro…</p></a>
-      <a class="risk-card r-mid" href="profil.html#moyen"><h3>Risque moyen</h3><p class="muted">ETF thématiques, actions solides…</p></a>
-      <a class="risk-card r-high" href="profil.html#eleve"><h3>Risque élevé</h3><p class="muted">Cryptos, small caps, stratégies dynamiques…</p></a>
+  <!-- HERO -->
+  <main>
+    <section class="hero">
+      <div class="container wrap">
+        <span class="badge">Gratuit • Local • Intelligent</span>
+        <h1>Maîtrise ton argent avec simplicité.</h1>
+        <p class="sub">
+          ValenHub t’aide à suivre ton budget, visualiser ton patrimoine
+          et découvrir des idées d’investissement adaptées à ton profil.
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" href="comparateur.html">Lancer le comparateur</a>
+          <a class="btn" href="assets/data/dashboard.html">Ouvrir mon espace</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARTES RISQUE -->
+    <section class="container">
+      <div class="risk-grid">
+        <!-- Risque faible -->
+        <a class="risk-card r-low" href="comparateur.html?risk=low">
+          <h3 style="margin:0 0 6px">Risque faible</h3>
+          <p class="muted small">ETF monde, monétaires, fonds euro…</p>
+        </a>
+
+        <!-- Risque moyen -->
+        <a class="risk-card r-mid" href="comparateur.html?risk=mid">
+          <h3 style="margin:0 0 6px">Risque moyen</h3>
+          <p class="muted small">ETF thématiques, actions solides…</p>
+        </a>
+
+        <!-- Risque élevé -->
+        <a class="risk-card r-high" href="comparateur.html?risk=high">
+          <h3 style="margin:0 0 6px">Risque élevé</h3>
+          <p class="muted small">Cryptos, small caps, stratégies dynamiques…</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © 2025 ValenHub — Transparence & simplicité
     </div>
-  </div>
-</main>
-
-<footer class="footer">
-  <div class="container" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;align-items:center">
-    <p>© 2025 ValenHub • Données locales par défaut • Transparence & simplicité</p>
-    <nav class="small">
-      <a href="privacy.html">Confidentialité</a> · <a href="terms.html">Conditions</a> · <a href="methode.html">Méthodologie</a>
-    </nav>
-  </div>
-</footer>
-</body></html>
+  </footer>
+</body>
+</html>
