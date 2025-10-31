@@ -231,7 +231,46 @@ function renderCard(it) {
       </div>
     `;
   })();
+// --- Helpers viz -------------------------------------------------------------
 
+function sparklineSVG(values=[], w=140, h=36){
+  if (!values || !values.length) values = seededSpark('x');
+  const min = Math.min(...values), max = Math.max(...values);
+  const span = (max - min) || 1;
+  const step = (w - 8) / (values.length - 1); // 4px padding latéral
+
+  let d = '';
+  values.forEach((v,i)=>{
+    const x = 4 + i*step;
+    const y = h - 4 - ((v - min) / span) * (h - 8);
+    d += (i===0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+  });
+
+  // Ligne médiane (axe zéro approximatif)
+  const midY = h - 4 - ((0 - min) / span) * (h - 8);
+
+  return `
+    <svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      ${isFinite(midY) ? `<path class="axis" d="M 0 ${midY.toFixed(2)} L ${w} ${midY.toFixed(2)}" />` : ''}
+      <path d="${d}" />
+    </svg>
+  `;
+}
+
+// Spark pseudo-déterministe pour éviter le “vide”
+function seededSpark(seed='seed', n=24){
+  let s = 0;
+  for (let i=0;i<seed.length;i++) s = (s*131 + seed.charCodeAt(i)) % 9973;
+  const arr = [];
+  let v = (s % 50) + 50;
+  for (let i=0;i<n;i++){
+    s = (s*1103515245 + 12345) & 0x7fffffff;
+    const delta = ((s % 9) - 4); // -4..+4
+    v = Math.max(10, Math.min(190, v + delta));
+    arr.push(v);
+  }
+  return arr;
+}
   // colonne catégorie / AUM / maker fee
   const col3 = (() => {
     if (it.type === 'crypto') {
