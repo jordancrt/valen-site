@@ -86,5 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
   cards.forEach(card => observer.observe(card));
 });
 </script>
+  <script>
+window.addEventListener("load", () => {
+  const hero = document.querySelector(".hero");
+  if (hero) hero.classList.add("loaded");
+});
+</script>
 </body>
 </html>
