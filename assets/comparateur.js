@@ -201,40 +201,94 @@ function renderPage(p) {
 }
 
 function renderCard(it) {
-  // carte compacte selon type
-  if (it.type === 'crypto') {
-    return `
-      <article class="card result-card reveal">
-        <div class="rc-title">
-          <h4>${it.name} <span class="muted">${it.symbol ? '· ' + it.symbol : ''}</span></h4>
-          ${fmt.riskBadge(it.risk)}
-        </div>
-        <div class="rc-lines">
-          <div><span class="muted small">Perf 1 an</span><strong>${fmt.pct(it.perf1y)}</strong></div>
-          <div><span class="muted small">Prix</span><strong>${it.price !== undefined ? it.price.toLocaleString('fr-FR') : '—'}</strong></div>
-          <div><span class="muted small">Catégorie</span><span>${it.category || '—'}</span></div>
-        </div>
-        ${it.url ? `<a class="btn btn-ghost" href="${it.url}" target="_blank" rel="noopener">Voir la fiche</a>` : ''}
-      </article>
-    `;
-  }
+  // perf pill (couleur selon signe)
+  const perf = (it.perf1y !== undefined) ? (it.perf1y*100) : undefined;
+  const perfTxt = (perf === undefined) ? '—' : `${perf.toFixed(1)}%`;
+  const perfCls = (perf === undefined) ? 'pill--flat' : (perf > 0 ? 'pill--up' : (perf < 0 ? 'pill--down' : 'pill--flat'));
 
-  if (it.type === 'etf') {
+  // colonne “prix / frais / TER” selon type
+  const col2 = (() => {
+    if (it.type === 'crypto') {
+      return `
+        <div class="metric">
+          <span class="label">Prix</span>
+          <strong>${it.price !== undefined ? it.price.toLocaleString('fr-FR') : '—'}</strong>
+        </div>
+      `;
+    }
+    if (it.type === 'etf') {
+      return `
+        <div class="metric">
+          <span class="label">TER</span>
+          <strong>${fmt.fee(it.fees)}</strong>
+        </div>
+      `;
+    }
     return `
-      <article class="card result-card reveal">
-        <div class="rc-title">
-          <h4>${it.name} <span class="muted">${it.symbol ? '· ' + it.symbol : ''}</span></h4>
-          ${fmt.riskBadge(it.risk)}
-        </div>
-        <div class="rc-lines">
-          <div><span class="muted small">Perf 1 an</span><strong>${fmt.pct(it.perf1y)}</strong></div>
-          <div><span class="muted small">TER</span><strong>${fmt.fee(it.fees)}</strong></div>
-          <div><span class="muted small">AUM</span><strong>${it.aum ? it.aum.toLocaleString('fr-FR')+' €' : '—'}</strong></div>
-        </div>
-        ${it.url ? `<a class="btn btn-ghost" href="${it.url}" target="_blank" rel="noopener">Voir la fiche</a>` : ''}
-      </article>
+      <div class="metric">
+        <span class="label">Frais taker</span>
+        <strong>${fmt.fee(it.takerFee)}</strong>
+      </div>
     `;
-  }
+  })();
+
+  // colonne catégorie / AUM / maker fee
+  const col3 = (() => {
+    if (it.type === 'crypto') {
+      return `
+        <div class="metric">
+          <span class="label">Catégorie</span>
+          <span>${it.category || '—'}</span>
+        </div>
+      `;
+    }
+    if (it.type === 'etf') {
+      return `
+        <div class="metric">
+          <span class="label">Encours (AUM)</span>
+          <strong>${it.aum ? it.aum.toLocaleString('fr-FR') + ' €' : '—'}</strong>
+        </div>
+      `;
+    }
+    return `
+      <div class="metric">
+        <span class="label">Frais maker</span>
+        <strong>${fmt.fee(it.makerFee)}</strong>
+      </div>
+    `;
+  })();
+
+  // risk bar (0-6 attendu — on clippe)
+  const riskVal = (it.risk ?? 0);
+  const riskPct = Math.max(0, Math.min(6, riskVal)) / 6 * 100;
+
+  // sparkline (array “spark” sinon on génère stable)
+  const sparkArr = it.spark || it.history || it.prices || seededSpark(it.name);
+  const sparkSvg = sparklineSVG(sparkArr, 140, 36);
+
+  return `
+    <article class="result-card">
+      <div class="rc-col-title">
+        <div class="rc-name">${it.name} ${it.symbol ? `<span class="muted">· ${it.symbol}</span>`:''}</div>
+        <div class="rc-sub">${it.type === 'plateforme' ? (it.exchange || 'Plateforme') : (it.category || '—')}</div>
+      </div>
+
+      <div class="metric">
+        <span class="label">Perf 1 an</span>
+        <span class="pill ${perfCls}">${perfTxt}</span>
+      </div>
+
+      ${col2}
+
+      <div class="riskcol">
+        <span class="label">Risque</span>
+        <div class="riskbar"><span style="width:${riskPct.toFixed(0)}%"></span></div>
+      </div>
+
+      <div>${sparkSvg}</div>
+    </article>
+  `;
+}
 
   // plateformes / courtiers
   return `
