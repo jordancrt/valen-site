@@ -1,40 +1,79 @@
-<!doctype html><html lang="fr">
+<!doctype html>
+<html lang="fr">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ValenHub — Comparateur</title>
-<link rel="stylesheet" href="assets/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ValenHub — Comparateur</title>
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
-<header class="navbar">
-  <div class="container nav-container">
-    <a class="nav-brand" href="index.html"><img src="assets/icon-192.png" alt=""><span>VALENHUB</span></a>
-    <nav><ul class="nav-links">
-      <li><a href="index.html">Accueil</a></li>
-      <li><a href="dashboard.html">Tableau de bord</a></li>
-      <li><a class="active" href="comparateur.html">Comparateur</a></li>
-      <li><a href="profil.html">Profil</a></li>
-    </ul></nav>
-  </div>
-</header>
+  <!-- NAV -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a class="nav-brand" href="index.html">
+        <img src="assets/icon-192.png" alt="" />
+        <span>VALENHUB</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a class="active" href="comparateur.html">Comparateur</a></li>
+          <li><a href="dashboard.html">Tableau de bord</a></li>
+          <li><a href="profil.html">Profil</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-<main class="container" style="padding:24px 0 64px">
-  <section class="card" style="display:grid;grid-template-columns:1fr 180px 140px auto;gap:10px;align-items:center">
-    <input id="q" class="input" placeholder="Ex: ETF monde, stablecoin, PEA Europe…">
-    <select id="type" class="select">
-      <option value="">Tous</option><option value="crypto">Crypto</option><option value="etf">ETF</option><option value="plateforme">Plateformes</option>
-    </select>
-    <select id="sort" class="select">
-      <option value="">Tri</option><option value="fee">Frais</option><option value="cap">Taille</option>
-    </select>
-    <button id="btnSearch" class="btn btn-primary">Comparer</button>
-  </section>
+  <!-- CONTENU -->
+  <main class="container" style="padding:24px 0 56px">
+    <!-- Barre d’outils -->
+    <section class="card toolbar">
+      <div class="toolbar-left">
+        <input id="q" class="input" placeholder="Ex: stablecoin, S&P 500, frais bas, BTC, PEA…" />
+        <select id="type" class="select">
+          <option value="crypto">Crypto</option>
+          <option value="etf">ETF</option>
+          <option value="plateforme">Plateformes</option>
+        </select>
+        <button id="btnSearch" class="btn btn-primary">Comparer</button>
+      </div>
 
-  <section class="card" style="margin-top:16px">
-    <div class="card-head"><h3>Résultats</h3><span id="count" class="muted"></span></div>
-    <div id="grid" class="grid-cards"></div>
-  </section>
-</main>
+      <div class="toolbar-right">
+        <select id="sort" class="select">
+          <option value="relevance">Pertinence</option>
+          <option value="perf1y">Perf. 1 an</option>
+          <option value="fees">Frais / TER</option>
+          <option value="risk">Risque</option>
+        </select>
+      </div>
+    </section>
 
-<footer class="footer"><div class="container">© 2025 ValenHub — Données locales de démonstration</div></footer>
-<script src="assets/comparateur.js"></script>
-</body></html>
+    <!-- Filtres rapides (facultatifs par dataset) -->
+    <section id="chips" class="chips"></section>
+
+    <!-- Résumé + erreurs -->
+    <section class="card" style="margin-top:16px">
+      <div class="card-head">
+        <h3>Résultats</h3>
+        <span id="count" class="muted small"></span>
+      </div>
+      <div id="errorBox" class="muted small" style="display:none"></div>
+      <div id="grid" class="grid-cards"></div>
+
+      <!-- pagination -->
+      <div id="pagin" class="pagin" hidden>
+        <button class="btn btn-ghost" id="prevPage">Précédent</button>
+        <span id="pageInfo" class="muted small"></span>
+        <button class="btn btn-ghost" id="nextPage">Suivant</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© 2025 ValenHub — Transparence & simplicité</div>
+  </footer>
+
+  <script src="assets/comparateur.js"></script>
+</body>
+</html>
