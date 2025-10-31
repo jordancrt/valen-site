@@ -297,3 +297,14 @@ h1{ margin: 6px 0 10px; }
   opacity: 1;
   transform: translateY(0);
 }
+/* ==== Animation d'entrée du hero (titre + sous-texte + CTA) ==== */
+.hero .wrap {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 1s ease-out;
+}
+
+.hero.loaded .wrap {
+  opacity: 1;
+  transform: translateY(0);
+}
