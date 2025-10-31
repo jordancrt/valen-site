@@ -1,63 +1,282 @@
-<!doctype html><html lang="fr">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ValenHub — Comparateur</title>
-<link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-<header class="navbar">
-  <div class="container nav-container">
-    <a class="nav-brand" href="index.html"><img src="assets/icon-192.png" alt=""><span>VALENHUB</span></a>
-    <nav><ul class="nav-links">
-      <li><a href="index.html">Accueil</a></li>
-      <li><a href="dashboard.html">Tableau de bord</a></li>
-      <li><a class="active" href="comparateur.html">Comparateur</a></li>
-      <li><a href="profil.html">Profil</a></li>
-    </ul></nav>
-  </div>
-</header>
+/* ValenHub – Comparateur
+   Fonctionne en 100% front : charge assets/data/*.json et filtre/tri localement.
+*/
 
-<main class="container" style="padding:24px 0 64px">
-  <section class="card" style="display:grid;grid-template-columns:1fr 180px 140px auto;gap:10px;align-items:center">
-    <input id="q" class="input" placeholder="Ex: ETF monde, stablecoin, PEA Europe…">
-    <select id="type" class="select">
-      <option value="">Tous</option><option value="crypto">Crypto</option><option value="etf">ETF</option><option value="plateforme">Plateformes</option>
-    </select>
-    <select id="sort" class="select">
-      <option value="">Tri</option><option value="fee">Frais</option><option value="cap">Taille</option>
-    </select>
-    <button id="btnSearch" class="btn btn-primary">Comparer</button>
-  </section>
+const els = {
+  q:        document.getElementById('q'),
+  type:     document.getElementById('type'),
+  btn:      document.getElementById('btnSearch'),
+  sort:     document.getElementById('sort'),
+  chips:    document.getElementById('chips'),
+  grid:     document.getElementById('grid'),
+  count:    document.getElementById('count'),
+  error:    document.getElementById('errorBox'),
+  pagin:    document.getElementById('pagin'),
+  prev:     document.getElementById('prevPage'),
+  next:     document.getElementById('nextPage'),
+  pageInfo: document.getElementById('pageInfo'),
+};
 
-  <section class="card" style="margin-top:16px">
-    <div class="card-head"><h3>Résultats</h3><span id="count" class="muted"></span></div>
-    <div id="grid" class="grid-cards"></div>
-  </section>
-</main>
+let DATASET = [];              // données brutes du dataset courant
+let RESULTS = [];              // résultats après filtre + tri
+let PAGE = 1;
+const PER_PAGE = 12;
 
-<footer class="footer"><div class="container">© 2025 ValenHub — Données locales de démonstration</div></footer>
-<script src="assets/comparateur.js"></script>
-</body></html>
-const $=s=>document.querySelector(s);const q=$('#q'),t=$('#type'),srt=$('#sort'),btn=$('#btnSearch'),grid=$('#grid'),count=$('#count');
-let DATA={crypto:[],etf:[],plateforme:[]};
-function skel(){grid.innerHTML=Array.from({length:6}).map(()=>`<div class="card" style="height:110px;opacity:.6"></div>`).join('');count.textContent=''}
-async function load(){skel();const [c,e,p]=await Promise.all([
-  fetch('assets/data/cryptos.json').then(r=>r.json()),fetch('assets/data/etf.json').then(r=>r.json()),fetch('assets/data/platforms.json').then(r=>r.json())
-]);DATA.crypto=c;DATA.etf=e;DATA.plateforme=p;search()}
-function norm(s){return (s||'').toString().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'')}
-function card(item,kind){const add=`<p style="margin-top:8px"><button class="btn btn-small" data-add='${encodeURIComponent(JSON.stringify(item))}'>Ajouter au Dashboard</button></p>`;
- if(kind==='crypto')return `<article class="card"><div class="card-head"><h3>${item.name} <span class="muted">(${item.ticker})</span></h3><span class="badge">CRYPTO</span></div><p class="small muted">Cap ${(item.cap/1e9).toFixed(0)} Md — Risque ${item.risk}</p>${add}</article>`;
- if(kind==='etf')return `<article class="card"><div class="card-head"><h3>${item.name} <span class="muted">(${item.ticker})</span></h3><span class="badge">ETF</span></div><p class="small muted">TER ${item.ter}% — Risque ${item.risk} — ${item.provider}</p>${add}</article>`;
- return `<article class="card"><div class="card-head"><h3>${item.name}</h3><span class="badge">PLATEFORME</span></div><p class="small muted">${item.kind} — Frais ${item.fees} — Confiance ${item.trust}</p>${add}</article>`}
-function search(){const needle=norm(q.value),type=t.value;let rows=[];const push=(arr,k)=>arr.forEach(x=>rows.push({...x,__k:k}));
- if(!type||type==='crypto')push(DATA.crypto,'crypto'); if(!type||type==='etf')push(DATA.etf,'etf'); if(!type||type==='plateforme')push(DATA.plateforme,'plateforme');
- if(needle)rows=rows.filter(x=>norm(Object.values(x).join(' ')).includes(needle));
- if(srt.value==='fee')rows.sort((a,b)=>String(a.fees||a.ter||'').localeCompare(String(b.fees||b.ter||'')));
- if(srt.value==='cap')rows.sort((a,b)=>(b.cap||0)-(a.cap||0));
- grid.innerHTML = rows.map(r=>card(r,r.__k)).join('') || `<div class="muted">Aucun résultat.</div>`;
- count.textContent = rows.length?`${rows.length} résultat(s)`:''; bindAdd()}
-function bindAdd(){grid.querySelectorAll('button[data-add]').forEach(b=>b.addEventListener('click',e=>{const it=JSON.parse(decodeURIComponent(e.currentTarget.dataset.add));
- const favs=JSON.parse(localStorage.getItem('valenhub-favs')||'[]'); if(!favs.find(x=>x.name===it.name))favs.push(it);
- localStorage.setItem('valenhub-favs',JSON.stringify(favs)); b.textContent='Ajouté ✔';}))}
-btn.addEventListener('click',search); q.addEventListener('keydown',e=>{if(e.key==='Enter')search()}); t.addEventListener('change',search); srt.addEventListener('change',search);
-load();
+// --- utilitaires -------------------------------------------------------------
+
+const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+const fmt = {
+  pct: (v) => (v === undefined || v === null || isNaN(v)) ? '—' : `${(v*100).toFixed(1)}%`,
+  fee: (v) => (v === undefined || v === null || isNaN(v)) ? '—' : `${(v*100).toFixed(2)}%`,
+  cur: (v) => (v === undefined || v === null || isNaN(v)) ? '—' : v.toLocaleString('fr-FR', { style:'currency', currency:'EUR' }),
+  riskBadge: (r) => {
+    if (r === undefined || r === null || isNaN(r)) return `<span class="badge">Risque n/d</span>`;
+    const label = r <= 2 ? 'Faible' : r <= 4 ? 'Moyen' : 'Élevé';
+    return `<span class="badge">Risque ${label}</span>`;
+  }
+};
+
+function saveState() {
+  localStorage.setItem('vh-cmp', JSON.stringify({
+    q: els.q.value, type: els.type.value, sort: els.sort.value
+  }));
+}
+
+function restoreState() {
+  try {
+    const s = JSON.parse(localStorage.getItem('vh-cmp') || '{}');
+    if (s.q) els.q.value = s.q;
+    if (s.type) els.type.value = s.type;
+    if (s.sort) els.sort.value = s.sort;
+  } catch {}
+}
+
+// --- chargement datasets -----------------------------------------------------
+
+async function loadDataset(kind) {
+  const map = {
+    crypto:     'assets/data/cryptos.json',
+    etf:        'assets/data/etf.json',
+    plateforme: 'assets/data/platforms.json',
+    // Raccourci si ton fichier s’appelle "plateforms.json":
+    // plateforme: 'assets/data/plateforms.json',
+  };
+  const url = map[kind] || map.crypto;
+
+  els.error.style.display = 'none';
+  els.grid.innerHTML = skeleton(8);
+
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = await res.json();
+
+    // normalisation douce pour avoir des clés communes
+    DATASET = (raw || []).map((x) => ({
+      // champs génériques
+      name:         x.name || x.ticker || x.symbol || 'Sans nom',
+      symbol:       x.symbol || x.ticker || '',
+      category:     x.category || x.theme || x.sector || '',
+      description:  x.description || '',
+      // métriques selon type
+      perf1y:       safeNum(x.perf1y ?? x.performance_1y ?? x.perf_1y),
+      fees:         safeNum(x.fees ?? x.ter ?? x.cost),
+      risk:         safeNum(x.risk ?? x.risk_score ?? x.volatility),
+      aum:          safeNum(x.aum),
+      price:        safeNum(x.price),
+      // liens
+      url:          x.url || x.link || '',
+      exchange:     x.exchange || x.broker || '',
+      // pour les plateformes
+      makerFee:     safeNum(x.maker_fee),
+      takerFee:     safeNum(x.taker_fee),
+      trust:        safeNum(x.trust),
+      type:         kind,
+      _raw:         x,
+    }));
+
+    buildChips(kind);
+    runSearch(); // applique filtre + tri + rendu
+  } catch (e) {
+    els.grid.innerHTML = '';
+    els.count.textContent = '';
+    els.pagin.hidden = true;
+    els.error.textContent = `Impossible de charger les données (${e.message}).`;
+    els.error.style.display = 'block';
+  }
+}
+
+function safeNum(v) {
+  const n = Number(v);
+  return isFinite(n) ? n : undefined;
+}
+
+// --- filtres chips -----------------------------------------------------------
+
+function buildChips(kind) {
+  const chips = [];
+  if (kind === 'crypto') {
+    chips.push({k:'stablecoin',label:'Stablecoins'});
+    chips.push({k:'layer 1',label:'Layer 1'});
+    chips.push({k:'defi',label:'DeFi'});
+    chips.push({k:'ai',label:'IA'});
+  } else if (kind === 'etf') {
+    chips.push({k:'s&p',label:'S&P 500'});
+    chips.push({k:'msci',label:'MSCI World'});
+    chips.push({k:'emerging',label:'Marchés émergents'});
+    chips.push({k:'obligation',label:'Obligations'});
+  } else if (kind === 'plateforme') {
+    chips.push({k:'frais bas',label:'Frais bas'});
+    chips.push({k:'staking',label:'Staking'});
+    chips.push({k:'dca',label:'DCA'});
+  }
+  els.chips.innerHTML = chips.map(c => `<button class="chip" data-q="${c.k}">${c.label}</button>`).join('');
+  els.chips.querySelectorAll('.chip').forEach(b => {
+    b.addEventListener('click', () => {
+      els.q.value = b.dataset.q;
+      runSearch();
+    });
+  });
+}
+
+// --- recherche / tri / pagination -------------------------------------------
+
+function runSearch() {
+  saveState();
+  PAGE = 1;
+
+  const q = norm(els.q.value.trim());
+  const type = els.type.value;
+  const sort = els.sort.value;
+
+  // filtre texte
+  let arr = DATASET.filter((it) => {
+    if (!q) return true;
+    const hay = norm([it.name, it.symbol, it.category, it.description, it.exchange].join(' '));
+    return q.split(/\s+/).every(tok => hay.includes(tok));
+  });
+
+  // tri
+  arr = sortResults(arr, sort);
+
+  RESULTS = arr;
+  renderPage(PAGE);
+}
+
+function sortResults(arr, sort) {
+  const by = (k, dir='desc') => (a,b) => {
+    const va = a[k] ?? -Infinity, vb = b[k] ?? -Infinity;
+    return dir === 'desc' ? (vb - va) : (va - vb);
+  };
+
+  if (sort === 'perf1y') return arr.sort(by('perf1y','desc'));
+  if (sort === 'fees')   return arr.sort(by('fees','asc'));
+  if (sort === 'risk')   return arr.sort(by('risk','asc'));
+
+  // pertinence naïve : perf puis frais puis risque
+  return arr.sort((a,b) => (b.perf1y??-99)-(a.perf1y??-99) || (a.fees??99)-(b.fees??99) || (a.risk??99)-(b.risk??99));
+}
+
+function renderPage(p) {
+  const total = RESULTS.length;
+  els.count.textContent = total ? `${total} éléments` : 'Aucun résultat';
+  els.error.style.display = 'none';
+
+  if (!total) {
+    els.grid.innerHTML = '';
+    els.pagin.hidden = true;
+    return;
+  }
+
+  const maxPage = Math.ceil(total / PER_PAGE);
+  PAGE = Math.min(Math.max(1, p), maxPage);
+  const start = (PAGE - 1) * PER_PAGE;
+  const pageItems = RESULTS.slice(start, start + PER_PAGE);
+
+  els.grid.innerHTML = pageItems.map(renderCard).join('');
+  els.pagin.hidden = maxPage <= 1;
+  els.pageInfo.textContent = `Page ${PAGE} / ${maxPage}`;
+  els.prev.disabled = PAGE <= 1;
+  els.next.disabled = PAGE >= maxPage;
+}
+
+function renderCard(it) {
+  // carte compacte selon type
+  if (it.type === 'crypto') {
+    return `
+      <article class="card result-card reveal">
+        <div class="rc-title">
+          <h4>${it.name} <span class="muted">${it.symbol ? '· ' + it.symbol : ''}</span></h4>
+          ${fmt.riskBadge(it.risk)}
+        </div>
+        <div class="rc-lines">
+          <div><span class="muted small">Perf 1 an</span><strong>${fmt.pct(it.perf1y)}</strong></div>
+          <div><span class="muted small">Prix</span><strong>${it.price !== undefined ? it.price.toLocaleString('fr-FR') : '—'}</strong></div>
+          <div><span class="muted small">Catégorie</span><span>${it.category || '—'}</span></div>
+        </div>
+        ${it.url ? `<a class="btn btn-ghost" href="${it.url}" target="_blank" rel="noopener">Voir la fiche</a>` : ''}
+      </article>
+    `;
+  }
+
+  if (it.type === 'etf') {
+    return `
+      <article class="card result-card reveal">
+        <div class="rc-title">
+          <h4>${it.name} <span class="muted">${it.symbol ? '· ' + it.symbol : ''}</span></h4>
+          ${fmt.riskBadge(it.risk)}
+        </div>
+        <div class="rc-lines">
+          <div><span class="muted small">Perf 1 an</span><strong>${fmt.pct(it.perf1y)}</strong></div>
+          <div><span class="muted small">TER</span><strong>${fmt.fee(it.fees)}</strong></div>
+          <div><span class="muted small">AUM</span><strong>${it.aum ? it.aum.toLocaleString('fr-FR')+' €' : '—'}</strong></div>
+        </div>
+        ${it.url ? `<a class="btn btn-ghost" href="${it.url}" target="_blank" rel="noopener">Voir la fiche</a>` : ''}
+      </article>
+    `;
+  }
+
+  // plateformes / courtiers
+  return `
+    <article class="card result-card reveal">
+      <div class="rc-title">
+        <h4>${it.name} <span class="muted">${it.exchange || ''}</span></h4>
+        ${fmt.riskBadge(it.risk)}
+      </div>
+      <div class="rc-lines">
+        <div><span class="muted small">Frais maker</span><strong>${fmt.fee(it.makerFee)}</strong></div>
+        <div><span class="muted small">Frais taker</span><strong>${fmt.fee(it.takerFee)}</strong></div>
+        <div><span class="muted small">Confiance</span><strong>${it.trust ?? '—'}</strong></div>
+      </div>
+      ${it.url ? `<a class="btn btn-ghost" href="${it.url}" target="_blank" rel="noopener">Aller sur la plateforme</a>` : ''}
+    </article>
+  `;
+}
+
+function skeleton(n=8){
+  return Array.from({length:n}).map(()=>`
+    <article class="card result-card skeleton">
+      <div style="height:20px;margin-bottom:12px"></div>
+      <div style="height:14px;margin:10px 0"></div>
+      <div style="height:14px;margin:10px 0"></div>
+      <div style="height:14px;margin:10px 0 4px"></div>
+    </article>
+  `).join('');
+}
+
+// --- events ------------------------------------------------------------------
+
+els.btn.addEventListener('click', runSearch);
+els.q.addEventListener('keydown', (e)=>{ if(e.key==='Enter') runSearch(); });
+els.type.addEventListener('change', async ()=>{
+  saveState();
+  await loadDataset(els.type.value);
+});
+els.sort.addEventListener('change', runSearch);
+
+els.prev.addEventListener('click', ()=> renderPage(PAGE-1));
+els.next.addEventListener('click', ()=> renderPage(PAGE+1));
+
+// init
+restoreState();
+loadDataset(els.type.value);
