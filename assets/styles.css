@@ -250,3 +250,39 @@ h1 {
   color: var(--muted);
   font-size: 14px;
 }
+/* ==== Ajustements de cadrage Accueil (au bas du fichier) ==== */
+
+/* Rapproche un peu les cartes du héros et évite un “trou” vertical */
+.hero{
+  min-height: 64vh;        /* au lieu de 100% de l’écran moins nav/footer */
+  padding-bottom: 8px;
+}
+
+/* Section des cartes de risque : centrée, remonte et garde de l’air en bas */
+.risk-grid{
+  margin: 36px auto 96px;  /* top plus court, bottom confortable */
+  justify-content: center; /* reste bien centré sur toutes largeurs */
+  gap: 24px;               /* léger resserrage */
+}
+
+/* Cartes : hauteur mini uniforme, meilleure lisibilité */
+.risk-card{
+  min-height: 170px;
+  max-width: 340px;        /* un poil plus large pour respirer */
+}
+
+/* Petites retouches typographiques du titre/cta pour compacter un peu */
+h1{ margin: 6px 0 10px; }
+.cta{ margin-top: 16px; }
+
+/* Desktop large : on remonte encore les cartes pour rester au-dessus du pli */
+@media (min-width: 1200px){
+  .hero{ min-height: 58vh; }
+  .risk-grid{ margin-top: 28px; }
+}
+
+/* Mobile : on évite que la dernière carte touche le footer */
+@media (max-width: 640px){
+  .risk-grid{ margin: 28px auto 120px; }
+  .risk-card{ width: 92%; max-width: 420px; }
+}
