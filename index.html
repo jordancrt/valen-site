@@ -71,5 +71,20 @@
       © 2025 ValenHub — Transparence & simplicité
     </div>
   </footer>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const cards = document.querySelectorAll(".risk-card");
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target); // évite de rejouer l'animation
+      }
+    });
+  }, { threshold: 0.2 });
+
+  cards.forEach(card => observer.observe(card));
+});
+</script>
 </body>
 </html>
