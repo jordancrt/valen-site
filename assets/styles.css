@@ -286,3 +286,14 @@ h1{ margin: 6px 0 10px; }
   .risk-grid{ margin: 28px auto 120px; }
   .risk-card{ width: 92%; max-width: 420px; }
 }
+/* ==== Animation d'apparition des cartes ==== */
+.risk-card {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.7s ease;
+}
+
+.risk-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
