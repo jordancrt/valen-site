@@ -376,3 +376,12 @@ h1{ margin: 6px 0 10px; }
   .results-list .result-card{ grid-template-columns: 1fr 0.9fr 0.9fr; }
   .results-list .spark, .results-list .riskcol { display:none; }
 }
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,.06) 25%, rgba(255,255,255,.1) 37%, rgba(255,255,255,.06) 63%);
+  background-size: 400% 100%;
+  animation: shine 1.2s ease-in-out infinite;
+}
+@keyframes shine {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
