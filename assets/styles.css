@@ -134,3 +134,61 @@ th{color:#DDE5F0;text-align:left}
   .risk-pills{display:block;}       /* affiche les pills */
   .pills{grid-template-columns:1fr} /* 3 lignes visibles d’un coup */
 }
+/* ============ PATCH VALENHUB (à coller en bas du fichier) ============ */
+
+/* --- Sécurité desktop : on fige la grille comme avant --- */
+@media (min-width: 1024px){
+  .risk-grid{
+    grid-template-columns: repeat(3, minmax(280px, 1fr));
+    gap: 18px;
+  }
+  .risk-card{
+    padding: 22px 20px;
+    border-radius: 18px;
+    transform: none;
+  }
+  .hero{
+    min-height: calc(100vh - 64px - 70px); /* centrage comme avant */
+  }
+}
+
+/* --- Améliorations tablette --- */
+@media (max-width: 1023px){
+  .container{ max-width: 920px; }
+  .hero{ min-height: auto; padding: 48px 0 24px; }
+}
+
+/* --- Version smartphone (< 640px) : compacte et 100% visible --- */
+@media (max-width: 640px){
+
+  /* safe-area iOS + marges plus serrées */
+  body{ padding-top: env(safe-area-inset-top); }
+  .container{ padding: 0 14px; }
+
+  /* Titre / sous-titre plus compacts mais lisibles */
+  .hero{ min-height: auto; padding: 24px 0 12px; }
+  .hero h1{ font-size: 34px; line-height: 1.12; margin: 10px 0 8px; }
+  .badge{ font-size: 12px; padding: 6px 10px; }
+
+  /* Boutons : largeur pleine + hauteur tap-friendly */
+  .cta{ flex-direction: column; gap: 10px; align-items: stretch; margin-top: 14px; }
+  .btn, .btn-primary{ width: 100%; padding: 14px 16px; font-size: 16px; }
+
+  /* Grille des risques : 1 colonne, cartes visibles sans scroller trop */
+  .risk-grid{
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px 0 24px;
+  }
+  .risk-card{
+    padding: 16px 14px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.03));
+    box-shadow: 0 10px 26px rgba(0,0,0,.22);
+  }
+  .risk-card h3{ font-size: 18px; margin: 0 0 6px; }
+  .risk-card p{ font-size: 14px; opacity: .9; }
+
+  /* Footer et espace sous les cartes pour éviter l’écrasement */
+  .footer{ padding: 14px 0 20px; }
+}
