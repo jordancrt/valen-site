@@ -376,3 +376,7 @@ loadDataset(els.type.value);
 // ... après DATASET = ... et buildChips(kind);
 els.grid.classList.add('results-list'); // <-- ajoute cette ligne
 runSearch();
+// Anti-rebond universel
+function debounce(fn, delay=250){
+  let t; return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn(...args), delay); };
+}
