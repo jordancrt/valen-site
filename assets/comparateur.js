@@ -380,3 +380,5 @@ runSearch();
 function debounce(fn, delay=250){
   let t; return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn(...args), delay); };
 }
+window.addEventListener('touchstart', ()=>{}, {passive:true});
+window.addEventListener('scroll', ()=>{}, {passive:true});
