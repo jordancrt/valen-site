@@ -382,3 +382,12 @@ function debounce(fn, delay=250){
 }
 window.addEventListener('touchstart', ()=>{}, {passive:true});
 window.addEventListener('scroll', ()=>{}, {passive:true});
+function skeleton(n=6){
+  return Array.from({length:n}).map(()=>`
+    <article class="result-card">
+      <div class="skeleton" style="height:16px;width:60%;margin-bottom:8px;"></div>
+      <div class="skeleton" style="height:12px;width:40%;margin-bottom:14px;"></div>
+      <div class="skeleton" style="height:36px;width:120px;border-radius:10px;"></div>
+    </article>
+  `).join('');
+}
