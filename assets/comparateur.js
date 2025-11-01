@@ -391,3 +391,18 @@ function skeleton(n=6){
     </article>
   `).join('');
 }
+function renderInBatches(items, renderFn, container, batchSize=10){
+  container.innerHTML = "";
+  let i = 0;
+  function step(){
+    const frag = document.createDocumentFragment();
+    for (let c=0; c<batchSize && i<items.length; c++, i++){
+      const div = document.createElement('div');
+      div.innerHTML = renderFn(items[i]);
+      frag.appendChild(div.firstElementChild);
+    }
+    container.appendChild(frag);
+    if (i < items.length) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
