@@ -492,3 +492,7 @@ els.type.addEventListener('change', runSearch);
   els.count.textContent = `${rows.length} élément${rows.length>1?'s':''}`;
   renderInBatches(rows, renderCard, els.grid, 8);
 })();
+// Anti-rebond universel
+function debounce(fn, delay=250){
+  let t; return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn(...args), delay); };
+}
