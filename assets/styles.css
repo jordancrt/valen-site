@@ -192,3 +192,47 @@ th{color:#DDE5F0;text-align:left}
   /* Footer et espace sous les cartes pour éviter l’écrasement */
   .footer{ padding: 14px 0 20px; }
 }
+/* ===== Mobile-first / Smartphones ===== */
+@media (max-width: 740px){
+  /* Conteneur respirant + zone sûre iOS */
+  .container{ padding: 0 16px; }
+  body{ padding-bottom: env(safe-area-inset-bottom); }
+
+  /* Barre de recherche collée en haut et compacte */
+  .toolbar,
+  .search-bar{
+    position: sticky; top: 64px; z-index: 9;
+    backdrop-filter: none;                 /* blur coûteux sur mobile */
+    background: rgba(11,17,32,.90);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 14px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .toolbar .row, .search-bar .row{ gap: 8px; }
+
+  /* Champs + boutons = cibles de 44px mini (ergonomie mobile) */
+  .input, .select, .btn{ min-height: 44px; font-size: 15px; }
+  .btn{ padding: 10px 14px; }
+
+  /* Grille des résultats : 1 colonne, cartes resserrées */
+  .grid-results{ display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .result-card{ padding: 14px; border-radius: 14px; }
+
+  /* Titres + badges plus lisibles */
+  .result-card h4{ font-size: 16px; margin: 0 0 6px; }
+  .badge{ font-size: 11px; padding: 4px 8px; }
+
+  /* Pagination compacte */
+  .pager{ display:flex; justify-content:center; gap:10px; margin:14px 0; }
+  .pager .btn{ min-width: 96px; }
+
+  /* Squelettes plus légers */
+  .skeleton{ animation-duration: 1.4s; border-radius: 10px; }
+}
+
+/* Si l’utilisateur demande moins d’animations (iOS/Android/Chrome) */
+@media (prefers-reduced-motion: reduce){
+  .skeleton{ animation: none; }
+  .card, .risk-card{ transition: none; transform: none; }
+}
