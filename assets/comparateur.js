@@ -507,3 +507,89 @@ function skeleton(n=6){
     </article>
   `).join('');
 }
+const els = {
+  q: document.getElementById('q'),
+  type: document.getElementById('type'),
+  grid: document.getElementById('grid'),
+  count: document.getElementById('count'),
+  btn: document.getElementById('btnSearch')
+};
+
+const CACHE_KEY = 'vh-last-results';
+
+async function fetchData(kind){
+  const map = { crypto:'assets/data/cryptos.json', etf:'assets/data/etf.json', plateforme:'assets/data/platforms.json' };
+  const url = map[kind] || map.crypto;
+  const res = await fetch(url, {cache:'force-cache'});
+  return res.json();
+}
+
+function renderCard(item){
+  const risk = item.risk ?? 'n/d';
+  const price = item.price ? `${item.price} €` : '—';
+  const perfY = item.perfY ? `${item.perfY}%` : '—';
+  return `
+  <article class="result-card card">
+    <div class="rc-head">
+      <h4>${item.name} · <span class="muted">${item.ticker || item.symbol || ''}</span></h4>
+      <span class="badge">Risque ${risk}</span>
+    </div>
+    <div class="rc-grid">
+      <div><div class="small muted">Prix</div><div class="big">${price}</div></div>
+      <div><div class="small muted">Perf 1 an</div><div class="big">${perfY}</div></div>
+      <div><div class="small muted">Catégorie</div><div>${item.category || '—'}</div></div>
+    </div>
+    <div class="rc-actions">
+      <button class="btn btn-secondary">Voir détails</button>
+      <button class="btn btn-primary">Ajouter</button>
+    </div>
+  </article>`;
+}
+
+async function runSearch(){
+  els.grid.innerHTML = skeleton(8);
+
+  const kind = els.type.value;
+  const query = (els.q.value || '').toLowerCase().trim();
+
+  try{
+    const data = await fetchData(kind);
+    let rows = data;
+
+    if (query){
+      const q = query.split(/\s+/);
+      rows = data.filter(d => q.every(w =>
+        (d.name||'').toLowerCase().includes(w) ||
+        (d.symbol||'').toLowerCase().includes(w) ||
+        (d.ticker||'').toLowerCase().includes(w) ||
+        (d.category||'').toLowerCase().includes(w)
+      ));
+    }
+
+    els.count.textContent = `${rows.length} élément${rows.length>1?'s':''}`;
+    localStorage.setItem(CACHE_KEY, JSON.stringify({kind, query, rows}));
+
+    // Rendu progressif (fluide sur mobile)
+    renderInBatches(rows, renderCard, els.grid, 8);
+
+  }catch(e){
+    els.grid.innerHTML = `<div class="muted">Erreur de chargement. Réessaie.</div>`;
+    console.error(e);
+  }
+}
+
+// Déclencheurs
+els.btn.addEventListener('click', runSearch);
+els.q.addEventListener('input', debounce(runSearch, 350));
+els.type.addEventListener('change', runSearch);
+
+// Restaure dernier résultat pour instantanéité
+(() => {
+  const saved = localStorage.getItem(CACHE_KEY);
+  if (!saved) return;
+  const {kind, query, rows} = JSON.parse(saved);
+  if (kind) els.type.value = kind;
+  if (query) els.q.value = query;
+  els.count.textContent = `${rows.length} élément${rows.length>1?'s':''}`;
+  renderInBatches(rows, renderCard, els.grid, 8);
+})();
