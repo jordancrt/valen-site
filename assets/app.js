@@ -5,3 +5,19 @@ document.addEventListener('scroll',onScroll,{passive:true}); onScroll();
 
 // Enregistrement service worker
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
+// Menu burger
+(function(){
+  const btn = document.getElementById('navToggle');
+  const drawer = document.getElementById('navDrawer');
+  const backdrop = document.getElementById('navBackdrop');
+  if(!btn || !drawer || !backdrop) return;
+
+  const open = () => { drawer.classList.add('open'); backdrop.classList.add('show'); };
+  const close = () => { drawer.classList.remove('open'); backdrop.classList.remove('show'); };
+
+  btn.addEventListener('click', () => {
+    drawer.classList.contains('open') ? close() : open();
+  });
+  backdrop.addEventListener('click', close);
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+})();
