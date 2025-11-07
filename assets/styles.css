@@ -223,3 +223,38 @@ h1{font-size:44px; line-height:1.08; letter-spacing:-.3px; margin:12px 0}
     color: var(--muted);
   }
 }
+/* ====== Apparition fluide (fade + slide) ====== */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Application de l'effet sur les blocs visibles */
+.hero, .cta, .risk-card {
+  opacity: 0;
+  animation: fadeUp 0.9s ease-out forwards;
+}
+
+/* Délai progressif pour donner du rythme */
+.hero { animation-delay: 0.1s; }
+.cta { animation-delay: 0.3s; }
+.risk-card:nth-child(1) { animation-delay: 0.5s; }
+.risk-card:nth-child(2) { animation-delay: 0.65s; }
+.risk-card:nth-child(3) { animation-delay: 0.8s; }
+
+/* Sur smartphone, ajustement pour performance */
+@media (max-width: 430px){
+  .hero, .cta, .risk-card {
+    animation-duration: 0.7s;
+  }
+}
