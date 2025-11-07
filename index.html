@@ -7,23 +7,26 @@
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <!-- NAV -->
   <header class="navbar">
-    <div class="container nav-container">
-      <a class="nav-brand" href="index.html">
-        <img src="assets/icon-192.png" alt="">
-        <span>VALENHUB</span>
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a class="active" href="index.html">Accueil</a></li>
-          <li><a href="comparateur.html">Comparateur</a></li>
-          <li><a href="assets/data/dashboard.html">Tableau de bord</a></li>
-          <li><a href="assets/data/profil.html">Profil</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <div class="container nav-container">
+    <a class="nav-brand" href="index.html">
+      <img src="assets/icon-192.png" alt=""><span>VALENHUB</span>
+    </a>
+
+    <!-- Liens desktop -->
+    <ul class="nav-links">
+      <li><a class="active" href="index.html">Accueil</a></li>
+      <li><a href="comparateur.html">Comparateur</a></li>
+      <li><a href="dashboard.html">Tableau de bord</a></li>
+      <li><a href="profil.html">Profil</a></li>
+    </ul>
+
+    <!-- Bouton burger (mobile) -->
+    <button id="navToggle" class="nav-toggle" aria-label="Menu">
+      ☰
+    </button>
+  </div>
+</header>
 
   <!-- HERO -->
   <main>
