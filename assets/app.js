@@ -21,3 +21,17 @@ if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').cat
   backdrop.addEventListener('click', close);
   drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
 })();
+// Apparition progressive au scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.style.opacity = 1;
+      entry.target.style.animationPlayState = 'running';
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.hero, .cta, .risk-card').forEach(el => {
+  el.style.animationPlayState = 'paused';
+  observer.observe(el);
+});
