@@ -434,3 +434,78 @@ h1{font-size:44px; line-height:1.08; letter-spacing:-.3px; margin:12px 0}
   /* Footer : léger espace, sans chevauchement */
   .footer{ padding: 18px 0 26px; margin-top: 6px; }
 }
+/* ====== DESKTOP COMPARATEUR (≥1100px) ====== */
+@media (min-width:1100px){
+
+  /* Bandeau de recherche compact */
+  .card.search-bar{
+    display: grid;
+    grid-template-columns: 1fr 180px 140px auto; /* input / select / tri / bouton */
+    gap: 12px;
+    align-items: center;
+    padding: 14px 16px;
+  }
+  .card.search-bar .input{ height: 44px; }
+  .card.search-bar .select{ height: 44px; }
+  .card.search-bar .btn{ height: 44px; padding: 0 16px; }
+
+  /* Filtres “chips” sous la barre (si présents) */
+  .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .chip{
+    padding:6px 10px; border-radius:999px; font-size:12px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10);
+  }
+  .chip.is-active{ background:rgba(167,139,250,.16); border-color: rgba(167,139,250,.35); }
+
+  /* Liste des résultats en cartes “lignes” */
+  .results{ display:grid; gap:10px; margin-top:12px; }
+  .result-card{
+    display:grid;
+    grid-template-columns: 2.2fr 1fr 1fr 1.2fr auto; /* ACTIF | PERF | PRIX | CATEGORIE | RISQUE */
+    align-items:center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 10px 26px rgba(0,0,0,.20);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .result-card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgba(0,0,0,.26);
+    border-color: rgba(167,139,250,.25);
+  }
+
+  /* Colonne ACTIF (nom + ticker) */
+  .asset{
+    display:flex; align-items:center; gap:12px;
+    min-width:0; /* permet le clamp */
+  }
+  .asset .name{ font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .asset .ticker{ color:var(--muted); font-size:12px; }
+
+  /* PERF / PRIX / CAT */
+  .perf{ font-weight:700; }
+  .perf.up   { color:#22c55e; }
+  .perf.down { color:#ef4444; }
+  .price{ color:#DDE5F0; }
+  .category{ color:var(--muted); }
+
+  /* Badge risque à droite */
+  .risk-badge{
+    justify-self:end;
+    font-size:12px; padding:6px 10px; border-radius:999px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+  }
+  .risk-badge.low  { background:rgba(34,197,94,.12);  border-color:rgba(34,197,94,.28);  }
+  .risk-badge.mid  { background:rgba(234,179,8,.12);  border-color:rgba(234,179,8,.28);  }
+  .risk-badge.high { background:rgba(239,68,68,.12);  border-color:rgba(239,68,68,.28);  }
+
+  /* État “chargement” si tu pousses des squelettes */
+  .skeleton{ min-height: 56px; border-radius: 12px; }
+
+  /* Pagination compacte */
+  .pager{ display:flex; align-items:center; gap:8px; justify-content:center; margin-top:14px; }
+  .pager .btn{ padding:8px 12px; }
+}
