@@ -258,3 +258,93 @@ h1{font-size:44px; line-height:1.08; letter-spacing:-.3px; margin:12px 0}
     animation-duration: 0.7s;
   }
 }
+/* ======= MOBILE COMPACT (≤ 430px) — coller à la fin du fichier ======= */
+@media (max-width: 430px){
+
+  /* Conteneur + respiration générale */
+  .container{ padding: 0 14px; }
+
+  /* Navbar plus sobre */
+  .nav-container{ height: 56px; }
+  .nav-brand img{ width:24px; height:24px; }
+  .nav-brand span{ font-weight: 700; font-size: 16px; letter-spacing:.3px; }
+  .nav-links{ display:none; }            /* on bascule sur le bouton menu déjà présent */
+
+  /* Hero : plus compact et centré */
+  .hero{ min-height: auto; padding: 18px 0 10px; }
+  .eyebrow, .badge{ padding:6px 10px; font-size:12px; }
+  h1{
+    font-size: 30px;                     /* ~2 lignes max */
+    line-height: 1.1;
+    letter-spacing: -.2px;
+    margin: 8px 0 10px;
+    text-wrap: balance;
+  }
+  .sub{
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: -webkit-box;                /* clamp en 3 lignes */
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* CTA : taille “tap-friendly” mais pas massive */
+  .cta{ gap:10px; margin: 6px 0 10px; justify-content: stretch; }
+  .btn{ padding: 12px 14px; font-weight: 700; border-radius: 12px; }
+  .btn-primary{ box-shadow: 0 8px 22px rgba(139,92,246,.25); }
+  .btn, .btn-primary{ width: 100%; }     /* deux gros boutons sur toute la largeur */
+
+  /* Cartes risque -> format “list item” léger (moins haut, plus respirant) */
+  .risk-card{
+    display: grid;
+    grid-template-columns: 10px 1fr;     /* pastille + contenu */
+    align-items: center;
+    gap: 12px;
+    padding: 14px 14px;
+    min-height: 68px;                    /* au lieu du gros pavé */
+    border-radius: 14px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 10px 22px rgba(0,0,0,.18);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .risk-card:hover{ transform: translateY(-2px); box-shadow: 0 14px 28px rgba(0,0,0,.22); }
+
+  /* Pastilles de couleur à gauche (faible/ moyen/ élevé) */
+  .risk-card.r-low::before,
+  .risk-card.r-mid::before,
+  .risk-card.r-high::before{
+    content:"";
+    width:10px; height:10px; border-radius:999px;
+    display:block;
+    box-shadow: 0 0 0 4px rgba(255,255,255,.04) inset;
+  }
+  .risk-card.r-low::before  { background:#22c55e; }  /* vert */
+  .risk-card.r-mid::before  { background:#eab308; }  /* jaune */
+  .risk-card.r-high::before { background:#ef4444; }  /* rouge */
+
+  /* Titres + sous-titres courts et respirants */
+  .risk-card h3{
+    margin:0; font-size: 18px; font-weight: 700; letter-spacing:.2px;
+  }
+  .risk-card p{
+    margin:2px 0 0; font-size: 13px; color: var(--muted);
+    display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  /* Grille des risques : une seule colonne, espaces cohérents */
+  .risk-grid{ gap: 12px; padding: 12px 0 18px; }
+
+  /* Footer compact (on minimise la “bruit visuel”) */
+  .footer{ padding: 14px 0 18px; }
+  .footer .container{ font-size: 12px; color: var(--muted); }
+  /* Si tu as des liens rapides “Risque faible/moyen/élevé” au footer, rends-les discrets : */
+  .footer .container a{ opacity:.8; text-decoration: none; }
+}
+
+/* Petit affinage pour l’animation mobile (si tu as activé l’effet fadeUp) */
+@media (max-width: 430px){
+  .hero, .cta, .risk-card{ animation-duration: .6s; }
+}
