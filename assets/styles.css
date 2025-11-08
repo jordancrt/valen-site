@@ -563,3 +563,35 @@ h1{font-size:44px; line-height:1.08; letter-spacing:-.3px; margin:12px 0}
 /* Optionnel : désactiver le souligné global dans les blocs "card" */
 .card a{ text-decoration: none; }
 .card a:hover{ text-decoration: none; }
+/* ===== Nettoyage footer & logo ===== */
+
+/* Supprime les liens parasites "Risque faible/moyen/élevé" */
+.footer a[href*="Risque"],
+.footer a[href*="risque"],
+.footer a[href*="#"] {
+  display: none !important;
+}
+
+/* Optionnel : harmonise la couleur du copyright */
+.footer {
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Logo : forcer affichage si image SVG/PNG */
+.nav-logo img {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* Texte VALENHUB bien aligné au logo */
+.nav-logo span {
+  margin-left: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: .4px;
+}
