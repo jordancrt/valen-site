@@ -6,34 +6,39 @@
   <title>ValenHub — Clarté & Sérénité financières</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
+
 <body>
+  <!-- NAVBAR -->
   <header class="navbar">
-  <div class="container nav-container">
-    <a class="nav-brand" href="index.html">
-      <img src="assets/icon-192.png" alt=""><span>VALENHUB</span>
-    </a>
+    <div class="container nav-container">
+      <a class="nav-brand" href="index.html">
+        <!-- ✅ Nouveau logo SVG -->
+        <img src="assets/logo-valenhub.svg" alt="Logo ValenHub" style="width:32px;height:32px;margin-right:8px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
+        <span>VALENHUB</span>
+      </a>
 
-    <!-- Liens desktop -->
-    <ul class="nav-links">
-      <li><a class="active" href="index.html">Accueil</a></li>
-      <li><a href="comparateur.html">Comparateur</a></li>
-      <li><a href="dashboard.html">Tableau de bord</a></li>
-      <li><a href="profil.html">Profil</a></li>
-    </ul>
+      <!-- Liens desktop -->
+      <ul class="nav-links">
+        <li><a class="active" href="index.html">Accueil</a></li>
+        <li><a href="comparateur.html">Comparateur</a></li>
+        <li><a href="dashboard.html">Tableau de bord</a></li>
+        <li><a href="profil.html">Profil</a></li>
+      </ul>
 
-    <!-- Bouton burger (mobile) -->
-    <button id="navToggle" class="nav-toggle" aria-label="Menu">
-      ☰
-    </button>
+      <!-- Bouton burger (mobile) -->
+      <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Drawer mobile -->
+  <div id="navDrawer" class="nav-drawer">
+    <a href="index.html">Accueil</a>
+    <a href="comparateur.html">Comparateur</a>
+    <a href="dashboard.html">Tableau de bord</a>
+    <a href="profil.html">Profil</a>
   </div>
-</header>
-<div id="navDrawer" class="nav-drawer">
-  <a href="index.html">Accueil</a>
-  <a href="comparateur.html">Comparateur</a>
-  <a href="dashboard.html">Tableau de bord</a>
-  <a href="profil.html">Profil</a>
-</div>
-<div id="navBackdrop" class="nav-backdrop"></div>
+  <div id="navBackdrop" class="nav-backdrop"></div>
+
   <!-- HERO -->
   <main>
     <section class="hero">
@@ -75,39 +80,41 @@
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
-    <!-- Version mobile : pills -->
-<section class="container risk-pills">
-  <div class="pills">
-    <a class="pill pill-low"  href="comparateur.html?risk=low"><span class="dot"></span>Risque faible</a>
-    <a class="pill pill-mid"  href="comparateur.html?risk=mid"><span class="dot"></span>Risque moyen</a>
-    <a class="pill pill-high" href="comparateur.html?risk=high"><span class="dot"></span>Risque élevé</a>
-  </div>
-</section>
+    <section class="container risk-pills">
+      <div class="pills">
+        <a class="pill pill-low"  href="comparateur.html?risk=low"><span class="dot"></span>Risque faible</a>
+        <a class="pill pill-mid"  href="comparateur.html?risk=mid"><span class="dot"></span>Risque moyen</a>
+        <a class="pill pill-high" href="comparateur.html?risk=high"><span class="dot"></span>Risque élevé</a>
+      </div>
+    </section>
     <div class="container">
       © 2025 ValenHub — Transparence & simplicité
     </div>
   </footer>
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const cards = document.querySelectorAll(".risk-card");
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        observer.unobserve(entry.target); // évite de rejouer l'animation
-      }
-    });
-  }, { threshold: 0.2 });
 
-  cards.forEach(card => observer.observe(card));
-});
-</script>
+  <!-- ANIMATIONS -->
   <script>
-window.addEventListener("load", () => {
-  const hero = document.querySelector(".hero");
-  if (hero) hero.classList.add("loaded");
-});
-</script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".risk-card");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    cards.forEach(card => observer.observe(card));
+  });
+  </script>
+
+  <script>
+  window.addEventListener("load", () => {
+    const hero = document.querySelector(".hero");
+    if (hero) hero.classList.add("loaded");
+  });
+  </script>
 </body>
 </html>
