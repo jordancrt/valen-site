@@ -318,3 +318,65 @@ document.addEventListener("keydown", (e) => {
 renderAccounts();
 renderChart();
 renderBudget();
+/* ============================
+   🎯 CAMEMBERT — Répartition du patrimoine
+   ============================ */
+
+function updatePieChart() {
+    const canvas = document.getElementById("pieChart");
+    if (!canvas) return; // Pas sur cette page
+
+    const ctx = canvas.getContext("2d");
+
+    // On récupère les comptes depuis ton localStorage
+    const accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
+
+    // Si aucun compte → on affiche rien
+    if (accounts.length === 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+    }
+
+    // Données graphiques
+    const labels = accounts.map(acc => acc.name);
+    const values = accounts.map(acc => Number(acc.balance));
+
+    // Détruit l'ancien graphe s'il existe
+    if (window.pieChartInstance) {
+        window.pieChartInstance.destroy();
+    }
+
+    // Crée le nouveau graphe
+    window.pieChartInstance = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: [
+                    "#8b5cf6",
+                    "#3b82f6",
+                    "#10b981",
+                    "#f59e0b",
+                    "#ef4444"
+                ],
+                borderWidth: 0,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: "white",
+                        font: { size: 14 }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Mise à jour automatique du camembert à chaque changement
+window.addEventListener("load", updatePieChart);
+window.addEventListener("storage", updatePieChart);
