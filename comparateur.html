@@ -1,79 +1,130 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ValenHub — Comparateur</title>
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ValenHub — Comparateur intelligent</title>
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
+
 <body>
-  <!-- NAV -->
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-brand" href="index.html">
-        <img src="assets/icon-192.png" alt="" />
+        <img src="assets/logo-valenhub.svg" alt="Logo ValenHub" style="width:32px;height:32px;margin-right:8px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
         <span>VALENHUB</span>
       </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a class="active" href="comparateur.html">Comparateur</a></li>
-          <li><a href="dashboard.html">Tableau de bord</a></li>
-          <li><a href="profil.html">Profil</a></li>
-        </ul>
-      </nav>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a class="active" href="comparateur.html">Comparateur</a></li>
+        <li><a href="dashboard.html">Tableau de bord</a></li>
+        <li><a href="profil.html">Profil</a></li>
+      </ul>
+
+      <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
     </div>
   </header>
 
+  <!-- Drawer mobile -->
+  <div id="navDrawer" class="nav-drawer">
+    <a href="index.html">Accueil</a>
+    <a class="active" href="comparateur.html">Comparateur</a>
+    <a href="dashboard.html">Tableau de bord</a>
+    <a href="profil.html">Profil</a>
+  </div>
+  <div id="navBackdrop" class="nav-backdrop"></div>
+
   <!-- CONTENU -->
-  <main class="container" style="padding:24px 0 56px">
-    <!-- Barre d’outils -->
-    <section class="card toolbar">
-      <div class="toolbar-left">
-        <input id="q" class="input" placeholder="Ex: stablecoin, S&P 500, frais bas, BTC, PEA…" />
+  <main class="container" style="padding:28px 0 72px">
+    
+    <!-- Bandeau titre -->
+    <section class="compare-header">
+      <div>
+        <h1 class="compare-title">Trouve où placer ton argent, sans prise de tête.</h1>
+        <p class="compare-sub">
+          Compare rapidement ETF, cryptos, actions et plateformes en fonction de ton niveau de risque,
+          des performances et des frais. Les données sont indicatives, pour t’aider à réfléchir, pas pour te donner des ordres.
+        </p>
+      </div>
+      <div class="compare-badge">
+        <span class="badge">Bêta privée ValenHub</span>
+        <p class="muted small">Les résultats sont simulés pour la démo. Plus tard : vraies données marchés.</p>
+      </div>
+    </section>
+
+    <!-- Carte de recherche / filtres -->
+    <section class="card search-card">
+      <div class="search-grid">
+        <input id="q" class="input" placeholder="Cherche un nom : SP500, Bitcoin, Amundi, Revolut…">
         <select id="type" class="select">
-          <option value="crypto">Crypto</option>
+          <option value="all">Tous les types</option>
           <option value="etf">ETF</option>
-          <option value="plateforme">Plateformes</option>
+          <option value="crypto">Crypto</option>
+          <option value="action">Action</option>
+          <option value="plateforme">Plateforme</option>
+        </select>
+        <select id="risk" class="select">
+          <option value="all">Tous les risques</option>
+          <option value="low">Risque faible</option>
+          <option value="mid">Risque moyen</option>
+          <option value="high">Risque élevé</option>
+        </select>
+        <select id="sort" class="select">
+          <option value="score">Score global</option>
+          <option value="perf">Perf 5 ans</option>
+          <option value="fee">Frais les plus bas</option>
+          <option value="vol">Volatilité la plus faible</option>
         </select>
         <button id="btnSearch" class="btn btn-primary">Comparer</button>
       </div>
 
-      <div class="toolbar-right">
-        <select id="sort" class="select">
-          <option value="relevance">Pertinence</option>
-          <option value="perf1y">Perf. 1 an</option>
-          <option value="fees">Frais / TER</option>
-          <option value="risk">Risque</option>
-        </select>
+      <!-- Filtres rapides (chips) -->
+      <div class="chips">
+        <button class="chip" data-chip="pea">Éligible PEA</button>
+        <button class="chip" data-chip="dividende">Dividende</button>
+        <button class="chip" data-chip="long">Long terme</button>
+        <button class="chip" data-chip="court">Court terme</button>
       </div>
     </section>
 
-    <!-- Filtres rapides (facultatifs par dataset) -->
-    <section id="chips" class="chips"></section>
-
-    <!-- Résumé + erreurs -->
-    <section class="card" style="margin-top:16px">
+    <!-- Résultats -->
+    <section class="card results-card">
       <div class="card-head">
-        <h3>Résultats</h3>
-        <span id="count" class="muted small"></span>
+        <h2>Résultats</h2>
+        <span id="count" class="muted small">Chargement…</span>
       </div>
-      <div id="errorBox" class="muted small" style="display:none"></div>
-      <div id="grid" class="grid-cards"></div>
 
-      <!-- pagination -->
-      <div id="pagin" class="pagin" hidden>
-        <button class="btn btn-ghost" id="prevPage">Précédent</button>
-        <span id="pageInfo" class="muted small"></span>
-        <button class="btn btn-ghost" id="nextPage">Suivant</button>
+      <!-- En-têtes “tableau” style Finary/CoinMarketCap -->
+      <div class="results-head-row muted small">
+        <span class="col-asset">Actif</span>
+        <span class="col-perf">Perf 5 ans</span>
+        <span class="col-fee">Frais / spread</span>
+        <span class="col-vol">Volatilité</span>
+        <span class="col-risk">Risque</span>
       </div>
+
+      <!-- Zone dynamique remplie par JS -->
+      <div id="results" class="results-list">
+        <!-- Squelettes de chargement (gérés par JS si besoin) -->
+      </div>
+
+      <p class="muted xsmall disclaimer">
+        Les informations affichées sont indicatives et simplifiées. ValenHub ne fournit pas de conseil en investissement.
+        Tu restes entièrement responsable de tes choix.
+      </p>
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
-    <div class="container">© 2025 ValenHub — Transparence & simplicité</div>
+    <div class="container">
+      © 2025 ValenHub — Transparence & simplicité
+    </div>
   </footer>
 
+  <!-- JS Comparateur -->
   <script src="assets/comparateur.js"></script>
 </body>
 </html>
