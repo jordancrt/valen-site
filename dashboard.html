@@ -39,7 +39,7 @@
   <!-- CONTENU -->
   <main class="container dashboard-main">
     <section class="dashboard-header">
-      <div>
+      <div> 
         <h1>Ton cockpit financier.</h1>
         <p class="muted">
           Visualise ton patrimoine, tes comptes, et suis l’évolution mois après mois.
@@ -51,7 +51,14 @@
         <p class="muted small">Ajoute quelques comptes et un budget pour voir le tableau de bord prendre vie.</p>
       </div>
     </section>
+<section class="container" style="margin-top:40px;">
+  <h2>Répartition du patrimoine</h2>
+  <p class="muted">Ajoute au moins un compte pour voir le graphique.</p>
 
+  <div style="max-width:340px;margin-top:22px;">
+    <canvas id="pieChart"></canvas>
+  </div>
+</section>
     <!-- GRID PRINCIPALE -->
     <section class="dashboard-grid">
 
