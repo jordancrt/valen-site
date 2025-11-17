@@ -225,5 +225,73 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="assets/dashboard.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("pieChart");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  // On récupère les lignes du tableau "Mes comptes"
+  const rows = document.querySelectorAll("table tbody tr");
+
+  const labels = [];
+  const values = [];
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll("td");
+    if (cells.length < 3) return;
+
+    const name = cells[0].textContent.trim();      // Nom du compte
+    const raw = cells[2].textContent               // Solde (ex: "0,00 €")
+      .replace(/\s/g, "")
+      .replace("€", "")
+      .replace(",", ".");
+    const value = parseFloat(raw);
+
+    if (!isNaN(value) && value > 0) {
+      labels.push(name);
+      values.push(value);
+    }
+  });
+
+  // S'il n'y a aucun solde > 0, on ne dessine pas de graphe
+  if (!labels.length) {
+    // Tu peux aussi cacher complètement le conteneur si tu veux :
+    // document.querySelector(".pie-container")?.classList.add("hidden");
+    return;
+  }
+
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: [
+          "rgba(167, 139, 250, 0.9)",
+          "rgba(56, 189, 248, 0.9)",
+          "rgba(52, 211, 153, 0.9)",
+          "rgba(251, 191, 36, 0.9)",
+          "rgba(239, 68, 68, 0.9)"
+        ],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: "#E5E7EB",
+            font: { size: 12 }
+          }
+        }
+      }
+    }
+  });
+});
+</script>
 </body>
 </html>
