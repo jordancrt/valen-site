@@ -12,7 +12,7 @@
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-brand" href="index.html">
-        <img src="assets/logo-valenhub.svg" alt="Logo ValenHub" style="width:32px;height:32px;margin-right:8px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
+        <img src="assets/icon-192.png" alt="Logo ValenHub" style="width:32px;height:32px;margin-right:8px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
         <span>VALENHUB</span>
       </a>
 
@@ -48,14 +48,14 @@
       </div>
       <div class="badge-box">
         <span class="badge">Bêta ValenHub</span>
-        <p class="muted small">Ajoute quelques comptes pour voir les cartes et le graphique se remplir.</p>
+        <p class="muted small">Ajoute quelques comptes et un budget pour voir le tableau de bord prendre vie.</p>
       </div>
     </section>
 
     <!-- GRID PRINCIPALE -->
     <section class="dashboard-grid">
 
-      <!-- Colonne gauche : KPI + comptes -->
+      <!-- Colonne gauche : KPI + comptes + budget -->
       <div class="dash-left">
 
         <!-- KPI -->
@@ -105,8 +105,42 @@
           </table>
           <p class="muted xsmall" style="margin-top:8px">
             Exemple : “Compte courant Revolut”, “PEA Bourse”, “Portefeuille Crypto”, “Livret A”…  
-            Tu peux tout mélanger, ce sont tes catégories.
+            Tu peux tout mélanger, ce sont tes propres catégories.
           </p>
+        </div>
+
+        <!-- Budget du mois -->
+        <div class="card">
+          <div class="card-head">
+            <h2>Budget du mois</h2>
+            <span id="budgetStatus" class="badge">Pas encore défini</span>
+          </div>
+          <table class="budget-table">
+            <thead>
+              <tr>
+                <th>Catégorie</th>
+                <th>Budget (€)</th>
+                <th>Dépensé (€)</th>
+              </tr>
+            </thead>
+            <tbody id="budgetTableBody">
+              <!-- Rempli par JS -->
+            </tbody>
+          </table>
+          <div class="budget-summary">
+            <div>
+              <p class="kpi-label">Budget total</p>
+              <p id="budgetTotal" class="kpi-value">0 €</p>
+            </div>
+            <div>
+              <p class="kpi-label">Dépensé</p>
+              <p id="budgetSpent" class="kpi-value">0 €</p>
+            </div>
+            <div>
+              <p class="kpi-label">Reste</p>
+              <p id="budgetLeft" class="kpi-value">0 €</p>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -127,7 +161,7 @@
         <div class="card">
           <h3>Résumé rapide</h3>
           <p class="muted small" id="summaryText">
-            Ajoute tes comptes pour voir un résumé intelligent de ta situation.
+            Ajoute tes comptes et tes budgets pour voir un résumé intelligent de ta situation.
           </p>
           <ul class="summary-list muted small">
             <li>• Tu peux ajouter autant de comptes que tu veux.</li>
