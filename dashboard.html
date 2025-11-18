@@ -12,7 +12,9 @@
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-brand" href="index.html">
-        <img src="assets/icon-192.png" alt="Logo ValenHub" style="width:32px;height:32px;margin-right:8px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
+        <img src="assets/icon-192.png" alt="Logo ValenHub"
+             style="width:32px;height:32px;margin-right:8px;vertical-align:middle;
+                    filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
         <span>VALENHUB</span>
       </a>
 
@@ -51,17 +53,17 @@
         <p class="muted small">Ajoute quelques comptes et un budget pour voir le tableau de bord prendre vie.</p>
       </div>
     </section>
-<section class="container" style="margin-top:40px;">
-  <h2>Répartition du patrimoine</h2>
-  <p class="muted">Ajoute au moins un compte pour voir le graphique.</p>
 
-  <div class="pie-container">
-  <canvas id="pieChart"></canvas>
-</div>
-  <div style="max-width:340px;margin-top:22px;">
-    <canvas id="pieChart"></canvas>
-  </div>
-</section>
+    <!-- SECTION CAMEMBERT -->
+    <section class="container" style="margin-top:40px;">
+      <h2>Répartition du patrimoine</h2>
+      <p class="muted small">Ajoute au moins un compte pour voir le graphique.</p>
+
+      <div class="pie-container">
+        <canvas id="pieChart"></canvas>
+      </div>
+    </section>
+
     <!-- GRID PRINCIPALE -->
     <section class="dashboard-grid">
 
@@ -160,8 +162,10 @@
 
         <div class="card">
           <div class="card-head">
-            <h2>Répartition du patrimoine</h2>
-            <span class="muted xsmall" id="chartHint">Ajoute au moins un compte pour voir le graphique.</span>
+            <h2>Répartition du patrimoine (détail)</h2>
+            <span class="muted xsmall" id="chartHint">
+              Ajoute au moins un compte pour voir le graphique principal.
+            </span>
           </div>
           <div class="chart-box">
             <canvas id="chartWealth"></canvas>
@@ -220,78 +224,77 @@
   </div>
 
   <div id="modalBackdrop" class="modal-backdrop hidden"></div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <!-- SCRIPTS -->
+  <!-- 1) Chart.js une seule fois -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- 2) Logique du tableau de bord (comptes, budget, graphique principal, etc.) -->
   <script src="assets/dashboard.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <!-- 3) Camembert de répartition basé sur les comptes -->
   <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("pieChart");
-  if (!canvas) return;
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById("pieChart");
+      if (!canvas) return;
 
-  const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d");
 
-  // On récupère les lignes du tableau "Mes comptes"
-  const rows = document.querySelectorAll("table tbody tr");
+      // On cible UNIQUEMENT le tableau des comptes
+      const rows = document.querySelectorAll("#accountsTable tbody tr");
 
-  const labels = [];
-  const values = [];
+      const labels = [];
+      const values = [];
 
-  rows.forEach(row => {
-    const cells = row.querySelectorAll("td");
-    if (cells.length < 3) return;
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        if (cells.length < 3) return;
 
-    const name = cells[0].textContent.trim();      // Nom du compte
-    const raw = cells[2].textContent               // Solde (ex: "0,00 €")
-      .replace(/\s/g, "")
-      .replace("€", "")
-      .replace(",", ".");
-    const value = parseFloat(raw);
+        const name = cells[0].textContent.trim();      // Nom du compte
+        const raw = cells[2].textContent               // Solde (ex: "0,00 €")
+          .replace(/\s/g, "")
+          .replace("€", "")
+          .replace(",", ".");
+        const value = parseFloat(raw);
 
-    if (!isNaN(value) && value > 0) {
-      labels.push(name);
-      values.push(value);
-    }
-  });
+        if (!isNaN(value) && value > 0) {
+          labels.push(name);
+          values.push(value);
+        }
+      });
 
-  // S'il n'y a aucun solde > 0, on ne dessine pas de graphe
-  if (!labels.length) {
-    // Tu peux aussi cacher complètement le conteneur si tu veux :
-    // document.querySelector(".pie-container")?.classList.add("hidden");
-    return;
-  }
+      // S'il n'y a aucun solde > 0, on ne dessine pas de graphe
+      if (!labels.length) {
+        return;
+      }
 
-  new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels,
-      datasets: [{
-        data: values,
-        backgroundColor: [
-          "rgba(167, 139, 250, 0.9)",
-          "rgba(56, 189, 248, 0.9)",
-          "rgba(52, 211, 153, 0.9)",
-          "rgba(251, 191, 36, 0.9)",
-          "rgba(239, 68, 68, 0.9)"
-        ],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: "#E5E7EB",
-            font: { size: 12 }
+      new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: [
+              "rgba(167, 139, 250, 0.9)",
+              "rgba(56, 189, 248, 0.9)",
+              "rgba(52, 211, 153, 0.9)",
+              "rgba(251, 191, 36, 0.9)",
+              "rgba(239, 68, 68, 0.9)"
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: "#E5E7EB",
+                font: { size: 12 }
+              }
+            }
           }
         }
-      }
-    }
-  });
-});
-</script>
+      });
+    });
+  </script>
 </body>
 </html>
