@@ -12,8 +12,9 @@
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-brand" href="index.html">
-        <img src="assets/icon-192.png" alt="Logo ValenHub"
-             style="width:32px;height:32px;margin-right:8px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
+        <img src="assets/icon-192.png"
+             alt="Logo ValenHub"
+             style="width:28px;height:28px;border-radius:8px;margin-right:8px;vertical-align:middle;filter:drop-shadow(0 0 6px rgba(139,92,246,.4));">
         <span>VALENHUB</span>
       </a>
 
@@ -37,197 +38,167 @@
   </div>
   <div id="navBackdrop" class="nav-backdrop"></div>
 
-  <!-- CONTENU PRINCIPAL -->
-  <main class="container dash-shell">
-    <!-- En-tête -->
-    <section class="dash-header">
-      <div>
-        <h1>Ton cockpit financier.</h1>
-        <p class="muted">
-          Vue d’ensemble de ton patrimoine, de tes comptes et de ton budget,
-          avec des données stockées uniquement dans ton navigateur.
-        </p>
+  <!-- DASHBOARD ONE SCREEN -->
+  <main class="container dashboard-fullscreen">
+
+    <!-- LIGNE HAUT : 4 KPI -->
+    <section class="dash-row dash-row-top">
+      <div class="card kpi">
+        <p class="kpi-label">Patrimoine total</p>
+        <p id="kpiTotal" class="kpi-value">–</p>
+        <p class="kpi-hint muted xsmall">Somme de tous tes comptes</p>
       </div>
-      <div class="badge-box">
-        <span class="badge">Bêta ValenHub</span>
-        <p class="muted small">
-          Ajoute quelques comptes pour voir les graphiques se mettre à jour en temps réel.
-        </p>
+      <div class="card kpi">
+        <p class="kpi-label">Liquidités</p>
+        <p id="kpiCash" class="kpi-value">–</p>
+        <p class="kpi-hint muted xsmall">Comptes courants & livrets</p>
+      </div>
+      <div class="card kpi">
+        <p class="kpi-label">Investissements</p>
+        <p id="kpiInvest" class="kpi-value">–</p>
+        <p class="kpi-hint muted xsmall">PEA, CTO, ETF, crypto…</p>
+      </div>
+      <div class="card kpi">
+        <p class="kpi-label">Dettes</p>
+        <p id="kpiDebt" class="kpi-value">–</p>
+        <p class="kpi-hint muted xsmall">Crédits conso / immo / auto</p>
       </div>
     </section>
 
-    <!-- Cartes de stats -->
-    <section class="stats-grid">
-      <article class="card stat-card">
-        <p class="stat-label">Patrimoine total</p>
-        <p id="statTotal" class="stat-value">0 €</p>
-        <p class="stat-hint muted xsmall">Somme de tous tes comptes</p>
-      </article>
-
-      <article class="card stat-card">
-        <p class="stat-label">Liquidités</p>
-        <p id="statCash" class="stat-value">0 €</p>
-        <p class="stat-hint muted xsmall">Comptes courants & livrets</p>
-      </article>
-
-      <article class="card stat-card">
-        <p class="stat-label">Investissements</p>
-        <p id="statInvest" class="stat-value">0 €</p>
-        <p class="stat-hint muted xsmall">PEA, CTO, crypto, etc.</p>
-      </article>
-
-      <article class="card stat-card">
-        <p class="stat-label">Dettes</p>
-        <p id="statDebt" class="stat-value">0 €</p>
-        <p class="stat-hint muted xsmall">Crédit conso, immo, etc.</p>
-      </article>
-    </section>
-
-    <!-- Zone graphiques -->
-    <section class="charts-grid">
-      <article class="card chart-card">
+    <!-- LIGNE BAS : COURBE + DONUT -->
+    <section class="dash-row dash-row-bottom">
+      <!-- Courbe -->
+      <div class="card chart-card">
         <div class="card-head">
           <h2>Évolution du patrimoine</h2>
-          <span class="muted xsmall" id="evoHint">6 derniers mois</span>
+          <span class="muted xsmall" id="lineSubtitle">6 derniers mois (données démo)</span>
         </div>
         <div class="chart-box">
-          <canvas id="evolutionChart"></canvas>
+          <canvas id="wealthLine"></canvas>
         </div>
-      </article>
+        <div class="card-footer">
+          <button class="btn-ghost" id="btnHistory">Voir plus de détails</button>
+        </div>
+      </div>
 
-      <article class="card chart-card">
+      <!-- Donut -->
+      <div class="card chart-card">
         <div class="card-head">
           <h2>Répartition par type d’actifs</h2>
-          <span class="muted xsmall" id="allocHint">Banque, investissements, crypto…</span>
+          <span class="muted xsmall">Vue simple par grandes catégories</span>
         </div>
         <div class="chart-box">
-          <canvas id="allocationChart"></canvas>
+          <canvas id="wealthDonut"></canvas>
         </div>
-      </article>
-    </section>
-
-    <!-- Comptes + budget -->
-    <section class="bottom-grid">
-      <!-- Comptes -->
-      <article class="card">
-        <div class="card-head">
-          <h2>Mes comptes</h2>
-          <button id="addAccountBtn" class="btn btn-primary btn-small">
-            Ajouter un compte
-          </button>
+        <div class="card-footer">
+          <button class="btn-ghost" id="btnAccounts">Mes comptes</button>
+          <button class="btn-ghost" id="btnBudget">Budget du mois</button>
         </div>
-
-        <table class="accounts-table">
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>Type</th>
-              <th>Catégorie</th>
-              <th>Solde (€)</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="accountsTableBody">
-            <!-- rempli par JS -->
-          </tbody>
-        </table>
-
-        <p class="muted xsmall" style="margin-top:8px">
-          Tu peux mélanger comptes bancaires, PEA, crypto, livrets, etc.
-          Tout est regroupé par catégorie pour les graphiques.
-        </p>
-      </article>
-
-      <!-- Budget + résumé -->
-      <article class="card">
-        <div class="card-head">
-          <h2>Budget du mois</h2>
-          <span id="budgetStatus" class="badge">Mode simple</span>
-        </div>
-
-        <table class="budget-table">
-          <thead>
-            <tr>
-              <th>Catégorie</th>
-              <th>Budget (€)</th>
-              <th>Dépensé (€)</th>
-            </tr>
-          </thead>
-          <tbody id="budgetTableBody">
-            <!-- rempli par JS -->
-          </tbody>
-        </table>
-
-        <div class="budget-summary">
-          <div>
-            <p class="kpi-label">Budget total</p>
-            <p id="budgetTotal" class="kpi-value">0 €</p>
-          </div>
-          <div>
-            <p class="kpi-label">Dépensé</p>
-            <p id="budgetSpent" class="kpi-value">0 €</p>
-          </div>
-          <div>
-            <p class="kpi-label">Reste</p>
-            <p id="budgetLeft" class="kpi-value">0 €</p>
-          </div>
-        </div>
-
-        <h3 style="margin-top:18px;">Résumé rapide</h3>
-        <p class="muted small" id="summaryText">
-          Ajoute quelques comptes et ajuste ton budget pour suivre ta trajectoire mois après mois.
-        </p>
-        <ul class="summary-list muted small">
-          <li>• Données stockées uniquement dans ton navigateur (localStorage).</li>
-          <li>• Tu peux ajouter / supprimer des comptes à tout moment.</li>
-          <li>• Les graphiques se mettent à jour dès que tu modifies un compte.</li>
-        </ul>
-      </article>
+      </div>
     </section>
   </main>
 
-  <!-- MODALE AJOUT COMPTE -->
-  <div id="accountModal" class="modal hidden">
-    <div class="modal-box">
-      <h3>Ajouter un compte</h3>
-      <p class="muted small">
-        Un compte peut être un compte courant, un PEA, un portefeuille crypto, un livret, etc.
+  <!-- MODALE : MES COMPTES -->
+  <div id="accountsModal" class="modal hidden">
+    <div class="modal-box modal-large">
+      <div class="card-head">
+        <h2>Mes comptes</h2>
+        <button class="modal-close" data-close="accountsModal">✕</button>
+      </div>
+      <p class="muted small" style="margin-top:4px">
+        Tu peux suivre ici tes comptes bancaires, PEA, crypto, livrets, etc.  
+        Les données restent dans ton navigateur (localStorage).
       </p>
 
-      <div class="modal-field">
-        <label for="accName">Nom du compte</label>
-        <input id="accName" type="text" placeholder="Ex : Revolut, PEA Trade Republic…">
-      </div>
-
-      <div class="modal-grid">
-        <div class="modal-field">
-          <label for="accType">Type</label>
-          <select id="accType">
-            <option value="banque">Banque</option>
-            <option value="invest">Investissement</option>
-            <option value="crypto">Crypto</option>
-            <option value="epargne">Épargne</option>
-            <option value="dette">Dette</option>
-            <option value="autre">Autre</option>
-          </select>
-        </div>
-        <div class="modal-field">
-          <label for="accBalance">Solde (€)</label>
-          <input id="accBalance" type="number" step="0.01" placeholder="0">
-        </div>
-      </div>
+      <table class="accounts-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Solde (€)</th>
+          </tr>
+        </thead>
+        <tbody id="accountsTableBody">
+          <!-- rempli par JS -->
+        </tbody>
+      </table>
 
       <div class="modal-actions">
-        <button id="cancelModal" class="btn">Annuler</button>
-        <button id="confirmModal" class="btn btn-primary">Ajouter</button>
+        <button class="btn" id="btnAddDemoAccount">Ajouter un compte démo</button>
+        <button class="btn" data-close="accountsModal">Fermer</button>
       </div>
     </div>
   </div>
 
+  <!-- MODALE : BUDGET -->
+  <div id="budgetModal" class="modal hidden">
+    <div class="modal-box modal-large">
+      <div class="card-head">
+        <h2>Budget du mois</h2>
+        <button class="modal-close" data-close="budgetModal">✕</button>
+      </div>
+      <p class="muted small" style="margin-top:4px">
+        Version simple : quelques catégories de base.  
+        Plus tard, on pourra ajouter un vrai éditeur de budget.
+      </p>
+
+      <table class="budget-table">
+        <thead>
+          <tr>
+            <th>Catégorie</th>
+            <th>Budget (€)</th>
+            <th>Dépensé (€)</th>
+          </tr>
+        </thead>
+        <tbody id="budgetTableBody">
+          <!-- rempli par JS -->
+        </tbody>
+      </table>
+
+      <div class="budget-summary">
+        <div>
+          <p class="kpi-label">Budget total</p>
+          <p id="budgetTotal" class="kpi-value">–</p>
+        </div>
+        <div>
+          <p class="kpi-label">Dépensé</p>
+          <p id="budgetSpent" class="kpi-value">–</p>
+        </div>
+        <div>
+          <p class="kpi-label">Reste</p>
+          <p id="budgetLeft" class="kpi-value">–</p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" data-close="budgetModal">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKDROP GLOBAL DES MODALES -->
   <div id="modalBackdrop" class="modal-backdrop hidden"></div>
 
   <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="assets/dashboard.js"></script>
+
+  <script>
+    // Menu mobile simple
+    const navToggle = document.getElementById('navToggle');
+    const navDrawer = document.getElementById('navDrawer');
+    const navBackdrop = document.getElementById('navBackdrop');
+
+    if (navToggle && navDrawer && navBackdrop) {
+      navToggle.addEventListener('click', () => {
+        navDrawer.classList.toggle('open');
+        navBackdrop.classList.toggle('open');
+      });
+      navBackdrop.addEventListener('click', () => {
+        navDrawer.classList.remove('open');
+        navBackdrop.classList.remove('open');
+      });
+    }
+  </script>
 </body>
 </html>
