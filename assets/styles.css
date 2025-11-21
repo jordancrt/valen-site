@@ -1338,3 +1338,108 @@ h1{font-size:44px; line-height:1.08; letter-spacing:-.3px; margin:12px 0}
     grid-template-columns: 1fr;
   }
 }
+/* ===== Dashboard simple, épuré, tout sur une page ===== */
+
+.dash-simple{
+  padding:32px 0 48px;
+}
+
+.dash-header h1{
+  margin-bottom:4px;
+}
+
+.dash-grid-simple{
+  display:grid;
+  gap:18px;
+  grid-template-columns: 1.6fr 1.2fr; /* gauche / droite */
+  align-items: stretch;
+}
+
+.dash-left{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.dash-right{
+  display:flex;
+  flex-direction:column;
+}
+
+/* KPI */
+.kpi-card{
+  padding:16px 18px;
+}
+.kpi-row{
+  display:grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.kpi-label{font-size:13px;color:var(--muted);}
+.kpi-value{font-size:20px;font-weight:700;margin-top:2px;}
+.xsmall{font-size:11px;}
+
+/* Tableau comptes */
+.accounts-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:8px;
+}
+.accounts-table th,
+.accounts-table td{
+  padding:8px 10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:14px;
+}
+.accounts-table th{
+  text-align:left;
+  color:#E5E7EB;
+}
+
+/* Budget */
+.budget-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:8px;
+}
+.budget-table th,
+.budget-table td{
+  padding:8px 10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:14px;
+}
+.budget-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:12px;
+}
+
+/* Chart box */
+.chart-box{
+  position:relative;
+  width:100%;
+  height:260px;
+}
+
+/* Bouton petit */
+.btn-small{
+  padding:6px 10px;
+  font-size:13px;
+}
+
+/* Responsive : une seule colonne sur petit écran */
+@media (max-width:900px){
+  .dash-grid-simple{
+    grid-template-columns: 1fr;
+  }
+  .chart-box{
+    height:220px;
+  }
+  .kpi-row{
+    grid-template-columns: 1fr;
+  }
+  .budget-summary{
+    grid-template-columns:1fr;
+  }
+}
