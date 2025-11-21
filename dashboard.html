@@ -37,21 +37,22 @@
   </div>
   <div id="navBackdrop" class="nav-backdrop"></div>
 
-  <!-- DASHBOARD SIMPLE, TOUT SUR UNE PAGE -->
+  <!-- DASHBOARD SIMPLE, UNE SEULE PAGE -->
   <main class="container dash-simple">
     <section class="dash-header">
       <div>
         <h1>Tableau de bord</h1>
         <p class="muted">
-          Vue simple de ton patrimoine : comptes, total et graphique.  
+          Vue simple de ton patrimoine : comptes, budget et graphique.  
           Les données restent dans ton navigateur (localStorage).
         </p>
       </div>
     </section>
 
     <section class="dash-grid-simple">
-      <!-- Colonne gauche : KPI + tableau comptes -->
+      <!-- Colonne gauche : KPI + comptes + budget -->
       <div class="dash-left">
+
         <!-- KPI -->
         <div class="card kpi-card">
           <div class="kpi-row">
@@ -92,6 +93,41 @@
             Exemple : “Compte courant Revolut”, “Livret A”, “PEA ETF Monde”, “Crypto ETH/BTC”…  
           </p>
         </div>
+
+        <!-- Budget du mois (nouveau) -->
+        <div class="card">
+          <div class="card-head">
+            <h2>Budget du mois</h2>
+            <button id="addBudgetBtn" class="btn btn-small">Ajouter une catégorie</button>
+          </div>
+          <table class="budget-table">
+            <thead>
+              <tr>
+                <th>Catégorie</th>
+                <th>Budget (€)</th>
+                <th>Dépensé (€)</th>
+              </tr>
+            </thead>
+            <tbody id="budgetTbody">
+              <!-- rempli par JS -->
+            </tbody>
+          </table>
+          <div class="budget-summary">
+            <div>
+              <p class="kpi-label">Budget total</p>
+              <p id="budgetTotal" class="kpi-value">0 €</p>
+            </div>
+            <div>
+              <p class="kpi-label">Dépensé</p>
+              <p id="budgetSpent" class="kpi-value">0 €</p>
+            </div>
+            <div>
+              <p class="kpi-label">Reste</p>
+              <p id="budgetLeft" class="kpi-value">0 €</p>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Colonne droite : graphique -->
