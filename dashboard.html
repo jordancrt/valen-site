@@ -6,12 +6,13 @@
   <title>ValenHub — Tableau de bord</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
+
 <body>
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-brand" href="index.html">
-        <img src="assets/icon-192.png" alt="Logo ValenHub">
+        <img src="assets/icon-192.png" alt="logo">
         <span>VALENHUB</span>
       </a>
 
@@ -22,31 +23,151 @@
         <li><a href="profil.html">Profil</a></li>
       </ul>
 
-      <!-- Bouton burger (mobile, on verra plus tard) -->
-      <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
+      <button id="navToggle" class="nav-toggle">☰</button>
     </div>
   </header>
 
-  <!-- Drawer mobile -->
   <div id="navDrawer" class="nav-drawer">
     <a href="index.html">Accueil</a>
     <a href="comparateur.html">Comparateur</a>
     <a class="active" href="dashboard.html">Tableau de bord</a>
     <a href="profil.html">Profil</a>
   </div>
+
   <div id="navBackdrop" class="nav-backdrop"></div>
 
-  <!-- CONTENU PRINCIPAL -->
-  <main class="container dash-main">
-    <!-- Bandeau haut -->
-    <section class="dash-top">
+  <!-- === CONTENU PRINCIPAL === -->
+  <main class="container dashboard-main">
+
+    <!-- HEADER DU TABLEAU DE BORD -->
+    <section class="dashboard-header">
       <div>
         <h1>Ton cockpit financier.</h1>
         <p class="muted">
-          Vue d’ensemble de ton patrimoine et de tes comptes, avec des données stockées
-          uniquement dans ton navigateur.
+          Visualise ton patrimoine, tes comptes et ton historique en un instant.
+          Tout est stocké localement dans ton appareil.
         </p>
       </div>
-      <div class="badge-box">
-        <span class="badge">Vue compacte</span>
-        <p class="muted xsmall">Pensé pour tenir sur un seul écran, sans scroll inutile sur PC.</p
+    </section>
+
+    <!-- LAYOUT GLOBAL ONE-SCREEN -->
+    <section class="dashboard-layout">
+
+      <!-- === COLONNE GAUCHE (Cartes) === -->
+      <div class="dash-left">
+
+        <!-- KPIs -->
+        <div class="card kpi-card">
+          <div class="kpi-grid">
+            <div class="kpi-item">
+              <p class="kpi-label">Patrimoine total</p>
+              <p id="totalWealth" class="kpi-value">0 €</p>
+              <p class="kpi-hint muted xsmall">Somme de tous les comptes</p>
+            </div>
+
+            <div class="kpi-item">
+              <p class="kpi-label">Variation mensuelle</p>
+              <p id="monthVariation" class="kpi-value kpi-pos">0%</p>
+              <p class="kpi-hint muted xsmall">Basé sur l’historique</p>
+            </div>
+
+            <div class="kpi-item">
+              <p class="kpi-label">Dépenses estimées</p>
+              <p id="expensesMonth" class="kpi-value">0 €</p>
+              <p class="kpi-hint muted xsmall">Projection rapide</p>
+            </div>
+
+            <div class="kpi-item">
+              <p class="kpi-label">Objectif 50 000 €</p>
+              <p id="goalProgress" class="kpi-value">0%</p>
+              <p class="kpi-hint muted xsmall">Progression</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comptes -->
+        <div class="card">
+          <div class="card-head">
+            <h2>Mes comptes</h2>
+            <button id="addAccountBtn" class="btn btn-primary btn-small">Ajouter</button>
+          </div>
+
+          <table class="accounts-table" id="accountsTable">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Type</th>
+                <th>Solde</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- Historique -->
+        <div class="card">
+          <div class="card-head">
+            <h2>Évolution du patrimoine</h2>
+          </div>
+
+          <div class="chart-box">
+            <canvas id="historyChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- === COLONNE DROITE (Graphiques) === -->
+      <div class="dash-right">
+
+        <!-- Donut / répartition -->
+        <div class="card">
+          <h2>Répartition du patrimoine</h2>
+          <p id="chartHint" class="muted small">Ajoute un compte pour voir le graphique</p>
+          <div class="chart-box">
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <!-- === MODALE AJOUT COMPTE === -->
+  <div id="accountModal" class="modal hidden">
+    <div class="modal-box">
+      <h3>Ajouter un compte</h3>
+
+      <label>Nom du compte</label>
+      <input id="accName" type="text" placeholder="Compte courant, PEA, Crypto…">
+
+      <label>Type</label>
+      <select id="accType">
+        <option value="banque">Banque</option>
+        <option value="pea">PEA / CTO</option>
+        <option value="crypto">Crypto</option>
+        <option value="epargne">Épargne</option>
+        <option value="autre">Autre</option>
+      </select>
+
+      <label>Solde (€)</label>
+      <input id="accBalance" type="number" placeholder="0">
+
+      <div class="modal-actions">
+        <button id="cancelModal" class="btn">Annuler</button>
+        <button id="confirmModal" class="btn btn-primary">Ajouter</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop hidden"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/app.js"></script>
+  <script src="assets/dashboard.js"></script>
+
+</body>
+</html>
