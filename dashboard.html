@@ -6,14 +6,15 @@
   <title>ValenHub — Tableau de bord</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
+
 <body>
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-brand" href="index.html">
-        <img src="assets/icon-192.png"
-             alt="Logo ValenHub"
-             style="width:28px;height:28px;border-radius:8px;margin-right:8px;vertical-align:middle;">
+        <img src="assets/icon-192.png" alt="Logo ValenHub"
+             style="width:32px;height:32px;margin-right:8px;vertical-align:middle;
+                    filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
         <span>VALENHUB</span>
       </a>
 
@@ -28,7 +29,7 @@
     </div>
   </header>
 
-  <!-- Menu mobile -->
+  <!-- Drawer mobile -->
   <div id="navDrawer" class="nav-drawer">
     <a href="index.html">Accueil</a>
     <a href="comparateur.html">Comparateur</a>
@@ -37,108 +38,105 @@
   </div>
   <div id="navBackdrop" class="nav-backdrop"></div>
 
-  <!-- DASHBOARD SIMPLE, UNE SEULE PAGE -->
-  <main class="container dash-simple">
-    <section class="dash-header">
+  <!-- CONTENU PRINCIPAL -->
+  <main class="container dashboard-main">
+    <!-- Header du tableau de bord -->
+    <section class="dashboard-header">
       <div>
-        <h1>Tableau de bord</h1>
+        <h1>Ton cockpit financier.</h1>
         <p class="muted">
-          Vue simple de ton patrimoine : comptes, budget et graphique.  
-          Les données restent dans ton navigateur (localStorage).
+          Ajoute tes comptes (banques, PEA, crypto, livrets…) et regarde ton patrimoine
+          se mettre à jour en temps réel.  
+          Toutes les données restent dans ton navigateur.
+        </p>
+      </div>
+      <div class="badge-box">
+        <span class="badge">Vue compacte</span>
+        <p class="muted small">
+          Pensé pour tenir sur un seul écran, sans scroll inutile sur PC.
         </p>
       </div>
     </section>
 
-    <section class="dash-grid-simple">
-      <!-- Colonne gauche : KPI + comptes + budget -->
+    <!-- GRID ONE-SCREEN -->
+    <section class="dashboard-grid">
+      <!-- Colonne gauche : form + table -->
       <div class="dash-left">
-
-        <!-- KPI -->
-        <div class="card kpi-card">
-          <div class="kpi-row">
-            <div>
-              <p class="kpi-label">Patrimoine total</p>
-              <p id="kpiTotal" class="kpi-value">0 €</p>
-            </div>
-            <div>
-              <p class="kpi-label">Nombre de comptes</p>
-              <p id="kpiCount" class="kpi-value">0</p>
-            </div>
-            <div>
-              <p class="kpi-label">Moyenne par compte</p>
-              <p id="kpiAvg" class="kpi-value">0 €</p>
-            </div>
+        <!-- Formulaire simple -->
+        <div class="card">
+          <h2>Ajouter un compte</h2>
+          <p class="muted small" style="margin-bottom:10px">
+            Exemple : “Compte courant Revolut”, “PEA Bourse”, “Crypto Binance”…
+          </p>
+          <div class="account-form">
+            <input id="accName" class="input" placeholder="Nom du compte">
+            <select id="accType" class="select">
+              <option value="banque">Banque</option>
+              <option value="pea">PEA / CTO</option>
+              <option value="crypto">Crypto</option>
+              <option value="epargne">Épargne</option>
+              <option value="autre">Autre</option>
+            </select>
+            <input id="accBalance" class="input" type="number" step="0.01" placeholder="Solde (€)">
+            <button id="addAccountBtn" class="btn btn-primary">Ajouter</button>
           </div>
         </div>
 
-        <!-- Comptes -->
+        <!-- Table des comptes -->
         <div class="card">
           <div class="card-head">
             <h2>Mes comptes</h2>
-            <button id="addAccountBtn" class="btn btn-primary btn-small">Ajouter un compte</button>
+            <span id="accountsCount" class="muted small">0 compte</span>
           </div>
-          <table class="accounts-table">
-            <thead>
+          <div class="accounts-wrapper">
+            <table class="accounts-table">
+              <thead>
               <tr>
                 <th>Nom</th>
                 <th>Type</th>
-                <th>Solde (€)</th>
+                <th>Solde</th>
+                <th></th>
               </tr>
-            </thead>
-            <tbody id="accountsTbody">
-              <!-- rempli par JS -->
-            </tbody>
-          </table>
-          <p class="muted xsmall" style="margin-top:8px">
-            Exemple : “Compte courant Revolut”, “Livret A”, “PEA ETF Monde”, “Crypto ETH/BTC”…  
-          </p>
-        </div>
-
-        <!-- Budget du mois (nouveau) -->
-        <div class="card">
-          <div class="card-head">
-            <h2>Budget du mois</h2>
-            <button id="addBudgetBtn" class="btn btn-small">Ajouter une catégorie</button>
-          </div>
-          <table class="budget-table">
-            <thead>
-              <tr>
-                <th>Catégorie</th>
-                <th>Budget (€)</th>
-                <th>Dépensé (€)</th>
-              </tr>
-            </thead>
-            <tbody id="budgetTbody">
-              <!-- rempli par JS -->
-            </tbody>
-          </table>
-          <div class="budget-summary">
-            <div>
-              <p class="kpi-label">Budget total</p>
-              <p id="budgetTotal" class="kpi-value">0 €</p>
-            </div>
-            <div>
-              <p class="kpi-label">Dépensé</p>
-              <p id="budgetSpent" class="kpi-value">0 €</p>
-            </div>
-            <div>
-              <p class="kpi-label">Reste</p>
-              <p id="budgetLeft" class="kpi-value">0 €</p>
-            </div>
+              </thead>
+              <tbody id="accountsTableBody">
+              <!-- Rempli par JS -->
+              </tbody>
+            </table>
           </div>
         </div>
-
       </div>
 
-      <!-- Colonne droite : graphique -->
+      <!-- Colonne droite : KPI + graphique -->
       <div class="dash-right">
+        <div class="card kpi-card">
+          <div class="kpi-grid">
+            <div class="kpi-item">
+              <p class="kpi-label">Patrimoine total</p>
+              <p id="totalWealth" class="kpi-value">0 €</p>
+              <p class="kpi-hint muted xsmall">Somme de tous tes comptes</p>
+            </div>
+            <div class="kpi-item">
+              <p class="kpi-label">Nombre de comptes</p>
+              <p id="kpiAccounts" class="kpi-value">0</p>
+              <p class="kpi-hint muted xsmall">Banque, PEA, crypto, livrets…</p>
+            </div>
+            <div class="kpi-item">
+              <p class="kpi-label">Variation (demo)</p>
+              <p id="kpiChange" class="kpi-value kpi-pos">+0,0%</p>
+              <p class="kpi-hint muted xsmall">Simple estimation pour l’instant</p>
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-head">
-            <h2>Graphique des comptes</h2>
-            <span class="muted xsmall">Répartition simple des soldes par compte</span>
+            <h2>Répartition du patrimoine</h2>
+            <span id="chartHint" class="muted xsmall">
+              Ajoute au moins un compte pour voir le graphique.
+            </span>
           </div>
           <div class="chart-box">
-            <canvas id="accountsChart"></canvas>
+            <canvas id="chartWealth"></canvas>
           </div>
         </div>
       </div>
@@ -147,30 +145,13 @@
 
   <footer class="footer">
     <div class="container">
-      © 2025 ValenHub — Tableau de bord simple et local.
+      © <span data-year>2025</span> ValenHub — Transparence & simplicité
     </div>
   </footer>
 
-  <!-- SCRIPTS -->
+  <!-- LIBRAIRIES + JS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/app.js"></script>
   <script src="assets/dashboard.js"></script>
-
-  <script>
-    // Menu mobile très simple
-    const navToggle   = document.getElementById('navToggle');
-    const navDrawer   = document.getElementById('navDrawer');
-    const navBackdrop = document.getElementById('navBackdrop');
-
-    if (navToggle && navDrawer && navBackdrop) {
-      navToggle.addEventListener('click', () => {
-        navDrawer.classList.toggle('open');
-        navBackdrop.classList.toggle('open');
-      });
-      navBackdrop.addEventListener('click', () => {
-        navDrawer.classList.remove('open');
-        navBackdrop.classList.remove('open');
-      });
-    }
-  </script>
 </body>
 </html>
