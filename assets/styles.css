@@ -1704,3 +1704,13 @@ h1{font-size:44px; line-height:1.08; letter-spacing:-.3px; margin:12px 0}
     grid-auto-rows:auto;
   }
 }
+.chart-box {
+  height: 200px !important;
+  max-height: 200px !important;
+  padding: 0;
+  margin-top: -10px;
+}
+
+canvas#chartWealth {
+  max-height: 200px;
+}
