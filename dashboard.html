@@ -6,15 +6,12 @@
   <title>ValenHub — Tableau de bord</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
-
 <body>
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="container nav-container">
       <a class="nav-brand" href="index.html">
-        <img src="assets/icon-192.png" alt="Logo ValenHub"
-             style="width:32px;height:32px;margin-right:8px;vertical-align:middle;
-                    filter:drop-shadow(0 0 6px rgba(139,92,246,.6));">
+        <img src="assets/icon-192.png" alt="Logo ValenHub">
         <span>VALENHUB</span>
       </a>
 
@@ -25,6 +22,7 @@
         <li><a href="profil.html">Profil</a></li>
       </ul>
 
+      <!-- Bouton burger (mobile, on verra plus tard) -->
       <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
     </div>
   </header>
@@ -39,119 +37,16 @@
   <div id="navBackdrop" class="nav-backdrop"></div>
 
   <!-- CONTENU PRINCIPAL -->
-  <main class="container dashboard-main">
-    <!-- Header du tableau de bord -->
-    <section class="dashboard-header">
+  <main class="container dash-main">
+    <!-- Bandeau haut -->
+    <section class="dash-top">
       <div>
         <h1>Ton cockpit financier.</h1>
         <p class="muted">
-          Ajoute tes comptes (banques, PEA, crypto, livrets…) et regarde ton patrimoine
-          se mettre à jour en temps réel.  
-          Toutes les données restent dans ton navigateur.
+          Vue d’ensemble de ton patrimoine et de tes comptes, avec des données stockées
+          uniquement dans ton navigateur.
         </p>
       </div>
       <div class="badge-box">
         <span class="badge">Vue compacte</span>
-        <p class="muted small">
-          Pensé pour tenir sur un seul écran, sans scroll inutile sur PC.
-        </p>
-      </div>
-    </section>
-
-    <!-- GRID ONE-SCREEN -->
-    <section class="dashboard-grid">
-      <!-- Colonne gauche : form + table -->
-      <div class="dash-left">
-        <!-- Formulaire simple -->
-        <div class="card">
-          <h2>Ajouter un compte</h2>
-          <p class="muted small" style="margin-bottom:10px">
-            Exemple : “Compte courant Revolut”, “PEA Bourse”, “Crypto Binance”…
-          </p>
-          <div class="account-form">
-            <input id="accName" class="input" placeholder="Nom du compte">
-            <select id="accType" class="select">
-              <option value="banque">Banque</option>
-              <option value="pea">PEA / CTO</option>
-              <option value="crypto">Crypto</option>
-              <option value="epargne">Épargne</option>
-              <option value="autre">Autre</option>
-            </select>
-            <input id="accBalance" class="input" type="number" step="0.01" placeholder="Solde (€)">
-            <button id="addAccountBtn" class="btn btn-primary">Ajouter</button>
-          </div>
-        </div>
-
-        <!-- Table des comptes -->
-        <div class="card">
-          <div class="card-head">
-            <h2>Mes comptes</h2>
-            <span id="accountsCount" class="muted small">0 compte</span>
-          </div>
-          <div class="accounts-wrapper">
-            <table class="accounts-table">
-              <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Type</th>
-                <th>Solde</th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody id="accountsTableBody">
-              <!-- Rempli par JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Colonne droite : KPI + graphique -->
-      <div class="dash-right">
-        <div class="card kpi-card">
-          <div class="kpi-grid">
-            <div class="kpi-item">
-              <p class="kpi-label">Patrimoine total</p>
-              <p id="totalWealth" class="kpi-value">0 €</p>
-              <p class="kpi-hint muted xsmall">Somme de tous tes comptes</p>
-            </div>
-            <div class="kpi-item">
-              <p class="kpi-label">Nombre de comptes</p>
-              <p id="kpiAccounts" class="kpi-value">0</p>
-              <p class="kpi-hint muted xsmall">Banque, PEA, crypto, livrets…</p>
-            </div>
-            <div class="kpi-item">
-              <p class="kpi-label">Variation (demo)</p>
-              <p id="kpiChange" class="kpi-value kpi-pos">+0,0%</p>
-              <p class="kpi-hint muted xsmall">Simple estimation pour l’instant</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <h2>Répartition du patrimoine</h2>
-            <span id="chartHint" class="muted xsmall">
-              Ajoute au moins un compte pour voir le graphique.
-            </span>
-          </div>
-          <div class="chart-box">
-            <canvas id="chartWealth"></canvas>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      © <span data-year>2025</span> ValenHub — Transparence & simplicité
-    </div>
-  </footer>
-
-  <!-- LIBRAIRIES + JS -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="assets/app.js"></script>
-  <script src="assets/dashboard.js"></script>
-</body>
-</html>
+        <p class="muted xsmall">Pensé pour tenir sur un seul écran, sans scroll inutile sur PC.</p
