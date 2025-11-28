@@ -1,312 +1,140 @@
-// =======================
-// Données simulées (démo)
-// =======================
-const DATA = [
-  {
-    name: "Amundi MSCI World",
-    ticker: "CW8",
-    type: "etf",
-    risk: "low",
-    pea: true,
-    style: ["long"],
-    perf5: 0.72,      // 72 %
-    fee: 0.0038,      // 0.38 %
-    vol: 0.14,        // 14 %
-  },
-  {
-    name: "Lyxor S&P 500",
-    ticker: "SP5",
-    type: "etf",
-    risk: "mid",
-    pea: true,
-    style: ["long"],
-    perf5: 0.85,
-    fee: 0.0015,
-    vol: 0.18,
-  },
-  {
-    name: "Bitcoin",
-    ticker: "BTC",
-    type: "crypto",
-    risk: "high",
-    pea: false,
-    style: ["long", "court"],
-    perf5: 3.5,
-    fee: 0.005,
-    vol: 0.80,
-  },
-  {
-    name: "Ethereum",
-    ticker: "ETH",
-    type: "crypto",
-    risk: "high",
-    pea: false,
-    style: ["long", "court"],
-    perf5: 2.2,
-    fee: 0.004,
-    vol: 0.65,
-  },
-  {
-    name: "Apple",
-    ticker: "AAPL",
-    type: "action",
-    risk: "mid",
-    pea: false,
-    style: ["long"],
-    perf5: 1.10,
-    fee: 0.001,
-    vol: 0.22,
-  },
-  {
-    name: "BNP Paribas Actions Europe",
-    ticker: "BNPEU",
-    type: "etf",
-    risk: "mid",
-    pea: true,
-    style: ["long", "dividende"],
-    perf5: 0.58,
-    fee: 0.007,
-    vol: 0.19,
-  },
-  {
-    name: "Livret A (simulation)",
-    ticker: "LVA",
-    type: "plateforme",
-    risk: "low",
-    pea: false,
-    style: ["court"],
-    perf5: 0.08,
-    fee: 0,
-    vol: 0.01,
-  },
-  {
-    name: "Plateforme crypto CEXX",
-    ticker: "CEXX",
-    type: "plateforme",
-    risk: "high",
-    pea: false,
-    style: ["court"],
-    perf5: 1.5,
-    fee: 0.01,
-    vol: 0.75,
-  }
-];
+// assets/comparateur.js
 
-// =======================
-// Utilitaires d'affichage
-// =======================
-function formatPercent(p) {
-  const sign = p >= 0 ? "+" : "";
-  return sign + (p * 100).toFixed(1) + " %";
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("q");
+  const chips = document.querySelectorAll(".chip");
+  const sortSelect = document.getElementById("sortSelect");
+  const tbody = document.getElementById("compareBody");
+  const resultCount = document.getElementById("resultCount");
 
-function formatFee(f) {
-  return (f * 100).toFixed(2) + " %";
-}
-
-function formatVol(v) {
-  return (v * 100).toFixed(0) + " %";
-}
-
-function riskLabel(r) {
-  if (r === "low") return "Faible";
-  if (r === "mid") return "Moyen";
-  if (r === "high") return "Élevé";
-  return r;
-}
-
-// Score très simple : perf - volatilité - frais (juste pour trier)
-function scoreOf(item) {
-  return item.perf5 - item.vol - item.fee * 2;
-}
-
-// =======================
-// Récupération des éléments
-// =======================
-const qInput   = document.getElementById("q");
-const typeSel  = document.getElementById("type");
-const riskSel  = document.getElementById("risk");
-const sortSel  = document.getElementById("sort");
-const btnSearch = document.getElementById("btnSearch");
-const chips    = document.querySelectorAll(".chip");
-
-const resultsEl = document.getElementById("results");
-const countEl   = document.getElementById("count");
-
-let activeChip = null;
-
-// =======================
-// Rendu des résultats
-// =======================
-function renderSkeleton() {
-  resultsEl.innerHTML = `
-    <div class="skeleton-row"></div>
-    <div class="skeleton-row"></div>
-    <div class="skeleton-row"></div>
-    <div class="skeleton-row"></div>
-  `;
-  countEl.textContent = "Chargement…";
-}
-
-function renderResults(list) {
-  if (!list || list.length === 0) {
-    resultsEl.innerHTML = `
-      <div class="empty-state">
-        <p>Aucun résultat ne correspond exactement à tes filtres.</p>
-        <p class="muted small">Essaie d’élargir le risque, le type ou de retirer un filtre rapide.</p>
-      </div>
-    `;
-    countEl.textContent = "0 résultat";
-    return;
-  }
-
-  const html = list.map(item => {
-    const perfCls = item.perf5 >= 0 ? "perf up" : "perf down";
-    const riskCls = `risk-badge ${item.risk}`;
-    const tags = [
-      item.type.toUpperCase(),
-      item.pea ? "Éligible PEA" : null,
-      item.style.includes("dividende") ? "Dividende" : null,
-      item.style.includes("long") ? "Long terme" : null,
-      item.style.includes("court") ? "Court terme" : null,
-    ].filter(Boolean).join(" • ");
-
-    return `
-      <div class="result-row">
-        <div class="col-asset">
-          <div class="asset-name">${item.name}</div>
-          <div class="asset-ticker muted small">${item.ticker}</div>
-          <div class="asset-tags muted xsmall">${tags}</div>
-        </div>
-        <div class="col-perf">
-          <div class="${perfCls}">${formatPercent(item.perf5)}</div>
-          <div class="muted xsmall">sur 5 ans</div>
-        </div>
-        <div class="col-fee">
-          <div>${formatFee(item.fee)}</div>
-          <div class="muted xsmall">frais / spread</div>
-        </div>
-        <div class="col-vol">
-          <div>${formatVol(item.vol)}</div>
-          <div class="muted xsmall">volatilité</div>
-        </div>
-        <div class="col-risk">
-          <span class="${riskCls}">Risque ${riskLabel(item.risk)}</span>
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  resultsEl.innerHTML = html;
-  countEl.textContent = `${list.length} résultat${list.length > 1 ? "s" : ""}`;
-}
-
-// =======================
-// Logique de filtre
-// =======================
-function getFilteredData() {
-  const q      = (qInput.value || "").toLowerCase().trim();
-  const type   = typeSel.value;
-  const risk   = riskSel.value;
-  const sort   = sortSel.value;
-  const chip   = activeChip; // pea / dividende / long / court / null
-
-  let list = [...DATA];
-
-  // filtre texte
-  if (q) {
-    list = list.filter(i =>
-      i.name.toLowerCase().includes(q) ||
-      i.ticker.toLowerCase().includes(q)
-    );
-  }
-
-  // filtre type
-  if (type !== "all") {
-    list = list.filter(i => i.type === type);
-  }
-
-  // filtre risque
-  if (risk !== "all") {
-    list = list.filter(i => i.risk === risk);
-  }
-
-  // filtre chip
-  if (chip === "pea") {
-    list = list.filter(i => i.pea);
-  } else if (chip === "dividende") {
-    list = list.filter(i => i.style.includes("dividende"));
-  } else if (chip === "long") {
-    list = list.filter(i => i.style.includes("long"));
-  } else if (chip === "court") {
-    list = list.filter(i => i.style.includes("court"));
-  }
-
-  // tri
-  if (sort === "score") {
-    list.sort((a, b) => scoreOf(b) - scoreOf(a));
-  } else if (sort === "perf") {
-    list.sort((a, b) => b.perf5 - a.perf5);
-  } else if (sort === "fee") {
-    list.sort((a, b) => a.fee - b.fee);
-  } else if (sort === "vol") {
-    list.sort((a, b) => a.vol - b.vol);
-  }
-
-  return list;
-}
-
-function refresh() {
-  const data = getFilteredData();
-  renderResults(data);
-}
-
-// =======================
-// Événements
-// =======================
-btnSearch.addEventListener("click", () => {
-  refresh();
-});
-
-[qInput, typeSel, riskSel, sortSel].forEach(el => {
-  if (!el) return;
-  el.addEventListener("change", refresh);
-  el.addEventListener("keyup", e => {
-    if (el === qInput && e.key === "Enter") refresh();
-  });
-});
-
-// Chips (filtres rapides)
-chips.forEach(chip => {
-  chip.addEventListener("click", () => {
-    const value = chip.dataset.chip;
-    if (activeChip === value) {
-      activeChip = null;
-      chip.classList.remove("is-active");
-    } else {
-      activeChip = value;
-      chips.forEach(c => c.classList.remove("is-active"));
-      chip.classList.add("is-active");
+  // Mini base locale (tu pourras plus tard la remplacer par tes JSON)
+  const items = [
+    {
+      name: "Livret A",
+      type: "livret",
+      typeLabel: "Livret / cash",
+      fees: 0.0,
+      yield: 3.0,
+      risk: 1
+    },
+    {
+      name: "ETF S&P 500",
+      type: "etf",
+      typeLabel: "ETF / indice",
+      fees: 0.07,
+      yield: 7.0,
+      risk: 3
+    },
+    {
+      name: "ETF World",
+      type: "etf",
+      typeLabel: "ETF / indice",
+      fees: 0.2,
+      yield: 6.0,
+      risk: 3
+    },
+    {
+      name: "Bitcoin",
+      type: "crypto",
+      typeLabel: "Crypto",
+      fees: 0.5,
+      yield: 20.0,
+      risk: 5
+    },
+    {
+      name: "Ethereum",
+      type: "crypto",
+      typeLabel: "Crypto",
+      fees: 0.5,
+      yield: 15.0,
+      risk: 5
+    },
+    {
+      name: "Fonds euro",
+      type: "autre",
+      typeLabel: "Fonds euro",
+      fees: 0.8,
+      yield: 2.5,
+      risk: 2
     }
-    refresh();
-  });
-});
+  ];
 
-// =======================
-// Initialisation
-// =======================
-(function initFromURL(){
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const risk = params.get("risk");
-    if (risk === "low" || risk === "mid" || risk === "high") {
-      riskSel.value = risk;
+  let currentType = "all";
+
+  function riskLabel(score) {
+    if (score <= 1) return "Très faible";
+    if (score === 2) return "Faible";
+    if (score === 3) return "Moyen";
+    if (score === 4) return "Élevé";
+    return "Très élevé";
+  }
+
+  function riskClass(score) {
+    if (score <= 1) return "risk-badge risk-verylow";
+    if (score === 2) return "risk-badge risk-low";
+    if (score === 3) return "risk-badge risk-mid";
+    if (score === 4) return "risk-badge risk-high";
+    return "risk-badge risk-veryhigh";
+  }
+
+  function render() {
+    const query = searchInput.value.toLowerCase().trim();
+    let filtered = items.filter(item => {
+      const matchesType = currentType === "all" || item.type === currentType;
+      const matchesText =
+        !query ||
+        item.name.toLowerCase().includes(query) ||
+        item.typeLabel.toLowerCase().includes(query);
+      return matchesType && matchesText;
+    });
+
+    // tri
+    const sort = sortSelect.value;
+    filtered = [...filtered]; // copie
+
+    if (sort === "fees") {
+      filtered.sort((a, b) => a.fees - b.fees);
+    } else if (sort === "yield") {
+      filtered.sort((a, b) => b.yield - a.yield);
+    } else if (sort === "risk") {
+      filtered.sort((a, b) => a.risk - b.risk);
     }
-  } catch(e) {}
-})();
+    // "relevance" = ordre de base
 
-// petit “squelette” au chargement
-renderSkeleton();
-setTimeout(() => {
-  refresh();
-}, 500);
+    // rendu
+    tbody.innerHTML = "";
+    filtered.forEach(item => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${item.name}</td>
+        <td>${item.typeLabel}</td>
+        <td>${item.fees.toFixed(2).replace(".", ",")} %</td>
+        <td>${item.yield.toFixed(1).replace(".", ",")} % / an</td>
+        <td><span class="${riskClass(item.risk)}">${riskLabel(item.risk)}</span></td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+    resultCount.textContent =
+      filtered.length === 0
+        ? "Aucun résultat"
+        : `${filtered.length} résultat${filtered.length > 1 ? "s" : ""}`;
+  }
+
+  // events
+  searchInput.addEventListener("input", render);
+  sortSelect.addEventListener("change", render);
+
+  chips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      chips.forEach(c => c.classList.remove("chip-active"));
+      chip.classList.add("chip-active");
+      currentType = chip.dataset.type;
+      render();
+    });
+  });
+
+  render();
+});
