@@ -1590,3 +1590,41 @@ h1{font-size:44px; line-height:1.08; letter-spacing:-.3px; margin:12px 0}
     min-width:0;
   }
 }
+/* ======================
+      PROFIL
+   ====================== */
+
+.profile-main {
+  padding: 32px 0 40px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.switch-field {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:16px 0;
+}
+
+.btn-danger {
+  background: rgba(239,68,68,.25);
+  border:1px solid rgba(239,68,68,.4);
+  color:#fca5a5;
+}
+
+@media (max-width: 960px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
