@@ -1714,3 +1714,11 @@ h1{font-size:44px; line-height:1.08; letter-spacing:-.3px; margin:12px 0}
 canvas#chartWealth {
   max-height: 200px;
 }
+.kpi-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.kpi-value {
+  font-size: 22px;
+}
